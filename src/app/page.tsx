@@ -22,7 +22,7 @@ export type Student = {
   mssv: string
   fullName: string
   dateOfBirth: string
-  gender: "male" | "female" | "other"
+  gender: "Nam" | "Nữ" | "Khác"
   faculty: "Khoa Luật" | "Khoa Tiếng Anh thương mại" | "Khoa Tiếng Nhật" | "Khoa Tiếng Pháp"
   course: string
   program: string
