@@ -42,7 +42,7 @@ const studentSchema = z.object({
 
 type StudentFormProps = {
   student: Student | null
-  onSubmit: (data: any) => void
+  onSubmit: (data: Student) => void
 }
 
 export function StudentForm({ student, onSubmit }: StudentFormProps) {
@@ -83,7 +83,7 @@ export function StudentForm({ student, onSubmit }: StudentFormProps) {
       onSubmit({ ...values, mssv: student.mssv })
     } else {
       // If adding new student
-      onSubmit(values)
+      onSubmit({ ...values, mssv: "" })
     }
   }
 
