@@ -6,8 +6,7 @@
     "dev": "next dev ",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "debug": "NEXT_OPTIONS='--inspect' next dev"
+    "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
