@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { PlusCircle, Search, Pencil, Trash2, GraduationCap } from "lucide-react"
+import { PlusCircle, Search, Pencil, Trash2, GraduationCap, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -16,13 +16,13 @@ import {
 import { StudentForm } from "@/components/student-form"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
+import Link from "next/link"
 // Define student type
 export type Student = {
   mssv: string
   fullName: string
   dateOfBirth: string
-  gender: "male" | "female" | "other"
+  gender: "Nam" | "Nữ" | "Khác"
   faculty: "Khoa Luật" | "Khoa Tiếng Anh thương mại" | "Khoa Tiếng Nhật" | "Khoa Tiếng Pháp"
   course: string
   program: string
@@ -159,6 +159,7 @@ export default function Home() {
     setIsFormOpen(true)
   }
 
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-md">
@@ -283,6 +284,15 @@ export default function Home() {
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
+                            <Link href={`/detail/${student.mssv}`}>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8 text-green-600 border-green-200 hover:bg-green-50"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </Link>
                             <Button
                               variant="outline"
                               size="icon"
