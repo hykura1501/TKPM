@@ -1,7 +1,7 @@
 ## Project name
 Dự án quản lý danh sách sinh viên.
 
-Web demo: [Demo Website](https://group06-ex-tkpm.vercel.app/)
+Web demo: [Student Management](https://group06-ex-tkpm.vercel.app/)
 
 ## Cấu trúc source code
 Dưới đây là mô tả các thư mục và tệp chính trong dự án:
