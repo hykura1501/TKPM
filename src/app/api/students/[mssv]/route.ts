@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
 // Kết nối MongoDB
@@ -7,11 +7,14 @@ async function getDb() {
     return client.db("student_management").collection("students");
   }
 
-export async function GET(req: Request, context: { params: { mssv: string } }) {
-    try {
-      const { mssv } = await context.params; // Đảm bảo params được await trước khi sử dụng
-        
-
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ mssv: string }> } // 👈 Đổi kiểu của `params` thành `Promise`
+) {
+  try {
+    const resolvedParams = await context.params; // 👈 Chờ `params` resolve
+    const { mssv } = resolvedParams;
+  
     if (!mssv) {
       return NextResponse.json({ error: "Mssv không được để trống" }, { status: 400 });
     }

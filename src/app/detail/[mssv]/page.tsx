@@ -7,11 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 
-// Validation functions
-const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-const isValidPhone = (phone: string) => /^(0|\+84)[3|5|7|8|9][0-9]{8}$/.test(phone)
-const isValidFaculty = (faculty: string) => ["Khoa Luật", "Khoa Tiếng Anh thương mại", "Khoa Tiếng Nhật", "Khoa Tiếng Pháp"].includes(faculty)
-const isValidStatus = (status: string) => ["Đang học", "Đã tốt nghiệp", "Đã thôi học", "Tạm dừng học"].includes(status)
+// Define student type
+type Student = {
+	mssv: string
+	fullName: string
+	dateOfBirth: string
+	gender: "Nam" | "Nữ" | "Khác"
+	faculty: "Khoa Luật" | "Khoa Tiếng Anh thương mại" | "Khoa Tiếng Nhật" | "Khoa Tiếng Pháp"
+	course: string
+	program: string
+	address: string
+	email: string
+	phone: string
+	status: "Đang học" | "Đã tốt nghiệp" | "Đã thôi học" | "Tạm dừng học"
+}
 
 // Get status badge color
 const getStatusColor = (status: string) => {
@@ -31,7 +40,7 @@ const getStatusColor = (status: string) => {
 
 export default function StudentDetailPage() {
 	const { mssv } = useParams()
-	const [student, setStudent] = useState<any>(null)
+	const [student, setStudent] = useState<Student | null>(null)
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
@@ -61,12 +70,6 @@ export default function StudentDetailPage() {
 	if (!student) {
 		return <div className="text-center mt-10 text-red-500">Không tìm thấy sinh viên</div>
 	}
-
-	// Validate student data
-	const emailValid = isValidEmail(student.email)
-	const phoneValid = isValidPhone(student.phone)
-	const facultyValid = isValidFaculty(student.faculty)
-	const statusValid = isValidStatus(student.status)
 
 	return (
 		<div className="container mx-auto py-8">

@@ -50,6 +50,7 @@ const facultyColors = {
 
 export default function Home() {
   const [students, setStudents] = useState<Student[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [editingStudent, setEditingStudent] = useState<Student | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -67,9 +68,11 @@ export default function Home() {
       const response = await fetch("/api/students")
       const data = await response.json()
       setStudents(data)
+      setIsLoading(false)
     }
 
     fetchStudents()
+    
   }, [])
 
   // Update stats when students change
@@ -177,7 +180,7 @@ export default function Home() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Tổng số</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="text-2xl font-bold">{isLoading ? "Đang tải..." : stats.total}</div>
             </CardContent>
           </Card>
           <Card>
@@ -185,7 +188,7 @@ export default function Home() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Đang học</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+              <div className="text-2xl font-bold text-green-600">{isLoading ? "Đang tải..." : stats.active}</div>
             </CardContent>
           </Card>
           <Card>
@@ -193,7 +196,7 @@ export default function Home() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Đã tốt nghiệp</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.graduated}</div>
+              <div className="text-2xl font-bold text-blue-600">{isLoading ? "Đang tải..." : stats.graduated}</div>
             </CardContent>
           </Card>
           <Card>
@@ -201,7 +204,7 @@ export default function Home() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Đã thôi học</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.dropped}</div>
+              <div className="text-2xl font-bold text-red-600">{isLoading ? "Đang tải..." : stats.dropped}</div>
             </CardContent>
           </Card>
           <Card>
@@ -209,7 +212,7 @@ export default function Home() {
               <CardTitle className="text-sm font-medium text-muted-foreground">Tạm dừng học</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">{stats.paused}</div>
+              <div className="text-2xl font-bold text-yellow-600">{isLoading ? "Đang tải..." : stats.paused}</div>
             </CardContent>
           </Card>
         </div>
@@ -313,6 +316,12 @@ export default function Home() {
                         </TableCell>
                       </TableRow>
                     ))
+                  ) : isLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-center py-10 text-gray-500">
+                        Đang tải...
+                      </TableCell>
+                    </TableRow>
                   ) : (
                     <TableRow>
                       <TableCell colSpan={7} className="text-center py-10 text-gray-500">

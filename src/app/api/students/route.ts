@@ -30,6 +30,7 @@ export async function GET() {
     const students = await collection.find({}).toArray();
     return NextResponse.json(students, { status: 200 });
   } catch (error) {
+    console.error("Lỗi khi lấy danh sách sinh viên:", error);
     return NextResponse.json({ error: "Lỗi khi lấy danh sách sinh viên" }, { status: 500 });
   }
 }
@@ -83,6 +84,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({ message: "Cập nhật thành công" }, { status: 200 });
   } catch (error) {
+    console.error("Lỗi khi cập nhật sinh viên:", error);
     return NextResponse.json({ error: "Lỗi khi cập nhật" }, { status: 500 });
   }
 }
@@ -98,6 +100,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json({ message: "Xóa thành công" }, { status: 200 });
   } catch (error) {
+    console.error("Lỗi khi xóa sinh viên:", error);
     return NextResponse.json({ error: "Lỗi khi xóa" }, { status: 500 });
   }
 }
