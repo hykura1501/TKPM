@@ -7,27 +7,76 @@ const studentSchema = z.object({
   mssv: z.string().optional(),
   fullName: z.string().min(3, "Họ tên không hợp lệ"),
   dateOfBirth: z.string().refine((date) => !isNaN(Date.parse(date)), "Ngày sinh không hợp lệ"),
-  gender: z.enum(["Nam", "Nữ", "Khác"]),
-  faculty: z.enum(["Khoa Luật", "Khoa Tiếng Anh thương mại", "Khoa Tiếng Nhật", "Khoa Tiếng Pháp"]),
+  gender: z.enum(["male", "female", "other"]),
+  faculty: z.string(),
   course: z.string(),
   program: z.string(),
-  address: z.string(),
+  permanentAddress: z.object({
+    streetAddress: z.string(),
+    ward: z.string(),
+    district: z.string(),
+    province: z.string(),
+    country: z.string(),
+  }).optional(),
+  temporaryAddress: z.object({
+    streetAddress: z.string(),
+    ward: z.string(),
+    district: z.string(),
+    province: z.string(),
+    country: z.string(),
+  }).optional(),
+  mailingAddress: z.object({
+    streetAddress: z.string(),
+    ward: z.string(),
+    district: z.string(),
+    province: z.string(),
+    country: z.string(),
+  }).optional(),
+  identityDocument: z.union([
+    z.object({
+      type: z.literal("CMND"),
+      number: z.string(),
+      issueDate: z.string(),
+      issuePlace: z.string(),
+      expiryDate: z.string(),
+    }),
+    z.object({
+      type: z.literal("CCCD"),
+      number: z.string(),
+      issueDate: z.string(),
+      issuePlace: z.string(),
+      expiryDate: z.string(),
+      hasChip: z.boolean(),
+    }),
+    z.object({
+      type: z.literal("Passport"),
+      number: z.string(),
+      issueDate: z.string(),
+      issuePlace: z.string(),
+      expiryDate: z.string(),
+      issuingCountry: z.string(),
+      notes: z.string().optional(),
+    }),
+  ]).optional(),
+  nationality: z.string(),
   email: z.string().email("Email không hợp lệ"),
   phone: z.string().regex(/^(0[0-9]{9})$/, "Số điện thoại không hợp lệ"),
-  status: z.enum(["Đang học", "Đã tốt nghiệp", "Đã thôi học", "Tạm dừng học"]),
+  status: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
 
 // Kết nối MongoDB
 async function getDb() {
   const client = await clientPromise;
-  return client.db("student_management").collection("students");
+  return client.db("student_dashboard").collection("students");
 }
 
 // 📌 API lấy danh sách sinh viên
 export async function GET() {
   try {
     const collection = await getDb();
-    const students = await collection.find({}).toArray();
+    const students = await collection.find({}, { projection: { _id: 0 } }).toArray();
     return NextResponse.json(students, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sinh viên:", error);

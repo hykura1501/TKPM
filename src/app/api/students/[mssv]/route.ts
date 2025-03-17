@@ -4,7 +4,7 @@ import clientPromise from "@/lib/mongodb";
 // Kết nối MongoDB
 async function getDb() {
     const client = await clientPromise;
-    return client.db("student_management").collection("students");
+    return client.db("student_dashboard").collection("students");
   }
 
 export async function GET(
