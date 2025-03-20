@@ -20,19 +20,19 @@ export function LogsDialog({ logs }: LogsDialogProps) {
   // Filter logs based on search term and filters
   const filteredLogs = logs.filter((log) => {
     const matchesSearch =
-      log.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (log.entityId && log.entityId.toLowerCase().includes(searchTerm.toLowerCase()))
+      log.metadata.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      log.metadata.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (log.metadata.entityId && log.metadata.entityId.toLowerCase().includes(searchTerm.toLowerCase()))
 
-    const matchesAction = !filterAction || log.action === filterAction
-    const matchesEntity = !filterEntity || log.entity === filterEntity
+    const matchesAction = !filterAction || log.metadata.action === filterAction
+    const matchesEntity = !filterEntity || log.metadata.entity === filterEntity
 
     return matchesSearch && matchesAction && matchesEntity
   })
 
   // Get unique actions and entities for filters
-  const uniqueActions = Array.from(new Set(logs.map((log) => log.action)))
-  const uniqueEntities = Array.from(new Set(logs.map((log) => log.entity)))
+  const uniqueActions = Array.from(new Set(logs.map((log) => log.metadata.action)))
+  const uniqueEntities = Array.from(new Set(logs.map((log) => log.metadata.entity)))
 
   // Get icon for action
   const getActionIcon = (action: string) => {
@@ -130,19 +130,19 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {filteredLogs.length > 0 ? (
                 filteredLogs.map((log) => (
-                  <div key={log.id} className="flex items-start p-3 border rounded-md">
-                    <div className="mr-3 mt-1">{getActionIcon(log.action)}</div>
+                  <div key={log._id} className="flex items-start p-3 border rounded-md">
+                    <div className="mr-3 mt-1">{getActionIcon(log.metadata.action)}</div>
                     <div className="flex-1">
                       <div className="flex justify-between">
                         <span className="font-medium">
-                          {log.action.charAt(0).toUpperCase() + log.action.slice(1)} {log.entity}
-                          {log.entityId && <span className="text-muted-foreground"> #{log.entityId}</span>}
+                          {log.metadata.action.charAt(0).toUpperCase() + log.metadata.action.slice(1)} {log.metadata.entity}
+                          {log.metadata.entityId && <span className="text-muted-foreground"> #{log.metadata.entityId}</span>}
                         </span>
                         <span className="text-sm text-muted-foreground">{formatTimestamp(log.timestamp)}</span>
                       </div>
-                      <p className="text-sm mt-1">{log.details}</p>
+                      <p className="text-sm mt-1">{log.metadata.details}</p>
                       <div className="flex justify-between mt-1">
-                        <span className="text-xs text-muted-foreground">Người dùng: {log.user}</span>
+                        <span className="text-xs text-muted-foreground">Người dùng: {log.metadata.user}</span>
                       </div>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Plus, X, Save, Pencil } from "lucide-react"
 import type { Faculty, StudentStatus, Program } from "@/types/student"
+import { toast, ToastContainer } from "react-toastify"
+
 
 type SettingsDialogProps = {
   faculties: Faculty[]
@@ -31,34 +33,85 @@ export function SettingsDialog({ faculties, statuses, programs, onSave }: Settin
   const [newProgramName, setNewProgramName] = useState("")
   const [newProgramFaculty, setNewProgramFaculty] = useState(faculties[0]?.id || "")
 
+  
+  // useEffect(() => {
+  //   return () => {
+  //     onSave(localFaculties, localStatuses, localPrograms)
+  //   }
+  // }, [localFaculties, localStatuses, localPrograms])
+
+
   // Faculty functions
-  const addFaculty = () => {
+  const addFaculty =async () => {
     if (newFacultyName.trim() === "") return
 
     const newId = `faculty-${Date.now()}`
     setLocalFaculties([...localFaculties, { id: newId, name: newFacultyName }])
+      // Call API to update faculties
+    const response =  await fetch("/api/faculties", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: newId, name: newFacultyName }),
+      })
+    if(response.ok){
+      const data = await response.json()
+      setLocalFaculties(data.faculties)
+    }
+    else{
+      toast.error("Lỗi khi thêm khoa")
+    }
     setNewFacultyName("")
   }
 
-  const updateFaculty = (id: string, name: string) => {
+  const updateFaculty = async (id: string, name: string) => {
     setLocalFaculties(localFaculties.map((f) => (f.id === id ? { ...f, name } : f)))
     setEditingFaculty(null)
+    const response =  await fetch("/api/faculties", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, name }),
+      })
+    if(response.ok){
+      const data = await response.json()
+      setLocalFaculties(data.faculties)
+    }
+    else{
+      toast.error("Lỗi khi thêm khoa")
+    }
   }
 
-  const deleteFaculty = (id: string) => {
+  const deleteFaculty = async(id: string) => {
     // Check if faculty is used by any program
     const isUsed = localPrograms.some((p) => p.faculty === id)
 
     if (isUsed) {
-      alert("Không thể xóa khoa này vì đang được sử dụng bởi một hoặc nhiều chương trình học.")
+      toast.error("Không thể xóa khoa này vì đang được sử dụng bởi một hoặc nhiều chương trình học.")
       return
     }
 
     setLocalFaculties(localFaculties.filter((f) => f.id !== id))
+    const response =  await fetch("/api/faculties", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      })
+    if(response.ok){
+      const data = await response.json()
+      setLocalFaculties(data.faculties)
+    }
+    else{
+      toast.error("Lỗi khi thêm khoa")
+    }
   }
 
   // Status functions
-  const addStatus = () => {
+  const addStatus = async() => {
     if (newStatusName.trim() === "") return
 
     const newId = `status-${Date.now()}`
@@ -71,19 +124,61 @@ export function SettingsDialog({ faculties, statuses, programs, onSave }: Settin
       },
     ])
     setNewStatusName("")
+    const response =  await fetch("/api/statuses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: newId, name: newStatusName, color: newStatusColor }),
+    })
+    if(response.ok){
+      const data = await response.json()
+      setLocalStatuses(data.statuses)
+    }
+    else{
+      toast.error("Lỗi khi thêm tình trạng")
+    }
   }
 
-  const updateStatus = (id: string, name: string, color: string) => {
+  const updateStatus = async (id: string, name: string, color: string) => {
     setLocalStatuses(localStatuses.map((s) => (s.id === id ? { ...s, name, color } : s)))
     setEditingStatus(null)
+    const response =  await fetch("/api/statuses", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, name, color }),
+    })
+    if(response.ok){
+      const data = await response.json()
+      setLocalStatuses(data.statuses)
+    }
+    else{
+      toast.error("Lỗi khi thêm tình trạng")
+    }
   }
 
-  const deleteStatus = (id: string) => {
+  const deleteStatus = async (id: string) => {
     setLocalStatuses(localStatuses.filter((s) => s.id !== id))
+    const response =  await fetch("/api/statuses", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    })
+    if(response.ok){
+      const data = await response.json()
+      setLocalStatuses(data.statuses)
+    }
+    else{
+      toast.error("Lỗi khi thêm tình trạng")
+    }
   }
 
   // Program functions
-  const addProgram = () => {
+  const addProgram = async () => {
     if (newProgramName.trim() === "" || !newProgramFaculty) return
 
     const newId = `program-${Date.now()}`
@@ -96,15 +191,59 @@ export function SettingsDialog({ faculties, statuses, programs, onSave }: Settin
       },
     ])
     setNewProgramName("")
+    const response =  await fetch("/api/programs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: newId, name: newProgramName, faculty: newProgramFaculty }),
+    })
+    if(response.ok){
+      const data = await response.json()
+      setLocalPrograms(data.programs)
+    }
+    else{
+      toast.error("Lỗi khi thêm chương trình")
+    }
+
   }
 
-  const updateProgram = (id: string, name: string, faculty: string) => {
+  const updateProgram = async(id: string, name: string, faculty: string) => {
     setLocalPrograms(localPrograms.map((p) => (p.id === id ? { ...p, name, faculty } : p)))
     setEditingProgram(null)
+    const response =  await fetch("/api/programs", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, name, faculty }),
+    })
+    if(response.ok){
+      const data = await response.json()
+      setLocalPrograms(data.programs)
+    }
+    else{
+      toast.error("Lỗi khi thêm chương trình")
+    }
   }
 
-  const deleteProgram = (id: string) => {
+  const deleteProgram = async (id: string) => {
     setLocalPrograms(localPrograms.filter((p) => p.id !== id))
+    const response =  await fetch("/api/programs", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    })
+    if(response.ok){
+      const data = await response.json()
+      setLocalPrograms(data.programs)
+    }
+    else{
+      toast.error("Lỗi khi thêm chương trình")
+    }
+
   }
 
   // Save all changes
@@ -177,7 +316,7 @@ export function SettingsDialog({ faculties, statuses, programs, onSave }: Settin
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => deleteFaculty(faculty.id)}>
-                            <X className="h-4 w-4" />
+                            <X className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       </>
@@ -263,7 +402,7 @@ export function SettingsDialog({ faculties, statuses, programs, onSave }: Settin
                             <Pencil className="h-4 w-4" />
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => deleteStatus(status.id)}>
-                            <X className="h-4 w-4" />
+                            <X className="h-4 w-4 text-white" />
                           </Button>
                         </div>
                       </>
@@ -368,7 +507,7 @@ export function SettingsDialog({ faculties, statuses, programs, onSave }: Settin
                               <Pencil className="h-4 w-4" />
                             </Button>
                             <Button size="sm" variant="destructive" onClick={() => deleteProgram(program.id)}>
-                              <X className="h-4 w-4" />
+                              <X className="h-4 w-4 text-white" />
                             </Button>
                           </div>
                         </>

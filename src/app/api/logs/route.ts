@@ -2,16 +2,11 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { z } from "zod";
 import type { LogEntry } from "@/types/student";
+import { metadata } from "@/app/layout";
 
 // Định nghĩa schema cho LogEntry
 const logEntrySchema = z.object({
-  id: z.string(),
   timestamp: z.string(),
-  action: z.enum(["create", "update", "delete", "import", "export", "login", "logout", "error"]),
-  entity: z.enum(["student", "faculty", "program", "status", "system"]),
-  entityId: z.string().optional(),
-  user: z.string(),
-  details: z.string(),
   metadata: z.record(z.any()).optional(),
 });
 

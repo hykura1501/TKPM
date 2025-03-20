@@ -22,12 +22,12 @@ import { ImportExportDialog } from "@/components/import-export-dialog"
 import { SettingsDialog } from "@/components/settings-dialog"
 import { LogsDialog } from "@/components/logs-dialog"
 import type { Student, Faculty, StudentStatus, Program, LogEntry } from "@/types/student"
-import { addLogEntry } from "@/lib/logging"
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { js2xml } from "xml-js";
 import { z } from "zod";
+import { metadata } from "./layout"
 
 
 export default function Home() {
@@ -102,14 +102,6 @@ export default function Home() {
     fetchPrograms()
     fetchLogs()
 
-    // Log system startup
-    const newLog = addLogEntry({
-      action: "login",
-      entity: "system",
-      user: "system",
-      details: "System initialized",
-    })
-    pushLop(newLog)
     setIsLoading(false)
   }, [])
 
@@ -167,16 +159,6 @@ export default function Home() {
       const data = await response.json()
       setStudents([...students, data.student])
       setIsFormOpen(false)
-
-      // Log the action
-      const newLog = addLogEntry({
-        action: "create",
-        entity: "student",
-        entityId: data.student.mssv,
-        user: "admin",
-        details: `Created student: ${student.fullName}`,
-      })
-      pushLop(newLog)
     } else {
       console.error("Failed to add student")
     }
@@ -198,15 +180,6 @@ export default function Home() {
       setEditingStudent(null)
       setIsFormOpen(false)
 
-      // Log the action
-      const newLog = addLogEntry({
-        action: "update",
-        entity: "student",
-        entityId: updatedStudent.mssv,
-        user: "admin",
-        details: `Updated student: ${updatedStudent.fullName}`,
-      })
-      pushLop(newLog)
     } else {
       console.error("Failed to add student")
     }
@@ -226,17 +199,6 @@ export default function Home() {
 
       if (response.ok) {
         setStudents(students.filter((student) => student.mssv !== mssv))
-        // Log the action
-        if (studentToDelete) {
-          const newLog = addLogEntry({
-            action: "delete",
-            entity: "student",
-            entityId: mssv,
-            user: "admin",
-            details: `Deleted student: ${studentToDelete.fullName}`,
-          })
-          pushLop(newLog)
-        }
       } else {
         console.error("Failed to delete student")
       }
@@ -336,17 +298,33 @@ export default function Home() {
   
       if (parsedData.length > 0) {
         setStudents([...students, ...parsedData]);
-  
         // Log the action
-        const newLog = addLogEntry({
-          action: "import",
-          entity: "student",
-          user: "admin",
-          details: `Imported ${parsedData.length} students in ${format} format`,
-        });
+        const newLog = {
+          timestamp: new Date().toISOString(),
+          level: 'info',
+          message: `Imported ${parsedData.length} students in ${format} format`,
+          metadata: {
+            action: "import",
+            entity: "student",
+            user: "admin",
+            details: `Imported ${parsedData.length} students in ${format} format`,
+          }
+        };
         pushLop(newLog);
       } else {
         console.error("No valid data to import");
+        const newLog = {
+          timestamp: new Date().toISOString(),
+          level: 'warn',
+          message: `No valid data to import`,
+          metadata: {
+            action: "import",
+            entity: "student",
+            user: "admin",
+            details: `No valid data to import`,
+          }
+        };
+        pushLop(newLog);
       }
     } else if (action === "export") {
       let fileContent;
@@ -413,12 +391,18 @@ export default function Home() {
       }
   
       // Log the action
-      const newLog = addLogEntry({
-        action: "export",
-        entity: "student",
-        user: "admin",
-        details: `Exported ${students.length} students in ${format} format`,
-      });
+      const newLog = {
+        id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+        timestamp: new Date().toISOString(),
+        level: 'info',
+        message: `Exported ${students.length} students in ${format} format`,
+        metadata: {
+          action: "export",
+          entity: "student",
+          user: "admin",
+          details: `Exported ${students.length} students in ${format} format`,
+        }
+      };
       pushLop(newLog);
     }
   
@@ -432,14 +416,6 @@ export default function Home() {
     setPrograms(newPrograms)
     setIsSettingsOpen(false)
 
-    // Log the action
-    const newLog = addLogEntry({
-      action: "update",
-      entity: "system",
-      user: "admin",
-      details: "Updated system settings",
-    })
-    pushLop(newLog)
   }
 
   // Get faculty name by ID
@@ -460,6 +436,12 @@ export default function Home() {
   const getProgramName = (id: string) => {
     return programs.find((p) => p.id === id)?.name || id
   }
+  async function handleOpenLogs(){
+    const response = await fetch("/api/logs")
+    const data = await response.json()
+    setLogs(data)
+    setIsLogsOpen(true)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -474,7 +456,7 @@ export default function Home() {
               variant="outline"
               size="sm"
               className="text-white bg-blue border-white hover:bg-white/20"
-              onClick={() => setIsLogsOpen(true)}
+              onClick={() =>handleOpenLogs()} 
             >
               Logs
             </Button>

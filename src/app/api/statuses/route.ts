@@ -40,7 +40,8 @@ export async function POST(req: Request) {
 
     const collection = await getDb();
     await collection.insertOne(parsed.data);
-    return NextResponse.json({ message: "Thêm tình trạng sinh viên thành công", status: parsed.data }, { status: 201 });
+    const statuses = await collection.find({}).toArray();
+    return NextResponse.json({ message: "Thêm tình trạng sinh viên thành công", statuses: statuses }, { status: 201 });
   } catch (error) {
     console.error("Lỗi khi thêm tình trạng sinh viên:", error);
     return NextResponse.json({ error: "Lỗi khi thêm tình trạng sinh viên" }, { status: 500 });
@@ -59,8 +60,9 @@ export async function PUT(req: Request) {
 
     const collection = await getDb();
     await collection.updateOne({ id: parsed.data.id }, { $set: parsed.data });
+    const statuses = await collection.find({}).toArray();
+    return NextResponse.json({ message: "Cập nhật tình trạng sinh viên thành công", statuses: statuses }, { status: 200 });
 
-    return NextResponse.json({ message: "Cập nhật tình trạng sinh viên thành công" }, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi cập nhật tình trạng sinh viên:", error);
     return NextResponse.json({ error: "Lỗi khi cập nhật tình trạng sinh viên" }, { status: 500 });
@@ -75,8 +77,9 @@ export async function DELETE(req: Request) {
 
     const collection = await getDb();
     await collection.deleteOne({ id });
+    const statuses = await collection.find({}).toArray();
+    return NextResponse.json({ message: "Xóa tình trạng sinh viên thành công", statuses: statuses }, { status: 200 });
 
-    return NextResponse.json({ message: "Xóa tình trạng sinh viên thành công" }, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi xóa tình trạng sinh viên:", error);
     return NextResponse.json({ error: "Lỗi khi xóa tình trạng sinh viên" }, { status: 500 });

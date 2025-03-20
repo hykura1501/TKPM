@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { z } from "zod";
+import { addLogEntry } from "@/lib/logging";
+
+
 
 // Xác định schema kiểm tra dữ liệu nhập vào
 const studentSchema = z.object({
@@ -72,11 +75,20 @@ async function getDb() {
   return client.db("student_dashboard").collection("students");
 }
 
+
 // 📌 API lấy danh sách sinh viên
 export async function GET() {
   try {
     const collection = await getDb();
     const students = await collection.find({}, { projection: { _id: 0 } }).toArray();
+    await addLogEntry({ 
+      message: "Lấy danh sách sinh viên",
+      level: "info" ,
+      action: "login",
+      entity: "system",
+      user: "system",
+      details: "System initialized",
+      });
     return NextResponse.json(students, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sinh viên:", error);
@@ -90,6 +102,10 @@ export async function POST(req: Request) {
     const parsed = studentSchema.safeParse(body);
 
     if (!parsed.success) {
+      await addLogEntry({ 
+        message: "Thêm sinh viên không hợp lệ",
+        level: "warn"
+      });
       return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
 
@@ -109,6 +125,15 @@ export async function POST(req: Request) {
     const newStudent = { ...parsed.data, mssv: newMssv };
 
     await collection.insertOne(newStudent);
+    await addLogEntry({ 
+      message: "Thêm sinh viên mới", 
+      level: "info" ,
+      action: "create",
+      entity: "student",
+      entityId: newStudent.mssv,
+      user: "admin",
+      details: `Created student: ${newStudent.fullName}`, 
+    });
     return NextResponse.json({ message: "Thêm sinh viên thành công", student: newStudent }, { status: 201 });
   } catch (error) {
     console.error("Lỗi khi thêm sinh viên:", error);
@@ -125,11 +150,21 @@ export async function PUT(req: Request) {
     const parsed = studentSchema.safeParse(body);
     console.log(parsed);
     if (!parsed.success) {
+      await addLogEntry({ message: "Cập nhật sinh viên không hợp lệ", level: "warn" });
       return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
 
     const collection = await getDb();
     await collection.updateOne({ mssv: parsed.data.mssv }, { $set: parsed.data });
+    await addLogEntry({
+      message: "Cập nhật sinh viên",
+      level: "info",
+      action: "update",
+      entity: "student",
+      entityId: parsed.data.mssv,
+      user: "admin",
+      details: `Updated student: ${parsed.data.fullName}`,
+    });
 
     return NextResponse.json({ message: "Cập nhật thành công" }, { status: 200 });
   } catch (error) {
@@ -142,10 +177,22 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const { mssv } = await req.json();
-    if (!mssv) return NextResponse.json({ error: "MSSV không được để trống" }, { status: 400 });
+    if (!mssv){
+      await addLogEntry({ message: "MSSV không được để trống", level: "warn" });
+      return NextResponse.json({ error: "MSSV không được để trống" }, { status: 400 });
+    }
 
     const collection = await getDb();
     await collection.deleteOne({ mssv });
+    await addLogEntry({
+      message: "Xóa sinh viên",
+      level: "info",
+      action: "delete",
+      entity: "student",
+      entityId: mssv,
+      details: `Deleted student: ${mssv}`,
+      user: "admin",
+    });
 
     return NextResponse.json({ message: "Xóa thành công" }, { status: 200 });
   } catch (error) {

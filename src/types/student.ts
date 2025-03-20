@@ -77,12 +77,14 @@ export type Student = {
 export type LogEntry = {
   id: string
   timestamp: string
-  action: "create" | "update" | "delete" | "import" | "export" | "login" | "logout" | "error"
-  entity: "student" | "faculty" | "program" | "status" | "system"
-  entityId?: string
-  user: string
-  details: string
-  metadata?: Record<string, any>
+  metadata: {
+    action: "create" | "update" | "delete" | "import" | "export" | "login" | "logout" | "error"
+    entity: "student" | "faculty" | "program" | "status" | "system"
+    entityId?: string
+    user: string
+    details: string
+  }
+
 }
 
 export type ImportFormat = "csv" | "json" | "xml" | "excel"

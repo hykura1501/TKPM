@@ -40,7 +40,9 @@ export async function POST(req: Request) {
 
     const collection = await getDb();
     await collection.insertOne(parsed.data);
-    return NextResponse.json({ message: "Thêm chương trình học thành công", program: parsed.data }, { status: 201 });
+    const programs = await collection.find({}).toArray();
+
+    return NextResponse.json({ message: "Thêm chương trình học thành công", programs: programs }, { status: 201 });
   } catch (error) {
     console.error("Lỗi khi thêm chương trình học:", error);
     return NextResponse.json({ error: "Lỗi khi thêm chương trình học" }, { status: 500 });
@@ -59,8 +61,8 @@ export async function PUT(req: Request) {
 
     const collection = await getDb();
     await collection.updateOne({ id: parsed.data.id }, { $set: parsed.data });
-
-    return NextResponse.json({ message: "Cập nhật chương trình học thành công" }, { status: 200 });
+    const programs = await collection.find({}).toArray();
+    return NextResponse.json({ message: "Cập nhật chương trình học thành công", programs: programs }, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi cập nhật chương trình học:", error);
     return NextResponse.json({ error: "Lỗi khi cập nhật chương trình học" }, { status: 500 });
@@ -75,8 +77,8 @@ export async function DELETE(req: Request) {
 
     const collection = await getDb();
     await collection.deleteOne({ id });
-
-    return NextResponse.json({ message: "Xóa chương trình học thành công" }, { status: 200 });
+    const programs = await collection.find({}).toArray();
+    return NextResponse.json({ message: "Xóa chương trình học thành công", programs: programs }, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi xóa chương trình học:", error);
     return NextResponse.json({ error: "Lỗi khi xóa chương trình học" }, { status: 500 });
