@@ -46,39 +46,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Lỗi khi thêm log" }, { status: 500 });
   }
 }
-
-// 📌 API cập nhật log (PUT)
-export async function PUT(req: Request) {
-  try {
-    const body = await req.json();
-    const parsed = logEntrySchema.safeParse(body);
-
-    if (!parsed.success) {
-      return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
-    }
-
-    const collection = await getDb();
-    await collection.updateOne({ id: parsed.data.id }, { $set: parsed.data });
-
-    return NextResponse.json({ message: "Cập nhật log thành công" }, { status: 200 });
-  } catch (error) {
-    console.error("Lỗi khi cập nhật log:", error);
-    return NextResponse.json({ error: "Lỗi khi cập nhật log" }, { status: 500 });
-  }
-}
-
-// 📌 API xóa log (DELETE)
-export async function DELETE(req: Request) {
-  try {
-    const { id } = await req.json();
-    if (!id) return NextResponse.json({ error: "ID không được để trống" }, { status: 400 });
-
-    const collection = await getDb();
-    await collection.deleteOne({ id });
-
-    return NextResponse.json({ message: "Xóa log thành công" }, { status: 200 });
-  } catch (error) {
-    console.error("Lỗi khi xóa log:", error);
-    return NextResponse.json({ error: "Lỗi khi xóa log" }, { status: 500 });
-  }
-}
