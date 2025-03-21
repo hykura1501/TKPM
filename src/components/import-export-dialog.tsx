@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { FileUp, FileDown, FileJson, FileSpreadsheet, FileText } from "lucide-react"
+import * as XLSX from "xlsx";
 import type { Student, ImportFormat } from "@/types/student"
 
 type ImportExportDialogProps = {
@@ -18,7 +19,7 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
   const [selectedFormat, setSelectedFormat] = useState<ImportFormat>("json")
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  // Xử lý khi chọn file JSON
+  // Xử lý khi chọn file JSON hoặc Excel
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -26,60 +27,118 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
     }
   };
 
-  // Xử lý import từ JSON
+  // Chuẩn hóa dữ liệu từ Excel trước khi import
+  const normalizeStudentData = (data: any) => {
+    return data.map((row: any) => ({
+      fullName: row["fullName"] || "",
+      dateOfBirth: row["dateOfBirth"] || "",
+      gender: row["gender"] || "male",
+      faculty: row["faculty"] || "",
+      course: row["course"] || "",
+      program: row["program"] || "",
+      permanentAddress: {
+        streetAddress: row["permanentAddress"].split(", ")[0] || "",
+        ward: row["permanentAddress"].split(", ")[1] || "",
+        district: row["permanentAddress"].split(", ")[2] || "",
+        province: row["permanentAddress"].split(", ")[3] || "",
+        country: row["permanentAddress"].split(", ")[4] || "",
+      },
+      temporaryAddress: {
+        streetAddress: row["temporaryAddress"].split(", ")[0] || "",
+        ward: row["temporaryAddress"].split(", ")[1] || "",
+        district: row["temporaryAddress"].split(", ")[2] || "",
+        province: row["temporaryAddress"].split(", ")[3] || "",
+        country: row["temporaryAddress"].split(", ")[4] || "",
+      },
+      mailingAddress: {
+        streetAddress: row["mailingAddress"].split(", ")[0] || "",
+        ward: row["mailingAddress"].split(", ")[1] || "",
+        district: row["mailingAddress"].split(", ")[2] || "",
+        province: row["mailingAddress"].split(", ")[3] || "",
+        country: row["mailingAddress"].split(", ")[4] || "",
+      },
+      identityDocument: {
+        type: "CCCD",
+        number: row["identityDocument"].split(" - ")[1]?.split(" (")[0] || "",
+        issueDate: row["identityDocument"].split("Issued: ")[1]?.split(",")[0] || "",
+        expiryDate: row["identityDocument"].split("Expiry: ")[1]?.split(",")[0] || "",
+        issuePlace: row["identityDocument"].split("Issued at: ")[1]?.split(",")[0] || "",
+        hasChip: row["identityDocument"].includes("Has Chip: True"),
+      },
+      nationality: row["nationality"] || "",
+      email: row["email"] || "",
+      phone: row["phone"] || "",
+      status: row["status"] || "",
+      createdAt: row["createdAt"] || "",
+      updatedAt: row["updatedAt"] || "",
+    }));
+  };
+
+  // Xử lý import từ JSON hoặc Excel
   const handleImport = () => {
     if (!selectedFile) {
-      console.error("Vui lòng chọn một file JSON để nhập dữ liệu.");
+      console.error("Vui lòng chọn một file để nhập dữ liệu.");
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const jsonData = JSON.parse(event.target?.result as string);
-        if (!Array.isArray(jsonData)) {
-          console.error("File JSON không hợp lệ. Dữ liệu phải là một mảng sinh viên.");
-          return;
+    if (selectedFile.name.endsWith(".json")) {
+      reader.onload = (event) => {
+        try {
+          const jsonData = JSON.parse(event.target?.result as string);
+          if (!Array.isArray(jsonData)) {
+            console.error("File JSON không hợp lệ. Dữ liệu phải là một mảng sinh viên.");
+            return;
+          }
+          onAction("import", "json", jsonData);
+        } catch (error) {
+          console.error("Lỗi đọc file JSON:", error);
         }
-        onAction("import", "json", jsonData); // Import chỉ dùng JSON
-      } catch (error) {
-        console.error("Lỗi đọc file JSON:", error);
-      }
-    };
-    reader.readAsText(selectedFile);
+      };
+      reader.readAsText(selectedFile);
+    } else if (selectedFile.name.endsWith(".xlsx")) {
+      reader.onload = (event) => {
+        try {
+          const data = new Uint8Array(event.target?.result as ArrayBuffer);
+          const workbook = XLSX.read(data, { type: "array" });
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          const normalizedData = normalizeStudentData(jsonData);
+          onAction("import", "json", normalizedData);
+        } catch (error) {
+          console.error("Lỗi đọc file Excel:", error);
+        }
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    }
   };
 
   const handleExport = () => {
     onAction("export", selectedFormat)
   }
 
-   return (
+  return (
     <>
       <DialogHeader>
         <DialogTitle>Import/Export Dữ liệu</DialogTitle>
         <DialogDescription>Nhập hoặc xuất dữ liệu sinh viên với nhiều định dạng khác nhau.</DialogDescription>
       </DialogHeader>
 
-      <Tabs defaultValue="export" onValueChange={(value) => setSelectedTab(value as "import" | "export")}>
+      <Tabs defaultValue="export" onValueChange={(value) => setSelectedTab(value as "import" | "export")}> 
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="import">Import</TabsTrigger>
           <TabsTrigger value="export">Export</TabsTrigger>
         </TabsList>
-
-        {/* Tab Import (Chỉ hỗ trợ JSON) */}
         <TabsContent value="import" className="space-y-4">
-          <p className="text-sm text-muted-foreground">Chỉ hỗ trợ nhập dữ liệu từ file JSON.</p>
-
-          {/* Input chọn file JSON */}
-          <input type="file" accept=".json" onChange={handleFileChange} className="border p-2 w-full" />
-
+          <p className="text-sm text-muted-foreground">Hỗ trợ nhập dữ liệu từ file JSON hoặc Excel.</p>
+          <input type="file" accept=".json,.xlsx" onChange={handleFileChange} className="border p-2 w-full" />
           <div className="flex justify-between mt-4">
             <p className="text-sm text-muted-foreground">
               {selectedFile ? `📂 File đã chọn: ${selectedFile.name}` : "Chưa chọn file"}
             </p>
             <Button onClick={handleImport} className="bg-blue-600 hover:bg-blue-700" disabled={!selectedFile}>
               <FileUp className="h-4 w-4 mr-2" />
-              Import từ JSON
+              Import từ File
             </Button>
           </div>
         </TabsContent>

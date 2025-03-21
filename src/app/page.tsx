@@ -218,8 +218,6 @@ export default function Home() {
     setIsFormOpen(true)
   }
 
-
-
   // Định nghĩa schema cho sinh viên
   const studentSchema = z.object({
     mssv: z.string().optional(),
@@ -277,7 +275,7 @@ export default function Home() {
       }),
     ]).optional(),
     nationality: z.string(),
-    email: z.string().email("Email không hợp lệ"),
+    email: z.string().email("Email không hợp lệ"), 
     phone: z.string().regex(/^(0[0-9]{9})$/, "Số điện thoại không hợp lệ"),
     status: z.string(),
     createdAt: z.string().optional(),
@@ -287,7 +285,7 @@ export default function Home() {
   const handleImportExport = async (action: "import" | "export", format: "csv" | "json" | "xml" | "excel", data?: any) => {
     if (action === "import" && data) {
       if (!Array.isArray(data)) {
-        console.error("❌ Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên.");
+        console.error("Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên.");
         return;
       }
   
@@ -295,29 +293,27 @@ export default function Home() {
       const studentsSchema = z.array(studentSchema);
       const parsed = studentsSchema.safeParse(data);
       if (!parsed.success) {
-        console.error("❌ Dữ liệu không hợp lệ:", parsed.error.errors);
+        console.error("Dữ liệu không hợp lệ:", parsed.error.errors);
         return;
       }
   
       try {
-        console.log("📤 Bắt đầu import từng sinh viên...");
+        console.log("Bắt đầu import từng sinh viên...");
   
         let successCount = 0;
         let errorCount = 0;
   
-        // Lấy danh sách MSSV hiện có và tìm số lớn nhất
         const existingMSSVs = students
           .map((s) => s.mssv)
-          .filter((mssv) => /^SV\d+$/.test(mssv)) // Chỉ lấy MSSV dạng SVxxx
-          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); // Chuyển về số
+          .filter((mssv) => /^SV\d+$/.test(mssv)) 
+          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); 
   
-        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; // Nếu không có, bắt đầu từ SV006
+        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; 
   
         for (const student of data) {
-          // Nếu MSSV đã tồn tại, tạo MSSV mới tăng dần
           if (students.some((s) => s.mssv === student.mssv)) {
             maxMSSV++;
-            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; // SV006, SV007, SV008
+            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; 
           }
   
           try {
@@ -330,18 +326,18 @@ export default function Home() {
             if (response.ok) {
               successCount++;
               const data = await response.json();
-              setStudents((prev) => [...prev, data.student]); // Cập nhật danh sách sinh viên
+              setStudents((prev) => [...prev, data.student]); 
             } else {
-              console.error("❌ Lỗi khi thêm sinh viên:", student.fullName, await response.json());
+              console.error("Lỗi khi thêm sinh viên:", student.fullName, await response.json());
               errorCount++;
             }
           } catch (error) {
-            console.error("❌ Lỗi kết nối khi thêm sinh viên:", student.fullName, error);
+            console.error("Lỗi kết nối khi thêm sinh viên:", student.fullName, error);
             errorCount++;
           }
         }
   
-        console.log(`✅ Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`);
+        console.log(`Import hoàn tất: ${successCount} thành công.`);
         setIsImportExportOpen(false);
   
         // Ghi log
@@ -358,7 +354,7 @@ export default function Home() {
         });
   
       } catch (error) {
-        console.error("❌ Lỗi khi import sinh viên:", error);
+        console.error("Lỗi khi import sinh viên:", error);
       }
     } else if (action === "export") {
       let fileContent;
