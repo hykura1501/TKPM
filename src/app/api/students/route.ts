@@ -1,33 +1,94 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { z } from "zod";
+import { addLogEntry } from "@/lib/logging";
+
+
 
 // Xác định schema kiểm tra dữ liệu nhập vào
 const studentSchema = z.object({
   mssv: z.string().optional(),
   fullName: z.string().min(3, "Họ tên không hợp lệ"),
   dateOfBirth: z.string().refine((date) => !isNaN(Date.parse(date)), "Ngày sinh không hợp lệ"),
-  gender: z.enum(["Nam", "Nữ", "Khác"]),
-  faculty: z.enum(["Khoa Luật", "Khoa Tiếng Anh thương mại", "Khoa Tiếng Nhật", "Khoa Tiếng Pháp"]),
+  gender: z.enum(["male", "female", "other"]),
+  faculty: z.string(),
   course: z.string(),
   program: z.string(),
-  address: z.string(),
+  permanentAddress: z.object({
+    streetAddress: z.string(),
+    ward: z.string(),
+    district: z.string(),
+    province: z.string(),
+    country: z.string(),
+  }).optional(),
+  temporaryAddress: z.object({
+    streetAddress: z.string(),
+    ward: z.string(),
+    district: z.string(),
+    province: z.string(),
+    country: z.string(),
+  }).optional(),
+  mailingAddress: z.object({
+    streetAddress: z.string(),
+    ward: z.string(),
+    district: z.string(),
+    province: z.string(),
+    country: z.string(),
+  }).optional(),
+  identityDocument: z.union([
+    z.object({
+      type: z.literal("CMND"),
+      number: z.string(),
+      issueDate: z.string(),
+      issuePlace: z.string(),
+      expiryDate: z.string(),
+    }),
+    z.object({
+      type: z.literal("CCCD"),
+      number: z.string(),
+      issueDate: z.string(),
+      issuePlace: z.string(),
+      expiryDate: z.string(),
+      hasChip: z.boolean(),
+    }),
+    z.object({
+      type: z.literal("Passport"),
+      number: z.string(),
+      issueDate: z.string(),
+      issuePlace: z.string(),
+      expiryDate: z.string(),
+      issuingCountry: z.string(),
+      notes: z.string().optional(),
+    }),
+  ]).optional(),
+  nationality: z.string(),
   email: z.string().email("Email không hợp lệ"),
   phone: z.string().regex(/^(0[0-9]{9})$/, "Số điện thoại không hợp lệ"),
-  status: z.enum(["Đang học", "Đã tốt nghiệp", "Đã thôi học", "Tạm dừng học"]),
+  status: z.string(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
 
 // Kết nối MongoDB
 async function getDb() {
   const client = await clientPromise;
-  return client.db("student_management").collection("students");
+  return client.db("student_dashboard").collection("students");
 }
+
 
 // 📌 API lấy danh sách sinh viên
 export async function GET() {
   try {
     const collection = await getDb();
-    const students = await collection.find({}).toArray();
+    const students = await collection.find({}, { projection: { _id: 0 } }).toArray();
+    await addLogEntry({ 
+      message: "Lấy danh sách sinh viên",
+      level: "info" ,
+      action: "login",
+      entity: "system",
+      user: "system",
+      details: "System initialized",
+      });
     return NextResponse.json(students, { status: 200 });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sinh viên:", error);
@@ -41,6 +102,10 @@ export async function POST(req: Request) {
     const parsed = studentSchema.safeParse(body);
 
     if (!parsed.success) {
+      await addLogEntry({ 
+        message: "Thêm sinh viên không hợp lệ",
+        level: "warn"
+      });
       return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
 
@@ -60,6 +125,15 @@ export async function POST(req: Request) {
     const newStudent = { ...parsed.data, mssv: newMssv };
 
     await collection.insertOne(newStudent);
+    await addLogEntry({ 
+      message: "Thêm sinh viên mới", 
+      level: "info" ,
+      action: "create",
+      entity: "student",
+      entityId: newStudent.mssv,
+      user: "admin",
+      details: `Created student: ${newStudent.fullName}`, 
+    });
     return NextResponse.json({ message: "Thêm sinh viên thành công", student: newStudent }, { status: 201 });
   } catch (error) {
     console.error("Lỗi khi thêm sinh viên:", error);
@@ -76,11 +150,21 @@ export async function PUT(req: Request) {
     const parsed = studentSchema.safeParse(body);
     console.log(parsed);
     if (!parsed.success) {
+      await addLogEntry({ message: "Cập nhật sinh viên không hợp lệ", level: "warn" });
       return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
 
     const collection = await getDb();
     await collection.updateOne({ mssv: parsed.data.mssv }, { $set: parsed.data });
+    await addLogEntry({
+      message: "Cập nhật sinh viên",
+      level: "info",
+      action: "update",
+      entity: "student",
+      entityId: parsed.data.mssv,
+      user: "admin",
+      details: `Updated student: ${parsed.data.fullName}`,
+    });
 
     return NextResponse.json({ message: "Cập nhật thành công" }, { status: 200 });
   } catch (error) {
@@ -93,10 +177,22 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const { mssv } = await req.json();
-    if (!mssv) return NextResponse.json({ error: "MSSV không được để trống" }, { status: 400 });
+    if (!mssv){
+      await addLogEntry({ message: "MSSV không được để trống", level: "warn" });
+      return NextResponse.json({ error: "MSSV không được để trống" }, { status: 400 });
+    }
 
     const collection = await getDb();
     await collection.deleteOne({ mssv });
+    await addLogEntry({
+      message: "Xóa sinh viên",
+      level: "info",
+      action: "delete",
+      entity: "student",
+      entityId: mssv,
+      details: `Deleted student: ${mssv}`,
+      user: "admin",
+    });
 
     return NextResponse.json({ message: "Xóa thành công" }, { status: 200 });
   } catch (error) {
