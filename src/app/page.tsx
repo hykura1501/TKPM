@@ -27,7 +27,6 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { js2xml } from "xml-js";
 import { z } from "zod";
-import { metadata } from "./layout"
 
 
 export default function Home() {
@@ -51,7 +50,7 @@ export default function Home() {
     byStatus: {} as Record<string, number>,
     byFaculty: {} as Record<string, number>,
   })
-  const [isLoading, setIsLoading] = useState(true)
+  // const [isLoading, setIsLoading] = useState(true)
   async function pushLop(log: LogEntry) {
     const response = await fetch("/api/logs", {
       method: "POST",
@@ -102,7 +101,7 @@ export default function Home() {
     fetchPrograms()
     fetchLogs()
 
-    setIsLoading(false)
+    // setIsLoading(false)
   }, [])
 
   // Update stats when data changes
@@ -187,7 +186,7 @@ export default function Home() {
 
   // Delete student
   const deleteStudent = async (mssv: string) => {
-    const studentToDelete = students.find((s) => s.mssv === mssv)
+    // const studentToDelete = students.find((s) => s.mssv === mssv)
     if (window.confirm("Bạn có chắc chắn muốn xóa sinh viên này?")) {
       const response = await fetch("/api/students", {
         method: "DELETE",
@@ -217,6 +216,8 @@ export default function Home() {
     setEditingStudent(null)
     setIsFormOpen(true)
   }
+
+
 
   // Định nghĩa schema cho sinh viên
   const studentSchema = z.object({
@@ -275,17 +276,18 @@ export default function Home() {
       }),
     ]).optional(),
     nationality: z.string(),
-    email: z.string().email("Email không hợp lệ"), 
+    email: z.string().email("Email không hợp lệ"),
     phone: z.string().regex(/^(0[0-9]{9})$/, "Số điện thoại không hợp lệ"),
     status: z.string(),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
   });
 
-  const handleImportExport = async (action: "import" | "export", format: "csv" | "json" | "xml" | "excel", data?: any) => {
+  const handleImportExport = async (action: "import" | "export", format: "csv" | "json" | "xml" | "excel", data?: Student[]) => {
+    
     if (action === "import" && data) {
       if (!Array.isArray(data)) {
-        console.error("Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên.");
+        console.error("❌ Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên.");
         return;
       }
   
@@ -293,27 +295,29 @@ export default function Home() {
       const studentsSchema = z.array(studentSchema);
       const parsed = studentsSchema.safeParse(data);
       if (!parsed.success) {
-        console.error("Dữ liệu không hợp lệ:", parsed.error.errors);
+        console.error("❌ Dữ liệu không hợp lệ:", parsed.error.errors);
         return;
       }
   
       try {
-        console.log("Bắt đầu import từng sinh viên...");
+        console.log("📤 Bắt đầu import từng sinh viên...");
   
         let successCount = 0;
         let errorCount = 0;
   
+        // Lấy danh sách MSSV hiện có và tìm số lớn nhất
         const existingMSSVs = students
           .map((s) => s.mssv)
-          .filter((mssv) => /^SV\d+$/.test(mssv)) 
-          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); 
+          .filter((mssv) => /^SV\d+$/.test(mssv)) // Chỉ lấy MSSV dạng SVxxx
+          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); // Chuyển về số
   
-        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; 
+        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; // Nếu không có, bắt đầu từ SV006
   
         for (const student of data) {
+          // Nếu MSSV đã tồn tại, tạo MSSV mới tăng dần
           if (students.some((s) => s.mssv === student.mssv)) {
             maxMSSV++;
-            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; 
+            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; // SV006, SV007, SV008
           }
   
           try {
@@ -326,18 +330,18 @@ export default function Home() {
             if (response.ok) {
               successCount++;
               const data = await response.json();
-              setStudents((prev) => [...prev, data.student]); 
+              setStudents((prev) => [...prev, data.student]); // Cập nhật danh sách sinh viên
             } else {
-              console.error("Lỗi khi thêm sinh viên:", student.fullName, await response.json());
+              console.error("❌ Lỗi khi thêm sinh viên:", student.fullName, await response.json());
               errorCount++;
             }
           } catch (error) {
-            console.error("Lỗi kết nối khi thêm sinh viên:", student.fullName, error);
+            console.error("❌ Lỗi kết nối khi thêm sinh viên:", student.fullName, error);
             errorCount++;
           }
         }
   
-        console.log(`Import hoàn tất: ${successCount} thành công.`);
+        console.log(`✅ Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`);
         setIsImportExportOpen(false);
   
         // Ghi log
@@ -354,23 +358,23 @@ export default function Home() {
         });
   
       } catch (error) {
-        console.error("Lỗi khi import sinh viên:", error);
+        console.error("❌ Lỗi khi import sinh viên:", error);
       }
     } else if (action === "export") {
       let fileContent;
-      let fileName = `students.${format}`;
+      const fileName = `students.${format}`;
 
       const response = await fetch("/api/students")
       const data = await response.json()
       const students = data
       // Gắn thông tin đầy đủ cho sinh viên
-      students.forEach((student) => {
+      students.forEach((student: Student) => {
         student.faculty = getFacultyName(student.faculty);
         student.program = getProgramName(student.program);
         student.status = getStatusInfo(student.status).name;
       });
       // Chuẩn hóa thông tin 3 cột địa chỉ
-      const normalizedStudents = students.map((student) => ({
+      const normalizedStudents = students.map((student: Student) => ({
         ...student,
         permanentAddress: [
           student.permanentAddress?.streetAddress,
@@ -571,7 +575,7 @@ export default function Home() {
                         </DialogDescription>
                       </DialogHeader>
                       <StudentForm
-                        student={editingStudent}
+                        student={editingStudent || undefined}
                         onSubmit={editingStudent ? updateStudent : addStudent}
                         faculties={faculties}
                         statuses={statuses}

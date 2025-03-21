@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Plus, X, Save, Pencil } from "lucide-react"
 import type { Faculty, StudentStatus, Program } from "@/types/student"
-import { toast, ToastContainer } from "react-toastify"
+import { toast } from "react-toastify"
 
 
 type SettingsDialogProps = {

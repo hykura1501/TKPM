@@ -75,11 +75,18 @@ export type Student = {
 }
 
 export type LogEntry = {
-  id: string
-  timestamp: string
-  metadata: {
-    action: "create" | "update" | "delete" | "import" | "export" | "login" | "logout" | "error"
-    entity: "student" | "faculty" | "program" | "status" | "system"
+  id?: string
+  timestamp: string,
+  message: string,
+  level: string,
+  action?: string,
+  entity?: string,
+  user?: string,
+  details?: string,
+  entityId?: string,
+  metadata?: {
+    action: string | "create" | "update" | "delete" | "import" | "export" | "login" | "logout" | "error" 
+    entity: string | "student" | "faculty" | "program" | "status" | "system"
     entityId?: string
     user: string
     details: string

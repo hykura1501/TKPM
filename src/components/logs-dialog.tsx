@@ -22,16 +22,16 @@ export function LogsDialog({ logs }: LogsDialogProps) {
     const details = log.metadata?.details?.toLowerCase() || "";
     const user = log.metadata?.user?.toLowerCase() || "";
     const entityId = log.metadata?.entityId?.toLowerCase() || "";
-  
+
     return details.includes(searchTerm.toLowerCase()) ||
-           user.includes(searchTerm.toLowerCase()) ||
-           entityId.includes(searchTerm.toLowerCase());
+      user.includes(searchTerm.toLowerCase()) ||
+      entityId.includes(searchTerm.toLowerCase());
   });
-  
+
 
   // Get unique actions and entities for filters
-  const uniqueActions = Array.from(new Set(logs.map((log) => log.metadata.action)))
-  const uniqueEntities = Array.from(new Set(logs.map((log) => log.metadata.entity)))
+  const uniqueActions = Array.from(new Set(logs.map((log) => log?.metadata?.action)))
+  const uniqueEntities = Array.from(new Set(logs.map((log) => log?.metadata?.entity)))
 
   // Get icon for action
   const getActionIcon = (action: string) => {
@@ -97,7 +97,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             <option value="">Tất cả hành động</option>
             {uniqueActions.map((action) => (
               <option key={action} value={action}>
-                {action.charAt(0).toUpperCase() + action.slice(1)}
+                {action ? action.charAt(0).toUpperCase() + action.slice(1) : ""}
               </option>
             ))}
           </select>
@@ -110,7 +110,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             <option value="">Tất cả đối tượng</option>
             {uniqueEntities.map((entity) => (
               <option key={entity} value={entity}>
-                {entity.charAt(0).toUpperCase() + entity.slice(1)}
+                {entity ? entity.charAt(0).toUpperCase() + entity.slice(1) : ""}
               </option>
             ))}
           </select>
@@ -129,19 +129,22 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {filteredLogs.length > 0 ? (
                 filteredLogs.map((log) => (
-                  <div key={log._id} className="flex items-start p-3 border rounded-md">
-                    <div className="mr-3 mt-1">{getActionIcon(log.metadata.action)}</div>
+                  <div key={log.id} className="flex items-start p-3 border rounded-md">
+                    <div className="mr-3 mt-1">{getActionIcon(log.metadata?.action ?? "")}</div>
                     <div className="flex-1">
                       <div className="flex justify-between">
                         <span className="font-medium">
-                          {log.metadata.action.charAt(0).toUpperCase() + log.metadata.action.slice(1)} {log.metadata.entity}
-                          {log.metadata.entityId && <span className="text-muted-foreground"> #{log.metadata.entityId}</span>}
+                          {log.metadata?.action
+                            ? log.metadata.action.charAt(0).toUpperCase() + log.metadata.action.slice(1)
+                            : "Hành động"}{" "}
+                          {log.metadata?.entity ?? ""}
+                          {log.metadata?.entityId && <span className="text-muted-foreground"> #{log.metadata.entityId}</span>}
                         </span>
                         <span className="text-sm text-muted-foreground">{formatTimestamp(log.timestamp)}</span>
                       </div>
-                      <p className="text-sm mt-1">{log.metadata.details}</p>
+                      <p className="text-sm mt-1">{log.metadata?.details ?? ""}</p>
                       <div className="flex justify-between mt-1">
-                        <span className="text-xs text-muted-foreground">Người dùng: {log.metadata.user}</span>
+                        <span className="text-xs text-muted-foreground">Người dùng: {log.metadata?.user ?? "Không xác định"}</span>
                       </div>
                     </div>
                   </div>
@@ -150,6 +153,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
                 <div className="text-center py-8 text-muted-foreground">Không tìm thấy nhật ký nào</div>
               )}
             </div>
+
           </CardContent>
         </Card>
       </div>

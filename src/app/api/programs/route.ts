@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { z } from "zod";
-import type { Program } from "@/types/student";
-import { use } from "react";
-
+import { addLogEntry } from "@/lib/logging";
 // Định nghĩa schema cho Program
 const programSchema = z.object({
   id: z.string(),

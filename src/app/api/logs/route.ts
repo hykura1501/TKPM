@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { z } from "zod";
-import type { LogEntry } from "@/types/student";
-import { metadata } from "@/app/layout";
 
 // Định nghĩa schema cho LogEntry
 const logEntrySchema = z.object({

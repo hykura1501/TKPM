@@ -18,7 +18,7 @@ const logger = createLogger({
     new transports.Console(),
     new transports.MongoDB({
       level: 'info',
-      db: process.env.MONGODB_URI,
+      db: process.env.MONGODB_URI as string,
       collection: 'logs',
       options: { useUnifiedTopology: true }
     })
@@ -35,10 +35,10 @@ export const addLogEntry = async (logData: Omit<LogEntry, "id" | "timestamp">): 
 
   // Ghi log với Winston
   logger.log({
-    level: logData.level || 'info',
-    message: logData.message,
-    ...newLog,
+    ...newLog, // Đảm bảo giữ nguyên `id`, `timestamp`, `level`, `message`
+    level: logData.level || 'info', // Ghi đè hoặc bổ sung nếu thiếu
   });
+
 
   console.log("New log entry:", newLog);
 
@@ -47,6 +47,10 @@ export const addLogEntry = async (logData: Omit<LogEntry, "id" | "timestamp">): 
 
 // Hàm lấy tất cả log
 export const getLogs = async (): Promise<LogEntry[]> => {
-  const logs = await logger.query({ order: 'desc' });
+  const logs = await logger.query({
+    order: 'desc',
+    fields: ['message', 'level', 'timestamp'], // Cung cấp các trường cần lấy
+  });
+  
   return logs;
 };

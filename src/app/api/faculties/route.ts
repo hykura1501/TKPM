@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { z } from "zod";
-import type { Faculty } from "@/types/student";
 import { addLogEntry } from "@/lib/logging";
 
 // Định nghĩa schema cho Faculty
@@ -33,6 +32,7 @@ export async function GET() {
   } catch (error) {
     console.error("Lỗi khi lấy danh sách khoa:", error);
     await addLogEntry({
+      
       message: "Lỗi khi lấy danh sách khoa",
       level: "error",
     });

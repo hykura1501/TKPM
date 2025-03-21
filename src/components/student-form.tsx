@@ -93,8 +93,8 @@ const studentSchema = z.object({
 })
 
 type StudentFormProps = {
-  student: Student | null
-  onSubmit: (data: any) => void
+  student?: Student
+  onSubmit: (data: Student) => void
   faculties: Faculty[]
   statuses: StudentStatus[]
   programs: Program[]
@@ -165,11 +165,18 @@ export function StudentForm({ student, onSubmit, faculties, statuses, programs }
         ...values,
         mssv: student.mssv,
         createdAt: student.createdAt,
+        updatedAt: new Date().toISOString(), // Thêm `updatedAt`
       })
     } else {
       // If adding new student
-      onSubmit({...values, mssv: ""})
+      onSubmit({
+        ...values,
+        mssv: "",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
     }
+    
   }
 
   // Xử lý khi thay đổi khoa
