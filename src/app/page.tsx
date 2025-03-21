@@ -286,45 +286,79 @@ export default function Home() {
 
   const handleImportExport = async (action: "import" | "export", format: "csv" | "json" | "xml" | "excel", data?: any) => {
     if (action === "import" && data) {
-      // Validate the data before importing
-      const parsedData = data.map((item: any) => {
-        const parsed = studentSchema.safeParse(item);
-        if (!parsed.success) {
-          console.error("Invalid data:", parsed.error.errors);
-          return null;
-        }
-        return parsed.data;
-      }).filter(Boolean);
+      if (!Array.isArray(data)) {
+        console.error("❌ Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên.");
+        return;
+      }
   
-      if (parsedData.length > 0) {
-        setStudents([...students, ...parsedData]);
-        // Log the action
-        const newLog = {
+      // Validate danh sách sinh viên
+      const studentsSchema = z.array(studentSchema);
+      const parsed = studentsSchema.safeParse(data);
+      if (!parsed.success) {
+        console.error("❌ Dữ liệu không hợp lệ:", parsed.error.errors);
+        return;
+      }
+  
+      try {
+        console.log("📤 Bắt đầu import từng sinh viên...");
+  
+        let successCount = 0;
+        let errorCount = 0;
+  
+        // Lấy danh sách MSSV hiện có và tìm số lớn nhất
+        const existingMSSVs = students
+          .map((s) => s.mssv)
+          .filter((mssv) => /^SV\d+$/.test(mssv)) // Chỉ lấy MSSV dạng SVxxx
+          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); // Chuyển về số
+  
+        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; // Nếu không có, bắt đầu từ SV006
+  
+        for (const student of data) {
+          // Nếu MSSV đã tồn tại, tạo MSSV mới tăng dần
+          if (students.some((s) => s.mssv === student.mssv)) {
+            maxMSSV++;
+            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; // SV006, SV007, SV008
+          }
+  
+          try {
+            const response = await fetch("/api/students", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(student),
+            });
+  
+            if (response.ok) {
+              successCount++;
+              const data = await response.json();
+              setStudents((prev) => [...prev, data.student]); // Cập nhật danh sách sinh viên
+            } else {
+              console.error("❌ Lỗi khi thêm sinh viên:", student.fullName, await response.json());
+              errorCount++;
+            }
+          } catch (error) {
+            console.error("❌ Lỗi kết nối khi thêm sinh viên:", student.fullName, error);
+            errorCount++;
+          }
+        }
+  
+        console.log(`✅ Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`);
+        setIsImportExportOpen(false);
+  
+        // Ghi log
+        pushLop({
           timestamp: new Date().toISOString(),
-          level: 'info',
-          message: `Imported ${parsedData.length} students in ${format} format`,
+          level: "info",
+          message: `Imported ${successCount} students successfully.`,
           metadata: {
             action: "import",
             entity: "student",
             user: "admin",
-            details: `Imported ${parsedData.length} students in ${format} format`,
-          }
-        };
-        pushLop(newLog);
-      } else {
-        console.error("No valid data to import");
-        const newLog = {
-          timestamp: new Date().toISOString(),
-          level: 'warn',
-          message: `No valid data to import`,
-          metadata: {
-            action: "import",
-            entity: "student",
-            user: "admin",
-            details: `No valid data to import`,
-          }
-        };
-        pushLop(newLog);
+            details: `Imported ${successCount} students.`,
+          },
+        });
+  
+      } catch (error) {
+        console.error("❌ Lỗi khi import sinh viên:", error);
       }
     } else if (action === "export") {
       let fileContent;

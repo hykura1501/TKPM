@@ -19,16 +19,15 @@ export function LogsDialog({ logs }: LogsDialogProps) {
 
   // Filter logs based on search term and filters
   const filteredLogs = logs.filter((log) => {
-    const matchesSearch =
-      log.metadata.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.metadata.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (log.metadata.entityId && log.metadata.entityId.toLowerCase().includes(searchTerm.toLowerCase()))
-
-    const matchesAction = !filterAction || log.metadata.action === filterAction
-    const matchesEntity = !filterEntity || log.metadata.entity === filterEntity
-
-    return matchesSearch && matchesAction && matchesEntity
-  })
+    const details = log.metadata?.details?.toLowerCase() || "";
+    const user = log.metadata?.user?.toLowerCase() || "";
+    const entityId = log.metadata?.entityId?.toLowerCase() || "";
+  
+    return details.includes(searchTerm.toLowerCase()) ||
+           user.includes(searchTerm.toLowerCase()) ||
+           entityId.includes(searchTerm.toLowerCase());
+  });
+  
 
   // Get unique actions and entities for filters
   const uniqueActions = Array.from(new Set(logs.map((log) => log.metadata.action)))
