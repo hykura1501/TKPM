@@ -284,8 +284,10 @@ export default function Home() {
   });
 
   const handleImportExport = async (action: "import" | "export", format: "csv" | "json" | "xml" | "excel", data?: Student[]) => {
+    console.log("vào đây");
     
     if (action === "import" && data) {
+      
       if (!Array.isArray(data)) {
         console.error("❌ Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên.");
         return;
