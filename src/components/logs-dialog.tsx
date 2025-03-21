@@ -128,8 +128,8 @@ export function LogsDialog({ logs }: LogsDialogProps) {
           <CardContent>
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
               {filteredLogs.length > 0 ? (
-                filteredLogs.map((log) => (
-                  <div key={log.id} className="flex items-start p-3 border rounded-md">
+                filteredLogs.map((log, index) => (
+                  <div key={index} className="flex items-start p-3 border rounded-md">
                     <div className="mr-3 mt-1">{getActionIcon(log.metadata?.action ?? "")}</div>
                     <div className="flex-1">
                       <div className="flex justify-between">

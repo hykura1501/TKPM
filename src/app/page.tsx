@@ -713,7 +713,17 @@ export default function Home() {
       </footer>
 
       {/* Settings Dialog */}
-      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
+      <Dialog open={isSettingsOpen} onOpenChange={(isOpen) => {
+        setIsLogsOpen(isOpen);
+        if (!isOpen) {
+          async function fetchLogs() {
+            const response = await fetch("/api/logs")
+            const data = await response.json()
+            setLogs(data)
+          }
+          fetchLogs();
+        }
+      }}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <SettingsDialog faculties={faculties} statuses={statuses} programs={programs} onSave={updateSettings} />
         </DialogContent>

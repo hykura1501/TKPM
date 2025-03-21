@@ -85,6 +85,7 @@ export type LogEntry = {
   details?: string,
   entityId?: string,
   metadata?: {
+    id?: string
     action: string | "create" | "update" | "delete" | "import" | "export" | "login" | "logout" | "error" 
     entity: string | "student" | "faculty" | "program" | "status" | "system"
     entityId?: string
