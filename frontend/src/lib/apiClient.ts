@@ -3,7 +3,7 @@ import config from "../config";
 
 // Cấu hình base URL
 const apiClient = axios.create({
-  baseURL: config.api.baseUrl, // Thay đổi nếu cần
+  baseURL: `${config.api.baseUrl}/api`, // Thay đổi nếu cần
   headers: {
     "Content-Type": "application/json",
   },

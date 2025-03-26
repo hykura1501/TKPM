@@ -1,7 +1,5 @@
 const { createLogger, format, transports } = require('winston');
 require('winston-mongodb');
-const Log = require('../models/log');
-
 // Function to generate a random ID
 const generateId = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);

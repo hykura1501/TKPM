@@ -36,6 +36,25 @@ app.use(morgan('combined'));
 
 route(app);
 
+
+// Xử lý lỗi 404 - Route không tồn tại
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: 'Route không tồn tại',
+    error: 'Not Found'
+  });
+});
+
+// Middleware xử lý lỗi tổng quát
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log lỗi ra console
+  res.status(err.status || 500).json({
+    message: err.message || 'Đã xảy ra lỗi trên server',
+    error: err.stack
+  });
+});
+
+
 httpServer.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
