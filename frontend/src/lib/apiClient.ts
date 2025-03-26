@@ -1,9 +1,8 @@
 import axios from "axios";
-import config from "../config";
 
 // Cấu hình base URL
 const apiClient = axios.create({
-  baseURL: `${config.api.baseUrl}/api`, // Thay đổi nếu cần
+  baseURL: `${process.env.API_BASE_URL}/api`, // Thay đổi nếu cần
   headers: {
     "Content-Type": "application/json",
   },
