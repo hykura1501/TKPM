@@ -95,8 +95,8 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             onChange={(e) => setFilterAction(e.target.value || null)}
           >
             <option value="">Tất cả hành động</option>
-            {uniqueActions.map((action) => (
-              <option key={action} value={action}>
+            {uniqueActions.map((action, index) => (
+              <option key={index} value={action}>
                 {action ? action.charAt(0).toUpperCase() + action.slice(1) : ""}
               </option>
             ))}
@@ -108,8 +108,8 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             onChange={(e) => setFilterEntity(e.target.value || null)}
           >
             <option value="">Tất cả đối tượng</option>
-            {uniqueEntities.map((entity) => (
-              <option key={entity} value={entity}>
+            {uniqueEntities.map((entity, index) => (
+              <option key={index} value={entity}>
                 {entity ? entity.charAt(0).toUpperCase() + entity.slice(1) : ""}
               </option>
             ))}
