@@ -322,7 +322,7 @@ export default function Home() {
           }
 
           try {
-            const data = await StudentService.addStudent(student);
+            const data = await StudentService.importStudent(student);
             successCount++;
             setStudents((prev) => [...prev, data.student]); // Cập nhật danh sách sinh viên
           } catch (error) {

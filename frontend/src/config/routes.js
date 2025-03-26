@@ -4,7 +4,7 @@ const routes = {
     faculties: '/faculties',
     statuses: '/statuses',
     logs: '/logs',
-    
+    studentsImport: '/students/import',
 };
 
 export default routes;

@@ -4,6 +4,8 @@ const { z } = require('zod');
 // Define the schema for input validation
 const logEntrySchema = z.object({
   timestamp: z.string(),
+  message: z.string(),
+  level: z.enum(['info', 'warn', 'error']),
   metadata: z.record(z.any()).optional(),
 });
 

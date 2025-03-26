@@ -27,6 +27,11 @@ class StudentService {
     const response = await apiClient.delete(`${routes.students}/${mssv}`);
     return response.data;
   }
+
+  async importStudent(student: Student) {
+    const response = await apiClient.post(routes.studentsImport, student);
+    return response.data;
+  }
 }
 
 const studentService = new StudentService();

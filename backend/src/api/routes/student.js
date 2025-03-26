@@ -7,5 +7,6 @@ router.get('/',studentController.getListStudents);
 router.post('/',studentController.addStudent);
 router.put('/',studentController.updateStudent);
 router.delete('/:mssv',studentController.deleteStudent);
+router.post('/import',studentController.addStudentFromFile);
 
 module.exports = router;
