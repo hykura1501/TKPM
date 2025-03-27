@@ -287,75 +287,106 @@ export default function Home() {
     if (action === "import" && data) {
       if (!Array.isArray(data)) {
         console.error(
-          "❌ Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên."
+          "Dữ liệu nhập vào không hợp lệ. Phải là một danh sách sinh viên."
         );
+        toast.error("Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại.");
         return;
       }
-
+  
       // Validate danh sách sinh viên
       const studentsSchema = z.array(studentSchema);
       const parsed = studentsSchema.safeParse(data);
       if (!parsed.success) {
-        console.error("❌ Dữ liệu không hợp lệ:", parsed.error.errors);
-        toast.error("Dữ liệu không hợp lệ.");
+        console.error("Dữ liệu không hợp lệ:", parsed.error.errors);
+        toast.error("Import không thành công! Vui lòng kiểm tra lại dữ liệu!");
+        // Ghi log
+        pushLop({
+          timestamp: new Date().toISOString(),
+          level: "info",
+          message: `Imported unsuccessfully.`,
+          metadata: {
+            action: "import",
+            entity: "student",
+            user: "admin",
+            details: `Imported unsuccessfully.`,
+          },
+        });
+        setIsImportExportOpen(false);
         return;
       }
-
+  
       try {
         console.log("📤 Bắt đầu import từng sinh viên...");
-
+  
         let successCount = 0;
         let errorCount = 0;
-
+  
         // Lấy danh sách MSSV hiện có và tìm số lớn nhất
         const existingMSSVs = students
           .map((s) => s.mssv)
-          .filter((mssv) => /^SV\d+$/.test(mssv)) // Chỉ lấy MSSV dạng SVxxx
-          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); // Chuyển về số
-
-        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; // Nếu không có, bắt đầu từ SV006
-
+          .filter((mssv) => /^SV\d+$/.test(mssv)) 
+          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); 
+        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; 
+  
         for (const student of data) {
-          // Nếu MSSV đã tồn tại, tạo MSSV mới tăng dần
           if (students.some((s) => s.mssv === student.mssv)) {
             maxMSSV++;
-            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; // SV006, SV007, SV008
+            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; 
           }
-
+  
           try {
             const data = await StudentService.importStudent(student);
             successCount++;
-            setStudents((prev) => [...prev, data.student]); // Cập nhật danh sách sinh viên
+            setStudents((prev) => [...prev, data.student]);
           } catch (error) {
             console.error(
-              "❌ Lỗi kết nối khi thêm sinh viên:",
+              "Lỗi kết nối khi thêm sinh viên:",
               student.fullName,
               error
             );
             errorCount++;
           }
         }
-
+  
         console.log(
-          `✅ Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`
+          `Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`
         );
-        toast.success("Import dữ liệu thành công!");
+  
+        if (successCount > 0) {
+          toast.success(`Import thành công: ${successCount} sinh viên.`);
+          // Ghi log
+          pushLop({
+            timestamp: new Date().toISOString(),
+            level: "info",
+            message: `Imported ${successCount} students successfully.`,
+            metadata: {
+              action: "import",
+              entity: "student",
+              user: "admin",
+              details: `Imported ${successCount} students.`,
+            },
+          });
+        }
+        if (errorCount > 0) {
+          toast.error("Import không thành công! Vui lòng kiểm tra lại dữ liệu!");
+          // Ghi log
+          pushLop({
+            timestamp: new Date().toISOString(),
+            level: "info",
+            message: `Imported unsuccessfully.`,
+            metadata: {
+              action: "import",
+              entity: "student",
+              user: "admin",
+              details: `Imported unsuccessfully.`,
+            },
+          });
+        }
+  
         setIsImportExportOpen(false);
-
-        // Ghi log
-        pushLop({
-          timestamp: new Date().toISOString(),
-          level: "info",
-          message: `Imported ${successCount} students successfully.`,
-          metadata: {
-            action: "import",
-            entity: "student",
-            user: "admin",
-            details: `Imported ${successCount} students.`,
-          },
-        });
       } catch (error) {
-        console.error("❌ Lỗi khi import sinh viên:", error);
+        console.error("Lỗi khi import sinh viên:", error);
+        toast.error("Đã xảy ra lỗi khi import sinh viên. Vui lòng thử lại.");
       }
     } else if (action === "export") {
       try {
