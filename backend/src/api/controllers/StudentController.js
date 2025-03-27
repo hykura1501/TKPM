@@ -203,7 +203,7 @@ class StudentController {
       if (!newStatus) {
         return res.status(400).json({ error: "Trạng thái không tồn tại" });
       }
-      if (!allowedStatus.includes(newStatus.name)) {
+      if (!allowedStatus.includes(newStatus.name) && newStatus.name !== currentStatus.name) {
         return res.status(400).json({ error: "Không thể chuyển trạng thái" });
       }
       await Student.updateOne(
