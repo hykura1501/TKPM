@@ -6,6 +6,13 @@ const Program = require("../models/Program");
 const Counter = require("../models/Counter");
 const { z } = require("zod");
 
+const allowedDomains = ["student.university.edu.vn", "hcmus.edu.vn"]; // Danh sách tên miền được phép (có thể cấu hình động)
+const statusTransitionRules = {
+  "Đang học": ["Bảo lưu", "Đã tốt nghiệp", "Đã thôi học"],
+  "Bảo lưu": ["Đang học", "Đã thôi học"],
+  "Đã thôi học": [],
+  "Đã tốt nghiệp": [],
+};
 // Define the schema for input validation
 const studentSchema = z.object({
   mssv: z.string().optional(),
@@ -73,7 +80,20 @@ const studentSchema = z.object({
     ])
     .optional(),
   nationality: z.string(),
-  email: z.string().email("Email không hợp lệ"),
+  email: z
+    .string()
+    .email({ message: "Email không hợp lệ" })
+    .refine(
+      (email) => {
+        const domain = email.split("@")[1];
+        return allowedDomains.includes(domain);
+      },
+      {
+        message:
+          "Email phải thuộc một trong các tên miền: " +
+          allowedDomains.join(", "),
+      }
+    ),
   phone: z.string().regex(/^(0|\+84)[3|5|7|8|9][0-9]{8}$/, {
     message:
       "Số điện thoại không hợp lệ (phải có 10 số và bắt đầu bằng 0 hoặc +84)",
@@ -114,15 +134,14 @@ class StudentController {
         return res.status(400).json({ error: parsed.error.errors });
       }
 
-      // Get all MSSV from the database and find the highest value
-      const students = await Student.find({}, { mssv: 1 });
-      const maxMssv = students.reduce((max, student) => {
-        const numberPart = parseInt(student.mssv.replace("SV", ""), 10);
-        return isNaN(numberPart) ? max : Math.max(max, numberPart);
-      }, 0);
+      // **Tạo MSSV đảm bảo không trùng**
+      const counter = await Counter.findOneAndUpdate(
+        { name: "student_mssv" },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
 
-      // Create a new MSSV with the format "SVxxx"
-      const newMssv = `SV${String(maxMssv + 1).padStart(3, "0")}`;
+      const newMssv = `SV${String(counter.value).padStart(3, "0")}`;
 
       // Add MSSV to the student data
       const newStudent = { ...parsed.data, mssv: newMssv };
@@ -170,7 +189,23 @@ class StudentController {
         });
         return res.status(400).json({ error: parsed.error.errors });
       }
-
+      //Kiểm tra trạng thái hợp lệ 
+      const currentStudent = await Student.findOne({ mssv: parsed.data.mssv });
+      if (!currentStudent) {
+        return res.status(404).json({ error: "Sinh viên không tồn tại" });
+      }
+      const currentStatus = await Status.findOne({ id: currentStudent.status });
+      if (!currentStatus) {
+        return res.status(400).json({ error: "Trạng thái không tồn tại" });
+      }
+      const allowedStatus = statusTransitionRules[currentStatus.name];
+      const newStatus = await Status.findOne({ id: parsed.data.status });
+      if (!newStatus) {
+        return res.status(400).json({ error: "Trạng thái không tồn tại" });
+      }
+      if (!allowedStatus.includes(newStatus.name)) {
+        return res.status(400).json({ error: "Không thể chuyển trạng thái" });
+      }
       await Student.updateOne(
         { mssv: parsed.data.mssv },
         { $set: parsed.data }
