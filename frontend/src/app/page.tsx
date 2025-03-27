@@ -297,6 +297,7 @@ export default function Home() {
       const parsed = studentsSchema.safeParse(data);
       if (!parsed.success) {
         console.error("❌ Dữ liệu không hợp lệ:", parsed.error.errors);
+        toast.error("Dữ liệu không hợp lệ.");
         return;
       }
 
@@ -338,6 +339,7 @@ export default function Home() {
         console.log(
           `✅ Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`
         );
+        toast.success("Import dữ liệu thành công!");
         setIsImportExportOpen(false);
 
         // Ghi log
