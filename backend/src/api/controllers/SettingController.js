@@ -1,6 +1,7 @@
 const Setting = require("../models/Setting");
 const { addLogEntry } = require("../helpers/logging");
 const Status = require("../models/Status");
+const generateStatusTransitionRules = require("../helpers/statusRule");
 class SettingController {
   async updateDomains(req, res) {
     try {
@@ -98,6 +99,20 @@ class SettingController {
 
       return res.status(200).json(result);
 
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách setting:", error);
+      await addLogEntry({
+        message: "Lỗi khi lấy danh sách setting",
+        level: "error",
+      });
+      res.status(500).json({ error: "Lỗi khi lấy danh sách setting" });
+    }
+  }
+  async getStatusRules(req, res) {
+    try {
+      const status = await Status.find({})
+      
+      return res.status(200).json(generateStatusTransitionRules(status));
     } catch (error) {
       console.error("Lỗi khi lấy danh sách setting:", error);
       await addLogEntry({

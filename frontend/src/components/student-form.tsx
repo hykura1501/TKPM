@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/card";
 import type { Student, Faculty, StudentStatus, Program } from "@/types/student";
 import { toast } from "react-toastify";
+import { PhoneFormat } from "@/types/student";
 
 // Định nghĩa schema cho địa chỉ
 const addressSchema = z
@@ -82,57 +83,7 @@ const identityDocumentSchema = z
     }),
   ])
   .optional();
-const allowedDomains = ["student.university.edu.vn", "hcmus.edu.vn"]; // Danh sách tên miền được phép (có thể cấu hình động)
-
-// Định nghĩa schema cho sinh viên
-const studentSchema = z.object({
-  fullName: z.string().min(2, { message: "Họ tên phải có ít nhất 2 ký tự" }),
-  dateOfBirth: z.string().refine(
-    (date) => {
-      const today = new Date();
-      const dob = new Date(date);
-      const age = today.getFullYear() - dob.getFullYear();
-      return age >= 16 && age <= 100;
-    },
-    { message: "Tuổi phải từ 16 đến 100" }
-  ),
-  gender: z.enum(["male", "female", "other"], {
-    required_error: "Vui lòng chọn giới tính",
-  }),
-  faculty: z.string({
-    required_error: "Vui lòng chọn khoa",
-  }),
-  course: z.string().min(1, { message: "Vui lòng nhập khóa học" }),
-  program: z.string({
-    required_error: "Vui lòng chọn chương trình học",
-  }),
-  permanentAddress: addressSchema,
-  temporaryAddress: addressSchema,
-  mailingAddress: addressSchema,
-  identityDocument: identityDocumentSchema,
-  nationality: z.string().min(1, { message: "Vui lòng nhập quốc tịch" }),
-  email: z
-    .string()
-    .email({ message: "Email không hợp lệ" })
-    .refine(
-      (email) => {
-        const domain = email.split("@")[1];
-        return allowedDomains.includes(domain);
-      },
-      {
-        message:
-          "Email phải thuộc một trong các tên miền: " +
-          allowedDomains.join(", "),
-      }
-    ),
-  phone: z.string().regex(/^(0|\+84)[3|5|7|8|9][0-9]{8}$/, {
-    message:
-      "Số điện thoại không hợp lệ (phải có 10 số và bắt đầu bằng 0 hoặc +84)",
-  }),
-  status: z.string({
-    required_error: "Vui lòng chọn tình trạng",
-  }),
-});
+// const allowedDomains = ["student.university.edu.vn", "hcmus.edu.vn"]; // Danh sách tên miền được phép (có thể cấu hình động)
 
 type StudentFormProps = {
   student?: Student;
@@ -141,6 +92,9 @@ type StudentFormProps = {
   statuses: StudentStatus[];
   programs: Program[];
   cancelForm: () => void;
+  statusTransitionRules: Record<string, string[]>;
+  phoneFormats: PhoneFormat[];
+  allowedDomains: string[];
 };
 
 export function StudentForm({
@@ -150,6 +104,9 @@ export function StudentForm({
   statuses,
   programs,
   cancelForm,
+  statusTransitionRules,
+  phoneFormats,
+  allowedDomains,
 }: StudentFormProps) {
   const [idType, setIdType] = useState<"CMND" | "CCCD" | "Passport">(
     student?.identityDocument?.type || "CMND"
@@ -172,7 +129,65 @@ export function StudentForm({
   const filteredPrograms = programs.filter(
     (p) => p.faculty === selectedFaculty
   );
-
+  // Định nghĩa schema cho sinh viên
+  const studentSchema = z.object({
+    fullName: z.string().min(2, { message: "Họ tên phải có ít nhất 2 ký tự" }),
+    dateOfBirth: z.string().refine(
+      (date) => {
+        const today = new Date();
+        const dob = new Date(date);
+        const age = today.getFullYear() - dob.getFullYear();
+        return age >= 16 && age <= 100;
+      },
+      { message: "Tuổi phải từ 16 đến 100" }
+    ),
+    gender: z.enum(["male", "female", "other"], {
+      required_error: "Vui lòng chọn giới tính",
+    }),
+    faculty: z.string({
+      required_error: "Vui lòng chọn khoa",
+    }),
+    course: z.string().min(1, { message: "Vui lòng nhập khóa học" }),
+    program: z.string({
+      required_error: "Vui lòng chọn chương trình học",
+    }),
+    permanentAddress: addressSchema,
+    temporaryAddress: addressSchema,
+    mailingAddress: addressSchema,
+    identityDocument: identityDocumentSchema,
+    nationality: z.string().min(1, { message: "Vui lòng nhập quốc tịch" }),
+    email: z
+      .string()
+      .email({ message: "Email không hợp lệ" })
+      .refine(
+        (email) => {
+          const domain = email.split("@")[1];
+          return allowedDomains.includes(domain);
+        },
+        {
+          message:
+            "Email phải thuộc một trong các tên miền: " +
+            allowedDomains.join(", "),
+        }
+      ),
+    // phone: z.string().regex(
+    //     /^(0|\+84)(\d{9}|\d{10})$/),
+    phone: z.string().refine(
+      (phone) => {
+        // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
+        return phoneFormats.some((format) => {
+          const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+          return regex.test(phone);
+        });
+      },
+      {
+        message: `Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng theo quốc gia.`,
+      }
+    ),
+    status: z.string({
+      required_error: "Vui lòng chọn tình trạng",
+    }),
+  });
   // Initialize form with default values or existing student data
   const form = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
@@ -255,12 +270,6 @@ export function StudentForm({
     }
   };
 
-  const statusTransitionRules: Record<string, string[]> = {
-    "Đang học": ["Bảo lưu", "Đã tốt nghiệp", "Đã thôi học"],
-    "Bảo lưu": ["Đang học", "Đã thôi học"],
-    "Đã thôi học": [],
-    "Đã tốt nghiệp": [],
-  };
   const handleStatusChange = (currentStatus: string, newStatus: string) => {
     const status1 = statuses.find((s) => s.id === currentStatus)?.name;
     const status2 = statuses.find((s) => s.id === newStatus)?.name;
@@ -1118,7 +1127,14 @@ export function StudentForm({
         </Tabs>
 
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={() =>{ form.reset(); cancelForm();}}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.reset();
+              cancelForm();
+            }}
+          >
             Hủy bỏ
           </Button>
           <Button type="submit" className="bg-blue-600 hover:bg-blue-700">

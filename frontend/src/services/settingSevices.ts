@@ -20,6 +20,10 @@ class SettingService {
         const response = await apiClient.patch(`${routes.settings}/phone`, { phoneFormats: JSON.stringify(phoneFormats) });
         return response.data;
     }
+    async getFormatRules() {
+        const response = await apiClient.get(`${routes.settings}/status/rules`);
+        return response.data;
+    }
 }
 
 const settingService = new SettingService();

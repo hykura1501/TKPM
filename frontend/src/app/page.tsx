@@ -66,6 +66,7 @@ import StatusService from "@/services/statusService";
 import { toast } from "react-toastify";
 import { ConfigDialog } from "@/components/config-dialog";
 import settingService from "@/services/settingSevices";
+import { set } from "date-fns";
 
 export default function Home() {
   // State for students and related data
@@ -97,6 +98,7 @@ export default function Home() {
       console.error("Failed to add student", error);
     }
   }
+  const [statusRules, setStatusRules] = useState<Record<string, string[]>>  ({}); 
   // Load initial data
   useEffect(() => {
     async function loadData() {
@@ -105,14 +107,14 @@ export default function Home() {
       const statusesData = await StatusService.fetchStatuses();
       const programsData = await ProgramService.fetchPrograms();
       const settings = await settingService.fetchSettings();
-      console.log();
-
+      const statusTransitionRules = await settingService.getFormatRules();
 
       setStudents(studentsData);
       setFaculties(facultiesData);
       setStatuses(statusesData);
       setPrograms(programsData);
       setSystemConfig(settings);
+      setStatusRules(statusTransitionRules);
     }
 
     loadData();
@@ -506,6 +508,7 @@ export default function Home() {
     try {
       if (flag === "status") {
         const res = await StatusService.updateStatusRules(newConfig.statusTransitionRules);
+        setStatusRules(await settingService.getFormatRules());
         toast.success(res.message)
         setSystemConfig(newConfig)
         setIsConfigOpen(false)
@@ -586,7 +589,7 @@ export default function Home() {
             <Button
               variant="outline"
               size="sm"
-              className="text-white border-white hover:bg-white/20"
+              className="text-white bg-blue border-white hover:bg-white/20"
               onClick={() => setIsConfigOpen(true)}
             >
               <Sliders className="h-4 w-4 mr-2" />
@@ -704,7 +707,10 @@ export default function Home() {
                         faculties={faculties}
                         statuses={statuses}
                         programs={programs}
+                        statusTransitionRules={statusRules}
                         cancelForm={() => setIsFormOpen(false)}
+                        phoneFormats={systemConfig.phoneFormats ?? []}
+                        allowedDomains={systemConfig.allowedEmailDomains ?? []}
                       />
                     </DialogContent>
                   </Dialog>
@@ -872,7 +878,7 @@ export default function Home() {
 
       <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <ConfigDialog config={systemConfig} statuses={statuses} onSave={updateSystemConfig} />
+          <ConfigDialog config={systemConfig} statuses={statuses} onSave={updateSystemConfig} statusRules={statusRules}/>
         </DialogContent>
       </Dialog>
 
