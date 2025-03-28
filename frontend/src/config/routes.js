@@ -5,6 +5,7 @@ const routes = {
     statuses: '/statuses',
     logs: '/logs',
     studentsImport: '/students/import',
+    settings: '/settings',
 };
 
 export default routes;

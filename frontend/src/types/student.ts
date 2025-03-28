@@ -46,6 +46,7 @@ export type StudentStatus = {
   id: string
   name: string
   color: string
+  allowedStatus?: string[]
 }
 
 export type Program = {
@@ -93,6 +94,30 @@ export type LogEntry = {
     details: string
   }
 
+}
+
+export type StatusTransitionRule = {
+  fromStatus: string // ID của tình trạng nguồn
+  toStatus: string[] // Danh sách ID của các tình trạng đích được phép chuyển đổi
+}
+
+export type SystemConfig = {
+  // Cấu hình email
+  allowedEmailDomains?: string[] // Danh sách tên miền email được phép
+
+  // Cấu hình số điện thoại
+  phoneFormats?: PhoneFormat[]
+
+  // Cấu hình chuyển đổi tình trạng
+  statusTransitionRules?: StatusTransitionRule[]
+}
+
+export type PhoneFormat = {
+  countryCode: string // Mã quốc gia (VN, US, ...)
+  countryName: string // Tên quốc gia
+  pattern: string // Mẫu regex để kiểm tra
+  example: string // Ví dụ
+  prefix: string // Tiền tố (VD: +84, +1)
 }
 
 export type ImportFormat = "csv" | "json" | "xml" | "excel"

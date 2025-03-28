@@ -9,6 +9,7 @@ import {
   GraduationCap,
   Download,
   Settings,
+  Sliders,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,7 @@ import type {
   StudentStatus,
   Program,
   LogEntry,
+  SystemConfig,
 } from "@/types/student";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
@@ -62,6 +64,8 @@ import ProgramService from "@/services/programService";
 import LogService from "@/services/logService";
 import StatusService from "@/services/statusService";
 import { toast } from "react-toastify";
+import { ConfigDialog } from "@/components/config-dialog";
+import settingService from "@/services/settingSevices";
 
 export default function Home() {
   // State for students and related data
@@ -100,11 +104,15 @@ export default function Home() {
       const facultiesData = await FacultyService.fetchFaculties();
       const statusesData = await StatusService.fetchStatuses();
       const programsData = await ProgramService.fetchPrograms();
+      const settings = await settingService.fetchSettings();
+      console.log();
+
 
       setStudents(studentsData);
       setFaculties(facultiesData);
       setStatuses(statusesData);
       setPrograms(programsData);
+      setSystemConfig(settings);
     }
 
     loadData();
@@ -192,7 +200,6 @@ export default function Home() {
       toast.error("Lỗi kết nối khi xóa sinh viên");
     }
   };
-
   // Handle edit button click
   const handleEdit = (student: Student) => {
     setEditingStudent(student);
@@ -292,7 +299,7 @@ export default function Home() {
         toast.error("Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại.");
         return;
       }
-  
+
       // Validate danh sách sinh viên
       const studentsSchema = z.array(studentSchema);
       const parsed = studentsSchema.safeParse(data);
@@ -314,26 +321,26 @@ export default function Home() {
         setIsImportExportOpen(false);
         return;
       }
-  
+
       try {
         console.log("📤 Bắt đầu import từng sinh viên...");
-  
+
         let successCount = 0;
         let errorCount = 0;
-  
+
         // Lấy danh sách MSSV hiện có và tìm số lớn nhất
         const existingMSSVs = students
           .map((s) => s.mssv)
-          .filter((mssv) => /^SV\d+$/.test(mssv)) 
-          .map((mssv) => parseInt(mssv.replace("SV", ""), 10)); 
-        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5; 
-  
+          .filter((mssv) => /^SV\d+$/.test(mssv))
+          .map((mssv) => parseInt(mssv.replace("SV", ""), 10));
+        let maxMSSV = existingMSSVs.length > 0 ? Math.max(...existingMSSVs) : 5;
+
         for (const student of data) {
           if (students.some((s) => s.mssv === student.mssv)) {
             maxMSSV++;
-            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`; 
+            student.mssv = `SV${String(maxMSSV).padStart(3, "0")}`;
           }
-  
+
           try {
             const data = await StudentService.importStudent(student);
             successCount++;
@@ -347,11 +354,11 @@ export default function Home() {
             errorCount++;
           }
         }
-  
+
         console.log(
           `Import hoàn tất: ${successCount} thành công, ${errorCount} thất bại.`
         );
-  
+
         if (successCount > 0) {
           toast.success(`Import thành công: ${successCount} sinh viên.`);
           // Ghi log
@@ -382,7 +389,7 @@ export default function Home() {
             },
           });
         }
-  
+
         setIsImportExportOpen(false);
       } catch (error) {
         console.error("Lỗi khi import sinh viên:", error);
@@ -492,6 +499,28 @@ export default function Home() {
     setIsImportExportOpen(false);
   };
 
+  // Update system config
+  const updateSystemConfig = async (newConfig: SystemConfig, flag: string) => {
+    // Show toast notification
+    toast.success("Cập nhật cấu hình hệ thống thành công!")
+    try {
+      if (flag === "status") {
+
+        const res = await StatusService.updateStatusRules(newConfig.statusTransitionRules);
+        toast.success(res.message)
+        setSystemConfig(newConfig)
+        setIsConfigOpen(false)
+      } else if (flag === "domains") {
+        const res = await settingService.updateDomains(newConfig.allowedEmailDomains);
+        toast.success(res.message)
+        setSystemConfig(newConfig)
+        setIsConfigOpen(false)
+      }
+    } catch (error) {
+      console.log("Failed to update status rules", error);
+    }
+  }
+
   // Update settings (faculties, statuses, programs)
   const updateSettings = (
     newFaculties: Faculty[],
@@ -532,6 +561,13 @@ export default function Home() {
     }
   }
 
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+
+
+  const [systemConfig, setSystemConfig] = useState<SystemConfig>({
+
+  });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-md">
@@ -543,6 +579,15 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-white border-white hover:bg-white/20"
+              onClick={() => setIsConfigOpen(true)}
+            >
+              <Sliders className="h-4 w-4 mr-2" />
+              Cấu hình
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -820,6 +865,12 @@ export default function Home() {
           © {new Date().getFullYear()} Hệ thống Quản lý Sinh viên
         </div>
       </footer>
+
+      <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <ConfigDialog config={systemConfig} statuses={statuses} onSave={updateSystemConfig} />
+        </DialogContent>
+      </Dialog>
 
       {/* Settings Dialog */}
       <Dialog

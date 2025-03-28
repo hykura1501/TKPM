@@ -14,12 +14,24 @@ class StatusService {
   }
 
   async updateStatus(updatedStatus: StudentStatus) {
-    const response = await apiClient.put(routes.statuses, updatedStatus); 
+    const response = await apiClient.put(routes.statuses, updatedStatus);
     return response.data;
   }
 
   async deleteStatus(id: string) {
     const response = await apiClient.delete(`${routes.statuses}/${id}`);
+    return response.data;
+  }
+
+  async fetchStatusRules() {
+    const response = await apiClient.get(`${routes.statuses}/rules`);
+    return response.data;
+  }
+
+  async updateStatusRules(statusTransitionsRules: any) {
+    const response = await apiClient.patch(`${routes.statuses}/rules`, {
+      statusTransitionsRules: JSON.stringify(statusTransitionsRules),
+    });
     return response.data;
   }
 }
