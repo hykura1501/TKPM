@@ -157,9 +157,9 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
   }
 
   // Lấy tên trạng thái từ ID
-  const getStatusName = (statusId: string) => {
-    return statuses.find((s: any) => s.id === statusId)?.name || statusId
-  }
+  // const getStatusName = (statusId: string) => {
+  //   return statuses.find((s: any) => s.id === statusId)?.name || statusId
+  // }
 
   // Kiểm tra xem có thể chuyển từ trạng thái A sang B không
   const canTransition = (fromStatus: string, toStatus: string) => {

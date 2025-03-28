@@ -66,7 +66,7 @@ import StatusService from "@/services/statusService";
 import { toast } from "react-toastify";
 import { ConfigDialog } from "@/components/config-dialog";
 import settingService from "@/services/settingSevices";
-import { set } from "date-fns";
+
 
 export default function Home() {
   // State for students and related data
@@ -878,7 +878,7 @@ export default function Home() {
 
       <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <ConfigDialog config={systemConfig} statuses={statuses} onSave={updateSystemConfig} statusRules={statusRules}/>
+          <ConfigDialog config={systemConfig} statuses={statuses} onSave={updateSystemConfig}/>
         </DialogContent>
       </Dialog>
 
