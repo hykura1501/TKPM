@@ -4,104 +4,9 @@ const Faculty = require("../models/Faculty");
 const Status = require("../models/Status");
 const Program = require("../models/Program");
 const Counter = require("../models/Counter");
+const Setting = require("../models/Setting");
 const { z } = require("zod");
-
-const allowedDomains = ["student.university.edu.vn", "hcmus.edu.vn"]; // Danh sách tên miền được phép (có thể cấu hình động)
-const statusTransitionRules = {
-  "Đang học": ["Bảo lưu", "Đã tốt nghiệp", "Đã thôi học"],
-  "Bảo lưu": ["Đang học", "Đã thôi học"],
-  "Đã thôi học": [],
-  "Đã tốt nghiệp": [],
-};
-// Define the schema for input validation
-const studentSchema = z.object({
-  mssv: z.string().optional(),
-  fullName: z.string().min(3, "Họ tên không hợp lệ"),
-  dateOfBirth: z
-    .string()
-    .refine((date) => !isNaN(Date.parse(date)), "Ngày sinh không hợp lệ"),
-  gender: z.enum(["male", "female", "other"]),
-  faculty: z.string(),
-  course: z.string(),
-  program: z.string(),
-  permanentAddress: z
-    .object({
-      streetAddress: z.string(),
-      ward: z.string(),
-      district: z.string(),
-      province: z.string(),
-      country: z.string(),
-    })
-    .optional(),
-  temporaryAddress: z
-    .object({
-      streetAddress: z.string(),
-      ward: z.string(),
-      district: z.string(),
-      province: z.string(),
-      country: z.string(),
-    })
-    .optional(),
-  mailingAddress: z
-    .object({
-      streetAddress: z.string(),
-      ward: z.string(),
-      district: z.string(),
-      province: z.string(),
-      country: z.string(),
-    })
-    .optional(),
-  identityDocument: z
-    .union([
-      z.object({
-        type: z.literal("CMND"),
-        number: z.string(),
-        issueDate: z.string(),
-        issuePlace: z.string(),
-        expiryDate: z.string(),
-      }),
-      z.object({
-        type: z.literal("CCCD"),
-        number: z.string(),
-        issueDate: z.string(),
-        issuePlace: z.string(),
-        expiryDate: z.string(),
-        hasChip: z.boolean(),
-      }),
-      z.object({
-        type: z.literal("Passport"),
-        number: z.string(),
-        issueDate: z.string(),
-        issuePlace: z.string(),
-        expiryDate: z.string(),
-        issuingCountry: z.string(),
-        notes: z.string().optional(),
-      }),
-    ])
-    .optional(),
-  nationality: z.string(),
-  email: z
-    .string()
-    .email({ message: "Email không hợp lệ" })
-    .refine(
-      (email) => {
-        const domain = email.split("@")[1];
-        return allowedDomains.includes(domain);
-      },
-      {
-        message:
-          "Email phải thuộc một trong các tên miền: " +
-          allowedDomains.join(", "),
-      }
-    ),
-  phone: z.string().regex(/^(0|\+84)[3|5|7|8|9][0-9]{8}$/, {
-    message:
-      "Số điện thoại không hợp lệ (phải có 10 số và bắt đầu bằng 0 hoặc +84)",
-  }),
-  status: z.string(),
-  createdAt: z.string().optional(),
-  updatedAt: z.string().optional(),
-});
+const generateStatusTransitionRules = require("../helpers/statusRule");
 
 class StudentController {
   async getListStudents(req, res) {
@@ -124,6 +29,99 @@ class StudentController {
 
   async addStudent(req, res) {
     try {
+      const setting = await Setting.findOne();
+      const allowedDomains = setting?.allowDomains || []; // Define the schema for input validation
+      const studentSchema = z.object({
+        mssv: z.string().optional(),
+        fullName: z.string().min(3, "Họ tên không hợp lệ"),
+        dateOfBirth: z
+          .string()
+          .refine((date) => !isNaN(Date.parse(date)), "Ngày sinh không hợp lệ"),
+        gender: z.enum(["male", "female", "other"]),
+        faculty: z.string(),
+        course: z.string(),
+        program: z.string(),
+        permanentAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        temporaryAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        mailingAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        identityDocument: z
+          .union([
+            z.object({
+              type: z.literal("CMND"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+            }),
+            z.object({
+              type: z.literal("CCCD"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+              hasChip: z.boolean(),
+            }),
+            z.object({
+              type: z.literal("Passport"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+              issuingCountry: z.string(),
+              notes: z.string().optional(),
+            }),
+          ])
+          .optional(),
+        nationality: z.string(),
+        email: z
+          .string()
+          .email({ message: "Email không hợp lệ" })
+          .refine(
+            (email) => {
+              const domain = email.split("@")[1];
+              return allowedDomains.includes(domain);
+            },
+            {
+              message:
+                "Email phải thuộc một trong các tên miền: " +
+                allowedDomains.join(", "),
+            }
+          ),
+        phone: z.string().refine((phone) => {
+          // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
+          return setting.allowPhones.some((format) => {
+            const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+            return regex.test(phone);
+          });
+        }),
+        status: z.string(),
+        createdAt: z.string().optional(),
+        updatedAt: z.string().optional(),
+      });
       const parsed = studentSchema.safeParse(req.body);
 
       if (!parsed.success) {
@@ -180,6 +178,99 @@ class StudentController {
 
   async updateStudent(req, res) {
     try {
+      const setting = await Setting.findOne();
+      const allowedDomains = setting?.allowDomains || []; // Define the schema for input validation
+      const studentSchema = z.object({
+        mssv: z.string().optional(),
+        fullName: z.string().min(3, "Họ tên không hợp lệ"),
+        dateOfBirth: z
+          .string()
+          .refine((date) => !isNaN(Date.parse(date)), "Ngày sinh không hợp lệ"),
+        gender: z.enum(["male", "female", "other"]),
+        faculty: z.string(),
+        course: z.string(),
+        program: z.string(),
+        permanentAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        temporaryAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        mailingAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        identityDocument: z
+          .union([
+            z.object({
+              type: z.literal("CMND"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+            }),
+            z.object({
+              type: z.literal("CCCD"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+              hasChip: z.boolean(),
+            }),
+            z.object({
+              type: z.literal("Passport"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+              issuingCountry: z.string(),
+              notes: z.string().optional(),
+            }),
+          ])
+          .optional(),
+        nationality: z.string(),
+        email: z
+          .string()
+          .email({ message: "Email không hợp lệ" })
+          .refine(
+            (email) => {
+              const domain = email.split("@")[1];
+              return allowedDomains.includes(domain);
+            },
+            {
+              message:
+                "Email phải thuộc một trong các tên miền: " +
+                allowedDomains.join(", "),
+            }
+          ),
+        phone: z.string().refine((phone) => {
+          // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
+          return setting.allowPhones.some((format) => {
+            const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+            return regex.test(phone);
+          });
+        }),
+        status: z.string(),
+        createdAt: z.string().optional(),
+        updatedAt: z.string().optional(),
+      });
       const parsed = studentSchema.safeParse(req.body);
 
       if (!parsed.success) {
@@ -189,7 +280,7 @@ class StudentController {
         });
         return res.status(400).json({ error: parsed.error.errors });
       }
-      //Kiểm tra trạng thái hợp lệ 
+      //Kiểm tra trạng thái hợp lệ
       const currentStudent = await Student.findOne({ mssv: parsed.data.mssv });
       if (!currentStudent) {
         return res.status(404).json({ error: "Sinh viên không tồn tại" });
@@ -198,12 +289,19 @@ class StudentController {
       if (!currentStatus) {
         return res.status(400).json({ error: "Trạng thái không tồn tại" });
       }
+      const statusTransitionRules = generateStatusTransitionRules(
+        await Status.find({})
+      );
+
       const allowedStatus = statusTransitionRules[currentStatus.name];
       const newStatus = await Status.findOne({ id: parsed.data.status });
       if (!newStatus) {
         return res.status(400).json({ error: "Trạng thái không tồn tại" });
       }
-      if (!allowedStatus.includes(newStatus.name) && newStatus.name !== currentStatus.name) {
+      if (
+        !allowedStatus.includes(newStatus.name) &&
+        newStatus.name !== currentStatus.name
+      ) {
         return res.status(400).json({ error: "Không thể chuyển trạng thái" });
       }
       await Student.updateOne(
@@ -278,6 +376,102 @@ class StudentController {
         student.status = status.id;
         student.faculty = faculty.id;
         student.program = program.id;
+        const setting = await Setting.findOne();
+        const allowedDomains = setting?.allowDomains || []; // Define the schema for input validation
+        const studentSchema = z.object({
+          mssv: z.string().optional(),
+          fullName: z.string().min(3, "Họ tên không hợp lệ"),
+          dateOfBirth: z
+            .string()
+            .refine(
+              (date) => !isNaN(Date.parse(date)),
+              "Ngày sinh không hợp lệ"
+            ),
+          gender: z.enum(["male", "female", "other"]),
+          faculty: z.string(),
+          course: z.string(),
+          program: z.string(),
+          permanentAddress: z
+            .object({
+              streetAddress: z.string(),
+              ward: z.string(),
+              district: z.string(),
+              province: z.string(),
+              country: z.string(),
+            })
+            .optional(),
+          temporaryAddress: z
+            .object({
+              streetAddress: z.string(),
+              ward: z.string(),
+              district: z.string(),
+              province: z.string(),
+              country: z.string(),
+            })
+            .optional(),
+          mailingAddress: z
+            .object({
+              streetAddress: z.string(),
+              ward: z.string(),
+              district: z.string(),
+              province: z.string(),
+              country: z.string(),
+            })
+            .optional(),
+          identityDocument: z
+            .union([
+              z.object({
+                type: z.literal("CMND"),
+                number: z.string(),
+                issueDate: z.string(),
+                issuePlace: z.string(),
+                expiryDate: z.string(),
+              }),
+              z.object({
+                type: z.literal("CCCD"),
+                number: z.string(),
+                issueDate: z.string(),
+                issuePlace: z.string(),
+                expiryDate: z.string(),
+                hasChip: z.boolean(),
+              }),
+              z.object({
+                type: z.literal("Passport"),
+                number: z.string(),
+                issueDate: z.string(),
+                issuePlace: z.string(),
+                expiryDate: z.string(),
+                issuingCountry: z.string(),
+                notes: z.string().optional(),
+              }),
+            ])
+            .optional(),
+          nationality: z.string(),
+          email: z
+            .string()
+            .email({ message: "Email không hợp lệ" })
+            .refine(
+              (email) => {
+                const domain = email.split("@")[1];
+                return allowedDomains.includes(domain);
+              },
+              {
+                message:
+                  "Email phải thuộc một trong các tên miền: " +
+                  allowedDomains.join(", "),
+              }
+            ),
+          phone: z.string().refine((phone) => {
+            // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
+            return setting.allowPhones.some((format) => {
+              const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+              return regex.test(phone);
+            });
+          }),
+          status: z.string(),
+          createdAt: z.string().optional(),
+          updatedAt: z.string().optional(),
+        });
 
         // Kiểm tra dữ liệu sinh viên
         const parsed = studentSchema.safeParse(student);
@@ -316,7 +510,99 @@ class StudentController {
       student.status = status.id;
       student.faculty = faculty.id;
       student.program = program.id;
-
+      const setting = await Setting.findOne();
+      const allowedDomains = setting?.allowDomains || []; // Define the schema for input validation
+      const studentSchema = z.object({
+        mssv: z.string().optional(),
+        fullName: z.string().min(3, "Họ tên không hợp lệ"),
+        dateOfBirth: z
+          .string()
+          .refine((date) => !isNaN(Date.parse(date)), "Ngày sinh không hợp lệ"),
+        gender: z.enum(["male", "female", "other"]),
+        faculty: z.string(),
+        course: z.string(),
+        program: z.string(),
+        permanentAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        temporaryAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        mailingAddress: z
+          .object({
+            streetAddress: z.string(),
+            ward: z.string(),
+            district: z.string(),
+            province: z.string(),
+            country: z.string(),
+          })
+          .optional(),
+        identityDocument: z
+          .union([
+            z.object({
+              type: z.literal("CMND"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+            }),
+            z.object({
+              type: z.literal("CCCD"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+              hasChip: z.boolean(),
+            }),
+            z.object({
+              type: z.literal("Passport"),
+              number: z.string(),
+              issueDate: z.string(),
+              issuePlace: z.string(),
+              expiryDate: z.string(),
+              issuingCountry: z.string(),
+              notes: z.string().optional(),
+            }),
+          ])
+          .optional(),
+        nationality: z.string(),
+        email: z
+          .string()
+          .email({ message: "Email không hợp lệ" })
+          .refine(
+            (email) => {
+              const domain = email.split("@")[1];
+              return allowedDomains.includes(domain);
+            },
+            {
+              message:
+                "Email phải thuộc một trong các tên miền: " +
+                allowedDomains.join(", "),
+            }
+          ),
+        phone: z.string().refine((phone) => {
+          // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
+          return setting.allowPhones.some((format) => {
+            const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+            return regex.test(phone);
+          });
+        }),
+        status: z.string(),
+        createdAt: z.string().optional(),
+        updatedAt: z.string().optional(),
+      });
       const parsed = studentSchema.safeParse(student);
       if (!parsed.success) {
         return res.status(400).json({ error: parsed.error.errors });

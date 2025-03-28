@@ -1,4 +1,5 @@
 const Status = require('../models/Status');
+const Student = require('../models/Student');
 const { z } = require('zod');
 const { addLogEntry } = require('../helpers/logging');
 
@@ -131,6 +132,35 @@ class StatusController {
       });
       res.status(500).json({ error: "Lỗi khi xóa tình trạng sinh viên" });
     }
+  }
+  async updateStatusRules(req, res) {
+    try {
+
+      const statusTransitionsRules = JSON.parse(req.body.statusTransitionsRules)
+
+      for (let status of statusTransitionsRules) {
+        await Status.updateOne({ id: status.fromStatus }, { $set: { allowedStatus: status.toStatus } });
+      }
+
+      return res.status(200).json({ message: "Cập nhật quy tắc cho trạng thái thành công" });
+
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Lỗi khi thêm quy tắc cho trạng thái" });
+    }
+  }
+
+  async getStatusRules(req, res) {
+    const status = await Status.find({})
+
+    const result = status.map((item) => {
+      return {
+        fromStatus: item.id,
+        toStatus: item.allowedStatus
+      }
+    })
+
+    return res.status(200).json(result);
   }
 }
 
