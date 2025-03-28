@@ -29,6 +29,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
   const [newPhoneFormat, setNewPhoneFormat] = useState<PhoneFormat>({
     countryCode: "",
     countryName: "",
+    pattern: "",
     example: "",
     prefix: "",
   })
@@ -62,17 +63,20 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
 
   // Phone formats
   const addPhoneFormat = () => {
-    setFlag("phone")
     if (
       !newPhoneFormat.countryCode ||
       !newPhoneFormat.countryName ||
+      !newPhoneFormat.pattern ||
       !newPhoneFormat.example ||
       !newPhoneFormat.prefix
     ) {
       return
     }
 
+    setFlag("phone")
+
     if (localConfig?.phoneFormats?.some((p: any) => p.countryCode === newPhoneFormat.countryCode)) {
+      toast.success("Tên miền không được để trống")
       return
     }
 
@@ -84,6 +88,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
     setNewPhoneFormat({
       countryCode: "",
       countryName: "",
+      pattern: "",
       example: "",
       prefix: "",
     })
@@ -265,6 +270,14 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                         placeholder="+84"
                       />
                     </div>
+                    <div>
+                      <label className="text-sm font-medium">Mẫu Regex</label>
+                      <Input
+                        value={editingPhoneFormat.pattern}
+                        onChange={(e) => setEditingPhoneFormat({ ...editingPhoneFormat, pattern: e.target.value })}
+                        placeholder="^(0|\+84)[3|5|7|8|9][0-9]{8}$"
+                      />
+                    </div>
                     <div className="col-span-2">
                       <label className="text-sm font-medium">Ví dụ</label>
                       <Input
@@ -310,6 +323,14 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                         value={newPhoneFormat.prefix}
                         onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, prefix: e.target.value })}
                         placeholder="+84"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Mẫu Regex</label>
+                      <Input
+                        value={newPhoneFormat.pattern}
+                        onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, pattern: e.target.value })}
+                        placeholder="^(0|\+84)[3|5|7|8|9][0-9]{8}$"
                       />
                     </div>
                     <div className="col-span-2">
