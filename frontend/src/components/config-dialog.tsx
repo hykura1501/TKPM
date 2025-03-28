@@ -13,7 +13,7 @@ import type { SystemConfig, PhoneFormat, StudentStatus } from "@/types/student"
 type ConfigDialogProps = {
   config: SystemConfig
   statuses: StudentStatus[]
-  onSave: (config: SystemConfig) => void
+  onSave: (config: SystemConfig, flag: string) => void
 }
 
 export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
@@ -37,12 +37,10 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
   // Email domains
   const addEmailDomain = () => {
     if (!newEmailDomain.trim()) {
-      toast.success("Tên miền không được để trống")
       return
     }
 
     if (localConfig?.allowedEmailDomains?.includes(newEmailDomain)) {
-      toast.success("Tên miền không được để trống")
       return
     }
 
@@ -53,7 +51,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
 
     setNewEmailDomain("")
 
-    toast.success("Tên miền không được để trống")
+    setFlag("domains")
   }
 
   const removeEmailDomain = (domain: string) => {
@@ -61,8 +59,6 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       ...localConfig,
       allowedEmailDomains: localConfig?.allowedEmailDomains?.filter((d: any) => d !== domain),
     })
-
-    toast.success("Tên miền không được để trống")
   }
 
   // Phone formats

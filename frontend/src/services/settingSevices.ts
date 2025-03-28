@@ -8,7 +8,7 @@ class SettingService {
     }
 
     async updateDomains(domains: any) {
-        const response = await apiClient.patch(`${routes.settings}/domains`, domains);
+        const response = await apiClient.patch(`${routes.settings}/domains`, {domains: domains});
         return response.data;
     }
 

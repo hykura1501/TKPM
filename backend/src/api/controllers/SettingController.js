@@ -5,8 +5,7 @@ class SettingController {
   async updateDomains(req, res) {
     try {
       const domains = req.body.domains;
-      console.log(domains);
-      
+
       if (!domains?.length) {
         await addLogEntry({
           message: "Danh sách domain không được để trống",
@@ -14,8 +13,17 @@ class SettingController {
         });
         return res.status(400).json({ error: "Danh sách domain không được để trống" });
       }
-      await Setting.create({allowDomains: domains});
+
+      // Cập nhật chỉ một bản ghi
+      await Setting.updateOne(
+        {
+          _id: "67e69a34c85ca96947abaae3",
+        }, {
+        allowDomains: domains,
+      }
+      );
       res.status(200).json({ message: "Cập nhật domain thành công" });
+
     } catch (error) {
       console.error("Lỗi khi cập nhật domain:", error);
       await addLogEntry({
@@ -42,7 +50,7 @@ class SettingController {
 
   async getAllSettings(req, res) {
     try {
-      const setting = await Setting.find({ });
+      const setting = await Setting.find({});
 
       const status = await Status.find({})
 
@@ -85,7 +93,7 @@ class SettingController {
           },
         ], statusTransitionRules: _status, allowedEmailDomains: setting[0].allowDomains
       }
-      
+
       return res.status(200).json(result);
 
     } catch (error) {
