@@ -8,12 +8,16 @@ class SettingService {
     }
 
     async updateDomains(domains: any) {
-        const response = await apiClient.patch(`${routes.settings}/domains`, {domains: domains});
+        const response = await apiClient.patch(`${routes.settings}/domains`, { domains: domains });
         return response.data;
     }
 
     async fetchSettings() {
         const response = await apiClient.get(`${routes.settings}`);
+        return response.data;
+    }
+    async updatePhoneFormats(phoneFormats: any) {
+        const response = await apiClient.patch(`${routes.settings}/phone`, { phoneFormats: JSON.stringify(phoneFormats) });
         return response.data;
     }
 }

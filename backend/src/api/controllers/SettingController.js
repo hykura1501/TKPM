@@ -47,6 +47,37 @@ class SettingController {
     }
   }
 
+  async updatePhoneFormats(req, res) {
+    try {
+      const phoneFormats = JSON.parse(req.body.phoneFormats);
+      if (!phoneFormats?.length) {
+        await addLogEntry({
+          message: "Danh sách phone formats không được để trống",
+          level: "warn",
+        });
+        return res.status(400).json({ error: "Danh sách phone formats không được để trống" });
+      }
+
+      console.log(phoneFormats);
+
+      await Setting.updateOne(
+        {
+          _id: "67e69a34c85ca96947abaae3",
+        }, {
+        $set: {
+          allowPhones: phoneFormats
+        }
+      });
+      res.status(200).json({ message: "Cập nhật phone formats thành công" });
+    } catch (error) {
+      console.error("Lỗi khi cập nhật phone formats:", error);
+      await addLogEntry({
+        message: "Lỗi khi cập nhật phone formats",
+        level: "error",
+      });
+      res.status(500).json({ error: "Lỗi khi cập nhật phone formats" });
+    }
+  }
 
   async getAllSettings(req, res) {
     try {
@@ -62,36 +93,7 @@ class SettingController {
       })
 
       const result = {
-        phoneFormats: [
-          {
-            countryCode: "VN",
-            countryName: "Việt Nam",
-            pattern: "^(0|\\+84)[3|5|7|8|9][0-9]{8}$",
-            example: "0901234567 hoặc +84901234567",
-            prefix: "+84",
-          },
-          {
-            countryCode: "US",
-            countryName: "Hoa Kỳ",
-            pattern: "^(\\+1)?[0-9]{10}$",
-            example: "1234567890 hoặc +11234567890",
-            prefix: "+1",
-          },
-          {
-            countryCode: "JP",
-            countryName: "Nhật Bản",
-            pattern: "^(\\+81|0)[0-9]{9,10}$",
-            example: "0123456789 hoặc +81123456789",
-            prefix: "+81",
-          },
-          {
-            countryCode: "FR",
-            countryName: "Pháp",
-            pattern: "^(\\+33|0)[1-9][0-9]{8}$",
-            example: "0123456789 hoặc +33123456789",
-            prefix: "+33",
-          },
-        ], statusTransitionRules: _status, allowedEmailDomains: setting[0].allowDomains
+        statusTransitionRules: _status, allowedEmailDomains: setting[0].allowDomains, phoneFormats: setting[0].allowPhones
       }
 
       return res.status(200).json(result);

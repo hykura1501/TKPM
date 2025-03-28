@@ -115,7 +115,6 @@ export type SystemConfig = {
 export type PhoneFormat = {
   countryCode: string // Mã quốc gia (VN, US, ...)
   countryName: string // Tên quốc gia
-  pattern: string // Mẫu regex để kiểm tra
   example: string // Ví dụ
   prefix: string // Tiền tố (VD: +84, +1)
 }

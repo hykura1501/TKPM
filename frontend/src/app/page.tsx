@@ -505,13 +505,17 @@ export default function Home() {
     toast.success("Cập nhật cấu hình hệ thống thành công!")
     try {
       if (flag === "status") {
-
         const res = await StatusService.updateStatusRules(newConfig.statusTransitionRules);
         toast.success(res.message)
         setSystemConfig(newConfig)
         setIsConfigOpen(false)
       } else if (flag === "domains") {
         const res = await settingService.updateDomains(newConfig.allowedEmailDomains);
+        toast.success(res.message)
+        setSystemConfig(newConfig)
+        setIsConfigOpen(false)
+      } else if (flag === "phone") {
+        const res = await settingService.updatePhoneFormats(newConfig.phoneFormats);
         toast.success(res.message)
         setSystemConfig(newConfig)
         setIsConfigOpen(false)
