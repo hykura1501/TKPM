@@ -70,13 +70,14 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       !newPhoneFormat.example ||
       !newPhoneFormat.prefix
     ) {
+      toast.error("Vui lòng nhập đầy đủ thông tin định dạng số điện thoại.");
       return
     }
 
     setFlag("phone")
 
     if (localConfig?.phoneFormats?.some((p: any) => p.countryCode === newPhoneFormat.countryCode)) {
-      toast.success("Tên miền không được để trống")
+      toast.warning("Định dạng số điện thoại đã tồn tại")
       return
     }
 
@@ -93,7 +94,8 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       prefix: "",
     })
 
-    toast.success("Tên miền không được để trống")
+    //setEditingPhoneFormat(null)
+    toast.success("Thêm định dạng số điện thoại thành công!");
   }
 
   const updatePhoneFormat = () => {
@@ -108,7 +110,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
 
     setEditingPhoneFormat(null)
 
-    toast.success("Tên miền không được để trống")
+    toast.success(`Cập nhật định dạng số điện thoại "${editingPhoneFormat.countryCode}" thành công!`);
   }
 
   const removePhoneFormat = (countryCode: string) => {
@@ -117,7 +119,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       phoneFormats: localConfig?.phoneFormats?.filter((p: any) => p.countryCode !== countryCode),
     })
     setFlag("phone")
-    toast.success("Tên miền không được để trống")
+    toast.success(`Xóa định dạng số điện thoại "${countryCode}" thành công!`);
   }
 
   // Status transitions
@@ -144,7 +146,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
             rule.fromStatus === fromStatus ? { ...rule, toStatus: [...rule.toStatus, toStatus] } : rule,
           ),
         })
-
+        toast.success(`Đã thêm quy tắc chuyển từ "${fromStatus}" sang "${toStatus}".`);
       }
     } else {
       // Nếu chưa có quy tắc cho trạng thái nguồn, tạo mới
@@ -170,8 +172,6 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
   // Lưu cấu hình
   const handleSave = () => {
     onSave(localConfig, flag)
-
-    toast.success("Tên miền không được để trống")
   }
 
   const [flag, setFlag] = useState("")

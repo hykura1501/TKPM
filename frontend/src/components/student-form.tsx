@@ -1068,7 +1068,7 @@ export function StudentForm({
                     <Select
                       onValueChange={(newStatus) => {
                         const currentStatus = student?.status || "";
-                        if (handleStatusChange(currentStatus, newStatus)) {
+                        if (currentStatus === "" || handleStatusChange(currentStatus, newStatus)) {
                           field.onChange(newStatus);
                         }
                       }}

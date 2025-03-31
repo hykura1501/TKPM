@@ -504,7 +504,7 @@ export default function Home() {
   // Update system config
   const updateSystemConfig = async (newConfig: SystemConfig, flag: string) => {
     // Show toast notification
-    toast.success("Cập nhật cấu hình hệ thống thành công!")
+    //toast.success("Cập nhật cấu hình hệ thống thành công!")
     try {
       if (flag === "status") {
         const res = await StatusService.updateStatusRules(newConfig.statusTransitionRules);
