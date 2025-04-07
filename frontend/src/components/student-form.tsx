@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -126,6 +126,8 @@ export function StudentForm({
   const [selectedFaculty, setSelectedFaculty] = useState(
     student?.faculty || faculties[0]?.id
   );
+  const [activeTab, setActiveTab] = useState("basic");
+
   const filteredPrograms = programs.filter(
     (p) => p.faculty === selectedFaculty
   );
@@ -286,13 +288,40 @@ export function StudentForm({
     }
     return true;
   };
+  // Logic xác định tab chứa lỗi đầu tiên
+  const getTabFromError = (errors: any) => {
+    const errorKeys = Object.keys(errors);
+    if (errorKeys.length === 0) return "basic";
+
+    const firstError = errorKeys[0];
+    if (["fullName", "dateOfBirth", "gender", "nationality", "email", "phone"].includes(firstError)) {
+      return "basic";
+    }
+    if (firstError.includes("Address")) {
+      return "address";
+    }
+    if (firstError === "identityDocument") {
+      return "identity";
+    }
+    if (["faculty", "course", "program", "status"].includes(firstError)) {
+      return "academic";
+    }
+    return "basic"; // Mặc định
+  };
+  // Chuyển tab khi submit thất bại
+  useEffect(() => {
+    if (form.formState.isSubmitted && Object.keys(form.formState.errors).length > 0) {
+      const errorTab = getTabFromError(form.formState.errors);
+      setActiveTab(errorTab);
+    }
+  }, [form.formState.isSubmitted, form.formState.errors]);
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-6 bg-white p-4 rounded-lg"
       >
-        <Tabs defaultValue="basic" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-4 mb-4">
             <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
             <TabsTrigger value="address">Địa chỉ</TabsTrigger>
