@@ -21,6 +21,18 @@ class FacultyRepository {
   async findOneByCondition(condition) {
     return await Faculty.findOne(condition);
   }
+  async getNextId() {
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: "Faculty_id" },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `Faculty${String(counter.value).padStart(3, "0")}`;
+    } catch (error) {
+      throw new Error("Lỗi khi tạo mã khoa: " + error.message);
+    }
+  }
 }
 
 module.exports = new FacultyRepository();

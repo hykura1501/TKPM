@@ -1,0 +1,45 @@
+const ClassSectionService = require('../services/ClassSectionService');
+
+class ClassSectionController {
+  async getListclassSections(req, res) {
+    try {
+      const classSections = await ClassSectionService.getListclassSections();
+      res.status(200).json(classSections);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách khoa:", error);
+      res.status(500).json({ error: "Lỗi khi lấy danh sách khoa" });
+    }
+  }
+
+  async addClassSection(req, res) {
+    try {
+      const result = await ClassSectionService.addClassSection(req.body);
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("Lỗi khi thêm khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi thêm khoa" });
+    }
+  }
+
+  async updateClassSection(req, res) {
+    try {
+      const result = await ClassSectionService.updateClassSection(req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật khoa" });
+    }
+  }
+
+  async deleteClassSection(req, res) {
+    try {
+      const result = await ClassSectionService.deleteClassSection(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi xóa khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi xóa khoa" });
+    }
+  }
+}
+
+module.exports = new ClassSectionController();

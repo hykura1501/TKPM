@@ -20,6 +20,18 @@ class ProgramRepository {
   async findOneByCondition(condition) {
     return await Program.findOne(condition);
   }
+  async getNextId() {
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: 'program_id' },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `program${String(counter.value).padStart(3, '0')}`;
+    } catch (error) {
+      throw new Error('Lỗi khi tạo mã chương trình: ' + error.message);
+    }
+  }
 }
 
 module.exports = new ProgramRepository();
