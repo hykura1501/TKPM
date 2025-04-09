@@ -21,7 +21,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Hệ Thống Quản Lý Khóa Học & Bảng Điểm",
   description: "Hệ thống quản lý khóa học và bảng điểm sinh viên",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
