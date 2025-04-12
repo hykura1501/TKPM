@@ -55,7 +55,6 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { js2xml } from "xml-js";
 import { z } from "zod";
-import { ToastContainer } from "react-toastify";
 
 import StudentService from "@/services/studentService";
 import FacultyService from "@/services/facultyService";
@@ -902,7 +901,6 @@ export default function Home() {
           <LogsDialog logs={logs} />
         </DialogContent>
       </Dialog>
-      <ToastContainer />
     </div>
   );
 }

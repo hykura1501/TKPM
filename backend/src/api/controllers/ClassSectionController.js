@@ -1,9 +1,9 @@
 const ClassSectionService = require('../services/ClassSectionService');
 
 class ClassSectionController {
-  async getListclassSections(req, res) {
+  async getListClassSections(req, res) {
     try {
-      const classSections = await ClassSectionService.getListclassSections();
+      const classSections = await ClassSectionService.getListClassSectiones();
       res.status(200).json(classSections);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách khoa:", error);

@@ -8,17 +8,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useToast } from "@/components/ui/use-toast"
 import type { ClassSection } from "@/types"
 import { classSections as initialClassSections, courses, getCourseById } from "@/data/sample-data"
 import { ClassSectionForm } from "@/components/class-section-form"
+import classSectionService from "@/services/classSectionService"
+import { toast } from "react-toastify";
+import { set } from "react-hook-form"
 
 export function ClassSectionManagement() {
   const [classSections, setClassSections] = useState<ClassSection[]>(initialClassSections)
   const [searchTerm, setSearchTerm] = useState("")
   const [editingSection, setEditingSection] = useState<ClassSection | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const { toast } = useToast()
 
   // Filter class sections based on search term
   const filteredSections = classSections.filter(
@@ -29,34 +30,22 @@ export function ClassSectionManagement() {
   )
 
   // Add new class section
-  const addClassSection = (section: Omit<ClassSection, "id" | "createdAt" | "currentEnrollment">) => {
+  const addClassSection = async (section: Omit<ClassSection, "id" | "createdAt" | "currentEnrollment">) => {
     // Check if class section code already exists
     if (classSections.some((s) => s.code === section.code)) {
-      toast({
-        title: "Lỗi",
-        description: "Mã lớp học đã tồn tại trong hệ thống.",
-        variant: "destructive",
-      })
+      toast.error("Mã lớp học đã tồn tại trong hệ thống.")
       return
     }
 
     // Check if course exists and is active
     const course = getCourseById(section.courseId)
     if (!course) {
-      toast({
-        title: "Lỗi",
-        description: "Khóa học không tồn tại trong hệ thống.",
-        variant: "destructive",
-      })
+      toast.error("Khóa học không tồn tại.")
       return
     }
 
     if (!course.isActive) {
-      toast({
-        title: "Lỗi",
-        description: "Không thể mở lớp cho khóa học đã bị vô hiệu hóa.",
-        variant: "destructive",
-      })
+      toast.error("Khóa học không hoạt động.")
       return
     }
 
@@ -66,49 +55,55 @@ export function ClassSectionManagement() {
       currentEnrollment: 0,
       createdAt: new Date().toISOString(),
     }
+    try{
+    await classSectionService.addClassSection(newSection)
+      setClassSections([...classSections, newSection])
+      toast.success(`Lớp học ${newSection.code} đã được mở thành công.`)
+      setIsFormOpen(false)
+    } catch(error: any) {
+      console.error("Error adding class section:", error)
+      toast.error(error || 'Có lỗi xảy ra khi thêm lớp học.')
+    }
 
-    setClassSections([...classSections, newSection])
-    setIsFormOpen(false)
-
-    toast({
-      title: "Thành công",
-      description: `Đã thêm lớp học ${section.code} vào hệ thống.`,
-    })
   }
 
   // Update class section
-  const updateClassSection = (updatedSection: ClassSection) => {
-    setClassSections(classSections.map((section) => (section.id === updatedSection.id ? updatedSection : section)))
-    setEditingSection(null)
-    setIsFormOpen(false)
+  const updateClassSection = async (updatedSection: ClassSection) => {
+    try{
+      const data = await classSectionService.updateClassSection(updatedSection)
+      // setClassSections(classSections.map((section) => (section.id === updatedSection.id ? data : section)))
+      setClassSections(data.classSections)
+      setEditingSection(null)
+      setIsFormOpen(false)
 
-    toast({
-      title: "Thành công",
-      description: `Đã cập nhật thông tin lớp học ${updatedSection.code}.`,
-    })
+      toast.success(`Lớp học ${updatedSection.code} đã được cập nhật thành công.`)
+
+    } catch(error: any) {
+      console.error("Error adding class section:", error)
+      toast.error(error || 'Có lỗi xảy ra khi thêm lớp học.')
+    }
   }
 
   // Delete class section
-  const deleteClassSection = (id: string) => {
+  const deleteClassSection = async (id: string) => {
     const sectionToDelete = classSections.find((s) => s.id === id)
     if (!sectionToDelete) return
 
     // Check if class section has enrollments
     if (sectionToDelete.currentEnrollment > 0) {
-      toast({
-        title: "Không thể xóa",
-        description: "Không thể xóa lớp học đã có sinh viên đăng ký.",
-        variant: "destructive",
-      })
+      toast.error("Không thể xóa lớp học đã có sinh viên đăng ký.")
       return
     }
 
-    setClassSections(classSections.filter((section) => section.id !== id))
+    try{
+      const data = await classSectionService.deleteClassSection(id)
+      setClassSections(data.classSections)
+      toast.success(`Lớp học ${sectionToDelete.code} đã được xóa thành công.`)
+    } catch (error: any) {
+      console.error("Error deleting class section:", error)
+      toast.error(error || 'Có lỗi xảy ra khi xóa lớp học.')
+    }
 
-    toast({
-      title: "Đã xóa lớp học",
-      description: `Lớp học ${sectionToDelete.code} đã được xóa khỏi hệ thống.`,
-    })
   }
 
   // Handle edit button click

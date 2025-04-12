@@ -21,6 +21,18 @@ class StatusRepository {
   async findOneByCondition(condition) {
     return await Status.findOne(condition);
   }
+  async getNextId() {
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: 'status_id' },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `status-${counter.value}`;
+    } catch (error) {
+      throw new Error('Lỗi khi tạo mã trạng thái: ' + error.message);
+    }
+  }
 }
 
 module.exports = new StatusRepository();

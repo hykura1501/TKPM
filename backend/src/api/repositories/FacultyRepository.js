@@ -28,7 +28,7 @@ class FacultyRepository {
         { $inc: { value: 1 } },
         { new: true, upsert: true }
       );
-      return `Faculty${String(counter.value).padStart(3, "0")}`;
+      return `Faculty-${counter.value}`;
     } catch (error) {
       throw new Error("Lỗi khi tạo mã khoa: " + error.message);
     }

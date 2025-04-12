@@ -68,7 +68,7 @@ class CourseService {
         message: "Thêm tình trạng sinh viên không hợp lệ",
         level: "warn",
       });
-      return { success: false, error: validationResult.error };
+      throw { status: 400, message: validationResult.error };
     }
   
     const course = validationResult.data;
@@ -98,7 +98,7 @@ class CourseService {
         message: "Cập nhật khóa học không hợp lệ",
         level: "warn",
       });
-      return { success: false, error: validationResult.error };
+      throw { status: 400, message: validationResult.error };
     }
   
     // Kiểm tra xem khóa học có tồn tại hay không
@@ -110,7 +110,7 @@ class CourseService {
         message: "Khóa học không tồn tại",
         level: "warn",
       });
-      return { success: false, error: "Khóa học không tồn tại" };
+      throw { status: 404, message: "Khóa học không tồn tại" };
     }
   
     // Cập nhật khóa học
@@ -135,7 +135,7 @@ class CourseService {
         message: "ID khóa học không được để trống",
         level: "warn",
       });
-      return { success: false, error: "ID khóa học không được để trống" };
+      throw { status: 400, message: "ID khóa học không được để trống" };
     }
   
     // Kiểm tra xem khóa học có tồn tại hay không
@@ -145,7 +145,7 @@ class CourseService {
         message: "Khóa học không tồn tại",
         level: "warn",
       });
-      return { success: false, error: "Khóa học không tồn tại" };
+      throw { status: 404, message: "Khóa học không tồn tại" };
     }
   
     // Kiểm tra xem khóa học có đang được sử dụng bởi sinh viên hay không
@@ -155,10 +155,7 @@ class CourseService {
         message: "Không thể xóa khóa học đang được sử dụng",
         level: "warn",
       });
-      return {
-        success: false,
-        error: "Không thể xóa khóa học đang được sử dụng",
-      };
+      throw { status: 400, message: "Không thể xóa khóa học đang được sử dụng" };
     }
   
     // Xóa khóa học

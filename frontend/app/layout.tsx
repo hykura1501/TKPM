@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/toaster"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Header } from "@/components/header"
+import { ToastContainer } from "react-toastify";
+
 
 
 const geistSans = Geist({
@@ -45,6 +47,7 @@ export default function RootLayout({
             </div>
           </SidebarInset>
           <Toaster />
+          <ToastContainer />
         </SidebarProvider>
       </body>
     </html>

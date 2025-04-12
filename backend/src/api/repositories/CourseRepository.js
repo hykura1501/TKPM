@@ -28,7 +28,7 @@ class CourseRepository {
         { $inc: { value: 1 } },
         { new: true, upsert: true }
       );
-      return `course${String(counter.value).padStart(3, "0")}`;
+      return `course-${counter.value}`;
     } catch (error) {
       throw new Error("Lỗi khi tạo mã khóa học: " + error.message);
     }

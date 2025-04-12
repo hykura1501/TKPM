@@ -25,7 +25,7 @@ class RegistrationService {
         message: "Thêm đăng ký học không hợp lệ",
         level: "warn",
       });
-      throw { registration: 400, message: parsed.error.errors };
+      throw { status: 400, message: parsed.error.errors };
     }
 
     const newRegistration = {
@@ -52,7 +52,7 @@ class RegistrationService {
         message: "Cập nhật đăng ký học không hợp lệ",
         level: "warn",
       });
-      throw { registration: 400, message: parsed.error.errors };
+      throw { status: 400, message: parsed.error.errors };
     }
 
     await RegistrationRepository.update(parsed.data.id, parsed.data);
@@ -77,7 +77,7 @@ class RegistrationService {
         message: "ID đăng ký học không được để trống",
         level: "warn",
       });
-      throw { registration: 400, message: "ID đăng ký học không được để trống" };
+      throw { status: 400, message: "ID đăng ký học không được để trống" };
     }
 
     const student = await StudentRepository.findOneByCondition({
@@ -88,10 +88,7 @@ class RegistrationService {
         message: "Không thể xóa đăng ký học đang được sử dụng",
         level: "warn",
       });
-      throw {
-        registration: 400,
-        message: "Không thể xóa đăng ký học đang được sử dụng",
-      };
+      throw { status: 400, message: "Không thể xóa đăng ký học đang được sử dụng" };
     }
 
     await RegistrationRepository.delete(id);

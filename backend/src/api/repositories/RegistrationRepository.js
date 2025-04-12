@@ -28,7 +28,7 @@ class RegistrationRepository {
         { $inc: { value: 1 } },
         { new: true, upsert: true }
       );
-      return `registration${String(counter.value).padStart(3, '0')}`;
+      return `registration-${counter.value}`;
     } catch (error) {
       throw new Error('Lỗi khi tạo mã đăng ký: ' + error.message);
     }

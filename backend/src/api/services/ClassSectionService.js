@@ -1,6 +1,7 @@
 const ClassSectionRepository = require("../repositories/ClassSectionRepository");
 const StudentRepository = require("../repositories/StudentRepository");
 const { addLogEntry } = require("../helpers/logging");
+const CourseRepository = require("../repositories/CourseRepository");
 const { z } = require("zod");
 
 const classSectionSchema = z.object({
@@ -9,6 +10,7 @@ const classSectionSchema = z.object({
   courseId: z.string({ required_error: "Vui lòng chọn khóa học" }),
   academicYear: z.string().min(4, { message: "Vui lòng nhập năm học" }),
   semester: z.string({ required_error: "Vui lòng chọn học kỳ" }),
+  currentEnrollment: z.number().optional(), // Sĩ số hiện tại, có thể không có khi thêm mới
   instructor: z
     .string()
     .min(3, { message: "Tên giảng viên phải có ít nhất 3 ký tự" }),
@@ -21,7 +23,7 @@ const classSectionSchema = z.object({
 });
 
 class ClassSectionService {
-  async validateClassSection(classSection) {
+  async validateClassSection(classSection, isUpdate = false) {
     const parsed = classSectionSchema.safeParse(classSection);
     if (!parsed.success) {
       await addLogEntry({
@@ -35,7 +37,7 @@ class ClassSectionService {
     const existingClassSection = await ClassSectionRepository.findOneByCondition({
       code: parsed.data.code,
     });
-    if (existingClassSection) {
+    if ( !isUpdate && existingClassSection) {
       await addLogEntry({
         message: "Mã lớp học đã tồn tại",
         level: "warn",
@@ -58,7 +60,7 @@ class ClassSectionService {
     return { success: true, data: parsed.data };
   }
 
-  async getListClassSectiones() {
+  async getListClassSections() {
     return await ClassSectionRepository.findAll();
   }
 
@@ -69,16 +71,16 @@ class ClassSectionService {
         message: "Thêm lớp học không hợp lệ",
         level: "warn",
       });
-      return { success: false, error: validationResult.error };
+      throw { status: 400, message: validationResult.error };
     }
 
-    const newId = await StudentRepository.getNextMssv();
+    const newId = await ClassSectionRepository.getNextId();
     const newClassSection = {
       ...validationResult.data,
       id: newId,
     };
     await ClassSectionRepository.create(newClassSection);
-    const classSectiones = await ClassSectionRepository.findAll();
+    const classSections = await ClassSectionRepository.findAll();
     await addLogEntry({
       message: "Thêm lớp học thành công",
       level: "info",
@@ -87,18 +89,18 @@ class ClassSectionService {
       user: "admin",
       details: "Add new classSection: " + validationResult.data.code,
     });
-    return { message: "Thêm lớp học thành công", classSectiones };
+    return { message: "Thêm lớp học thành công", classSections };
   }
 
   async updateClassSection(data) {
     // Sử dụng hàm validateClassSection để kiểm tra dữ liệu
-    const validationResult = await this.validateClassSection(data);
+    const validationResult = await this.validateClassSection(data, true);
     if (!validationResult.success) {
       await addLogEntry({
         message: "Cập nhật lớp học không hợp lệ",
         level: "warn",
       });
-      return { success: false, error: validationResult.error };
+      throw { status: 400, message: validationResult.error };
     }
   
     // Kiểm tra xem lớp học có tồn tại hay không
@@ -110,12 +112,12 @@ class ClassSectionService {
         message: "Lớp học không tồn tại",
         level: "warn",
       });
-      return { success: false, error: "Lớp học không tồn tại" };
+      throw { status: 404, message: "Lớp học không tồn tại" };
     }
   
     // Cập nhật lớp học
     await ClassSectionRepository.update(validationResult.data.id, validationResult.data);
-    const classSectiones = await ClassSectionRepository.findAll();
+    const classSections = await ClassSectionRepository.findAll();
   
     // Ghi log thành công
     await addLogEntry({
@@ -127,7 +129,7 @@ class ClassSectionService {
       details: "Updated classSection: " + validationResult.data.code,
     });
   
-    return { success: true, message: "Cập nhật lớp học thành công", classSectiones };
+    return { success: true, message: "Cập nhật lớp học thành công", classSections };
   }
 
   async deleteClassSection(id) {
@@ -136,7 +138,7 @@ class ClassSectionService {
         message: "ID lớp học không được để trống",
         level: "warn",
       });
-      return { success: false, error: "ID lớp học không được để trống" };
+      throw { status: 400, message: "ID lớp học không được để trống" };
     }
   
     // Kiểm tra xem lớp học có tồn tại hay không
@@ -148,24 +150,21 @@ class ClassSectionService {
         message: "Lớp học không tồn tại",
         level: "warn",
       });
-      return { success: false, error: "Lớp học không tồn tại" };
+      throw { status: 404, message: "Lớp học không tồn tại" };
     }
   
     // Kiểm tra xem lớp học có đang được sử dụng bởi sinh viên hay không
-    const student = await StudentRepository.findOneByCondition({
-      classSection: id,
-    });
-    if (student) {
+    if (existingClassSection.currentEnrollment > 0) {
       await addLogEntry({
         message: "Không thể xóa lớp học đang được sử dụng",
         level: "warn",
       });
-      return { success: false, error: "Không thể xóa lớp học đang được sử dụng" };
+      throw { status: 400, message: "Không thể xóa lớp học đang được sử dụng" };
     }
   
     // Xóa lớp học
     await ClassSectionRepository.delete(id);
-    const classSectiones = await ClassSectionRepository.findAll();
+    const classSections = await ClassSectionRepository.findAll();
   
     // Ghi log thành công
     await addLogEntry({
@@ -177,7 +176,7 @@ class ClassSectionService {
       details: `Deleted classSection: ${id}`,
     });
   
-    return { success: true, message: "Xóa lớp học thành công", classSectiones };
+    return { success: true, message: "Xóa lớp học thành công", classSections };
   }
 
   async classSectionExists(id) {

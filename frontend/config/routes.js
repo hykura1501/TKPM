@@ -6,6 +6,10 @@ const routes = {
     logs: '/logs',
     studentsImport: '/students/import',
     settings: '/settings',
+    registrations: '/registrations',
+    classSections: '/class-sections',
+    courses: '/courses',
+    semesters: '/semesters',
 };
 
 export default routes;

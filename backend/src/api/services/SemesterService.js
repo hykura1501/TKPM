@@ -16,7 +16,7 @@ class SemesterService {
     const parsed = semesterSchema.safeParse(data);
     if (!parsed.success) {
       await addLogEntry({ message: "Thêm học kỳ không hợp lệ", level: "warn" });
-      throw { semester: 400, message: parsed.error.errors };
+      throw { status: 400, message: parsed.error.errors };
     }
 
     const newId = await SemesterRepository.getNextId();
@@ -38,7 +38,7 @@ class SemesterService {
     const parsed = semesterSchema.safeParse(data);
     if (!parsed.success) {
       await addLogEntry({ message: "Cập nhật học kỳ không hợp lệ", level: "warn" });
-      throw { semester: 400, message: parsed.error.errors };
+      throw { status: 400, message: parsed.error.errors };
     }
 
     await SemesterRepository.update(parsed.data.id, parsed.data);
@@ -57,13 +57,13 @@ class SemesterService {
   async deleteSemester(id) {
     if (!id) {
       await addLogEntry({ message: "ID học kỳ không được để trống", level: "warn" });
-      throw { semester: 400, message: "ID học kỳ không được để trống" };
+      throw { status: 400, message: "ID học kỳ không được để trống" };
     }
 
     const student = await StudentRepository.findOneByCondition({ semester: id });
     if (student) {
       await addLogEntry({ message: "Không thể xóa học kỳ đang được sử dụng", level: "warn" });
-      throw { semester: 400, message: "Không thể xóa học kỳ đang được sử dụng" };
+      throw { status: 400, message: "Không thể xóa học kỳ đang được sử dụng" };
     }
 
     await SemesterRepository.delete(id);

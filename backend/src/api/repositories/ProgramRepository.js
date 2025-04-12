@@ -27,7 +27,7 @@ class ProgramRepository {
         { $inc: { value: 1 } },
         { new: true, upsert: true }
       );
-      return `program${String(counter.value).padStart(3, '0')}`;
+      return `program-${counter.value}`;
     } catch (error) {
       throw new Error('Lỗi khi tạo mã chương trình: ' + error.message);
     }

@@ -25,11 +25,12 @@ class ClassSectionRepository {
   async getNextId() {
     try {
       const counter = await Counter.findOneAndUpdate(
-        { name: "classSection_id" },
+        { name: "Section" },
         { $inc: { value: 1 } },
         { new: true, upsert: true }
       );
-      return `classSection${String(counter.value).padStart(3, "0")}`;
+      // dạng mã  như sau Section-2
+      return `section-${counter.value}`;
     } catch (error) {
       throw new Error("Lỗi khi tạo mã lớp: " + error.message);
     }

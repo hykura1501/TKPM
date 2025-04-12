@@ -10,15 +10,15 @@ const apiClient = axios.create({
 });
 
 // Thêm interceptor để bắt lỗi
-// apiClient.interceptors.response.use(
-//   (response: any) => {
-//     return response;
-//   },
-//   (error: any) => {
-//     console.error("Lỗi từ API:", error);
-//     return Promise.reject(error);
-//   }
-// );
+apiClient.interceptors.response.use(
+  (response: any) => {
+    return response;
+  },
+  (error: any) => {
+    console.error("Lỗi từ API:", error);
+    return Promise.reject(error.response?.data.error || error.message);
+  }
+);
 
 
 export default apiClient;
