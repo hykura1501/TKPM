@@ -1,4 +1,5 @@
 import type { Course, ClassSection, Student, Registration, Department } from "@/types"
+import { Faculty } from "@/types/student"
 
 // Sample departments
 export const departments: Department[] = [
@@ -205,9 +206,9 @@ export const registrations: Registration[] = [
 ]
 
 // Helper function to get department name by ID
-export const getDepartmentName = (departmentId: string): string => {
-  const department = departments.find((dept) => dept.id === departmentId)
-  return department ? department.name : "Unknown Department"
+export const getDepartmentName = (facultyId: string, faculties: Faculty[]): string => {
+  const faculty = faculties.find((dept) => dept.id === facultyId)
+  return faculty ? faculty.name : "Unknown Faculty"
 }
 
 // Helper function to get course by ID

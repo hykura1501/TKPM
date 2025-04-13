@@ -13,11 +13,11 @@ import type { Course, Department } from "@/types"
 type CourseFormProps = {
   course: Course | null
   onSubmit: (data: any) => void
-  departments: Department[]
+  faculties: Department[]
   existingCourses: Course[]
 }
 
-export function CourseForm({ course, onSubmit, departments, existingCourses }: CourseFormProps) {
+export function CourseForm({ course, onSubmit, faculties, existingCourses }: CourseFormProps) {
   // Define schema for course
   const courseSchema = z.object({
     code: z
@@ -37,7 +37,7 @@ export function CourseForm({ course, onSubmit, departments, existingCourses }: C
       .number()
       .min(2, { message: "Số tín chỉ phải lớn hơn hoặc bằng 2" })
       .max(10, { message: "Số tín chỉ không được vượt quá 10" }),
-    department: z.string({ required_error: "Vui lòng chọn khoa phụ trách" }),
+    faculty: z.string({ required_error: "Vui lòng chọn khoa phụ trách" }),
     description: z.string().min(10, { message: "Mô tả phải có ít nhất 10 ký tự" }),
     prerequisites: z.array(z.string()).default([]),
   })
@@ -50,7 +50,7 @@ export function CourseForm({ course, onSubmit, departments, existingCourses }: C
           code: course.code,
           name: course.name,
           credits: course.credits,
-          department: course.department,
+          faculty: course.faculty,
           description: course.description,
           prerequisites: course.prerequisites,
         }
@@ -58,7 +58,7 @@ export function CourseForm({ course, onSubmit, departments, existingCourses }: C
           code: "",
           name: "",
           credits: 3,
-          department: departments[0]?.id || "",
+          faculty: faculties[0]?.id || "",
           description: "",
           prerequisites: [],
         },
@@ -150,7 +150,7 @@ export function CourseForm({ course, onSubmit, departments, existingCourses }: C
 
           <FormField
             control={form.control}
-            name="department"
+            name="faculty"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Khoa phụ trách</FormLabel>
@@ -161,9 +161,9 @@ export function CourseForm({ course, onSubmit, departments, existingCourses }: C
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {departments.map((department) => (
-                      <SelectItem key={department.id} value={department.id}>
-                        {department.name}
+                    {faculties.map((faculty) => (
+                      <SelectItem key={faculty.id} value={faculty.id}>
+                        {faculty.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -1,5 +1,5 @@
 const CourseRepository = require("../repositories/CourseRepository");
-const StudentRepository = require("../repositories/StudentRepository");
+const ClassSectionRepository = require("../repositories/ClassSectionRepository");
 const { addLogEntry } = require("../helpers/logging");
 const { z } = require("zod");
 const FacultyRepository = require("../repositories/FacultyRepository");
@@ -20,17 +20,17 @@ const courseSchema = z.object({
 });
 
 class CourseService {
-  async validateCourse(course) {
+  async validateCourse(course, isUpdate = false) {
     const parsed = courseSchema.safeParse(course);
     if (!parsed.success) {
-      await addLogEntry({ message: "Mã khóa học không hợp lệ", level: "warn" });
-      return { success: false, error: parsed.error.errors };
+      await addLogEntry({ message: "Khóa học không hợp lệ", level: "warn" });
+      return { success: false, error: parsed.error.errors.message };
     }
   
     const existingCourse = await CourseRepository.findOneByCondition({
       code: parsed.data.code,
     });
-    if (existingCourse) {
+    if (!isUpdate && existingCourse) {
       await addLogEntry({ message: "Mã khóa học đã tồn tại", level: "warn" });
       return { success: false, error: "Mã khóa học đã tồn tại" };
     }
@@ -38,13 +38,13 @@ class CourseService {
     const existingCourseName = await CourseRepository.findOneByCondition({
       name: parsed.data.name,
     });
-    if (existingCourseName) {
+    if (!isUpdate && existingCourseName) {
       await addLogEntry({ message: "Tên khóa học đã tồn tại", level: "warn" });
       return { success: false, error: "Tên khóa học đã tồn tại" };
     }
   
     const existingFaculty = await FacultyRepository.findOneByCondition({
-      faculty: parsed.data.faculty,
+      id: parsed.data.faculty,
     });
     if (!existingFaculty) {
       await addLogEntry({
@@ -56,7 +56,7 @@ class CourseService {
   
     return { success: true, data: parsed.data };
   }
-  async getListCoursees() {
+  async getListCourses() {
     return await CourseRepository.findAll();
   }
 
@@ -77,7 +77,7 @@ class CourseService {
     const newCourse = { ...course, id: newId };
     await CourseRepository.create(newCourse);
   
-    const coursees = await CourseRepository.findAll();
+    const courses = await CourseRepository.findAll();
     await addLogEntry({
       message: "Thêm tình trạng sinh viên thành công",
       level: "info",
@@ -87,12 +87,12 @@ class CourseService {
       details: "Add new course: " + course.name,
     });
   
-    return { success: true, message: "Thêm tình trạng sinh viên thành công", coursees };
+    return { success: true, message: "Thêm khóa học thành công", courses };
   }
 
   async updateCourse(data) {
     // Sử dụng hàm validateCourse để kiểm tra dữ liệu
-    const validationResult = await this.validateCourse(data);
+    const validationResult = await this.validateCourse(data, true);
     if (!validationResult.success) {
       await addLogEntry({
         message: "Cập nhật khóa học không hợp lệ",
@@ -149,15 +149,20 @@ class CourseService {
     }
   
     // Kiểm tra xem khóa học có đang được sử dụng bởi sinh viên hay không
-    const student = await StudentRepository.findOneByCondition({ course: id });
-    if (student) {
+    const classSection = await ClassSectionRepository.findOneByCondition({ course: id });
+    if (classSection) {
       await addLogEntry({
         message: "Không thể xóa khóa học đang được sử dụng",
         level: "warn",
       });
-      throw { status: 400, message: "Không thể xóa khóa học đang được sử dụng" };
+      // Deactivate the course instead of deleting it
+      await CourseRepository.update(id, { isActive: false });
+      const courses = await CourseRepository.findAll();
+
+      return { success: true, message: "Khóa học đã được vô hiệu hóa", courses };
     }
   
+
     // Xóa khóa học
     await CourseRepository.delete(id);
     const courses = await CourseRepository.findAll();

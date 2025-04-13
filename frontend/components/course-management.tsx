@@ -1,148 +1,158 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { PlusCircle, Search, Pencil, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useToast } from "@/components/ui/use-toast"
-import type { Course } from "@/types/index"
-import { courses as initialCourses, departments, getDepartmentName } from "@/data/sample-data"
-import { CourseForm } from "@/components/course-form"
+import { use, useState, useEffect } from "react";
+import { PlusCircle, Search, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import type { Course } from "@/types/index";
+import { classSections, getDepartmentName } from "@/data/sample-data";
+import { CourseForm } from "@/components/course-form";
+import { toast } from "react-toastify";
+import courseService from "@/services/courseService";
+import facultyService from "@/services/facultyService";
+import { Faculty } from "@/types/student";
 
 export function CourseManagement() {
-  const [courses, setCourses] = useState<Course[]>(initialCourses)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [editingCourse, setEditingCourse] = useState<Course | null>(null)
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const { toast } = useToast()
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   // Filter courses based on search term
   const filteredCourses = courses.filter(
     (course) =>
       course.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      course.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Add new course
-  const addCourse = (course: Omit<Course, "id" | "createdAt" | "updatedAt" | "isActive">) => {
+  const addCourse = async (
+    course: Omit<Course, "id" | "createdAt" | "updatedAt" | "isActive">
+  ) => {
     // Check if course code already exists
     if (courses.some((c) => c.code === course.code)) {
-      toast({
-        title: "Lỗi",
-        description: "Mã khóa học đã tồn tại trong hệ thống.",
-        variant: "destructive",
-      })
-      return
+      toast.error("Mã khóa học đã tồn tại trong hệ thống.");
+      return;
     }
 
     // Validate prerequisites
     for (const prereqCode of course.prerequisites) {
       if (!courses.some((c) => c.code === prereqCode)) {
-        toast({
-          title: "Lỗi",
-          description: `Môn tiên quyết ${prereqCode} không tồn tại trong hệ thống.`,
-          variant: "destructive",
-        })
-        return
+        toast.error(
+          `Môn tiên quyết ${prereqCode} không tồn tại trong hệ thống.`
+        );
+        return;
       }
     }
 
-    const now = new Date().toISOString()
+    const now = new Date().toISOString();
     const newCourse: Course = {
       ...course,
       id: `course-${courses.length + 1}`,
       isActive: true,
       createdAt: now,
       updatedAt: now,
+    };
+
+    try {
+      const data = await courseService.addCourse(newCourse);
+      setCourses(data.courses);
+      setIsFormOpen(false);
+
+      toast.success(`Khóa học ${newCourse.name} đã được thêm thành công.`);
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi thêm khóa học.");
     }
-
-    setCourses([...courses, newCourse])
-    setIsFormOpen(false)
-
-    toast({
-      title: "Thành công",
-      description: `Đã thêm khóa học ${course.name} vào hệ thống.`,
-    })
-  }
+  };
 
   // Update course
-  const updateCourse = (updatedCourse: Course) => {
-    setCourses(
-      courses.map((course) =>
-        course.id === updatedCourse.id ? { ...updatedCourse, updatedAt: new Date().toISOString() } : course,
-      ),
-    )
-    setEditingCourse(null)
-    setIsFormOpen(false)
+  const updateCourse = async (updatedCourse: Course) => {
+    // setCourses(
+    //   courses.map((course) =>
+    //     course.id === updatedCourse.id ? { ...updatedCourse, updatedAt: new Date().toISOString() } : course,
+    //   ),
+    // )
+    try {
+      const data = await courseService.updateCourse(updatedCourse);
+      setCourses(data.courses);
+      setEditingCourse(null);
+      setIsFormOpen(false);
 
-    toast({
-      title: "Thành công",
-      description: `Đã cập nhật thông tin khóa học ${updatedCourse.name}.`,
-    })
-  }
+      toast.success(
+        `Khóa học ${updatedCourse.name} đã được cập nhật thành công.`
+      );
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi cập nhật khóa học.");
+    }
+  };
 
   // Delete course
-  const deleteCourse = (id: string) => {
-    const courseToDelete = courses.find((c) => c.id === id)
-    if (!courseToDelete) return
+  const deleteCourse = async (id: string) => {
+    const courseToDelete = courses.find((c) => c.id === id);
+    if (!courseToDelete) return;
 
     // Check if course can be deleted (within 30 minutes of creation)
-    const createdAt = new Date(courseToDelete.createdAt)
-    const now = new Date()
-    const timeDiff = (now.getTime() - createdAt.getTime()) / (1000 * 60) // in minutes
+    const createdAt = new Date(courseToDelete.createdAt);
+    const now = new Date();
+    const timeDiff = (now.getTime() - createdAt.getTime()) / (1000 * 60); // in minutes
 
     if (timeDiff > 30) {
-      toast({
-        title: "Không thể xóa",
-        description: "Chỉ có thể xóa khóa học trong vòng 30 phút sau khi tạo.",
-        variant: "destructive",
-      })
-      return
+      toast.error("Khóa học đã được tạo hơn 30 phút trước, không thể xóa.");
+      return;
     }
 
-    // In a real app, we would check if there are any class sections for this course
-    // For now, we'll just simulate this check
-    const hasClassSections = Math.random() > 0.7 // 30% chance of having class sections
+    try {
+      const data = await courseService.deleteCourse(id);
 
-    if (hasClassSections) {
       // Deactivate instead of delete
-      setCourses(
-        courses.map((course) =>
-          course.id === id ? { ...course, isActive: false, updatedAt: new Date().toISOString() } : course,
-        ),
-      )
-
-      toast({
-        title: "Khóa học đã bị vô hiệu hóa",
-        description: "Khóa học đã có lớp học, nên chỉ có thể vô hiệu hóa thay vì xóa.",
-        variant: "warning",
-      })
-    } else {
-      // Delete the course
-      setCourses(courses.filter((course) => course.id !== id))
-
-      toast({
-        title: "Đã xóa khóa học",
-        description: `Khóa học ${courseToDelete.name} đã được xóa khỏi hệ thống.`,
-      })
+      setCourses(data.courses);
+      toast.success(data.message || "Khóa học đã bị vô hiệu hóa hoặc bị xóa.");
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi xóa khóa học.");
     }
-  }
+  };
 
   // Handle edit button click
   const handleEdit = (course: Course) => {
-    setEditingCourse(course)
-    setIsFormOpen(true)
-  }
+    setEditingCourse(course);
+    setIsFormOpen(true);
+  };
 
   // Handle add button click
   const handleAdd = () => {
-    setEditingCourse(null)
-    setIsFormOpen(true)
-  }
+    setEditingCourse(null);
+    setIsFormOpen(true);
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setCourses(await courseService.fetchCourses());
+        setFaculties(await facultyService.fetchFaculties());
+      } catch (error: any) {
+        toast.error(error || "Đã xảy ra lỗi khi tải danh sách khóa học.");
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <Card>
@@ -150,19 +160,26 @@ export function CourseManagement() {
         <CardTitle>Quản lý Khóa học</CardTitle>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <DialogTrigger asChild>
-            <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={handleAdd}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               <PlusCircle className="mr-2 h-4 w-4" />
               Thêm Khóa học
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{editingCourse ? "Cập nhật Thông tin Khóa học" : "Thêm Khóa học Mới"}</DialogTitle>
+              <DialogTitle>
+                {editingCourse
+                  ? "Cập nhật Thông tin Khóa học"
+                  : "Thêm Khóa học Mới"}
+              </DialogTitle>
             </DialogHeader>
             <CourseForm
               course={editingCourse}
               onSubmit={editingCourse ? updateCourse : addCourse}
-              departments={departments}
+              faculties={faculties}
               existingCourses={courses}
             />
           </DialogContent>
@@ -201,7 +218,9 @@ export function CourseManagement() {
                     <TableCell className="font-medium">{course.code}</TableCell>
                     <TableCell>{course.name}</TableCell>
                     <TableCell>{course.credits}</TableCell>
-                    <TableCell>{getDepartmentName(course.department)}</TableCell>
+                    <TableCell>
+                      {getDepartmentName(course.faculty, faculties)}
+                    </TableCell>
                     <TableCell>
                       {course.prerequisites.length > 0 ? (
                         <div className="flex flex-wrap gap-1">
@@ -216,7 +235,11 @@ export function CourseManagement() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge className={course.isActive ? "bg-green-500" : "bg-red-500"}>
+                      <Badge
+                        className={
+                          course.isActive ? "bg-green-500" : "bg-red-500"
+                        }
+                      >
                         {course.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
                       </Badge>
                     </TableCell>
@@ -244,7 +267,10 @@ export function CourseManagement() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10 text-gray-500">
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-10 text-gray-500"
+                  >
                     Không tìm thấy khóa học nào
                   </TableCell>
                 </TableRow>
@@ -254,6 +280,5 @@ export function CourseManagement() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-

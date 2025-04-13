@@ -4,7 +4,7 @@ export type Course = {
   code: string // Unique course code
   name: string
   credits: number
-  department: string
+  faculty: string
   description: string
   prerequisites: string[] // Array of course codes that are prerequisites
   isActive: boolean
