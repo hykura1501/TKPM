@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { PlusCircle, Search, Pencil, Trash2, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -8,18 +8,34 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import type { ClassSection } from "@/types"
-import { classSections as initialClassSections, courses, getCourseById } from "@/data/sample-data"
+import type { ClassSection, Course } from "@/types"
+import { getCourseById } from "@/data/sample-data"
 import { ClassSectionForm } from "@/components/class-section-form"
 import classSectionService from "@/services/classSectionService"
 import { toast } from "react-toastify";
 import { set } from "react-hook-form"
+import courseService from "@/services/courseService"
 
 export function ClassSectionManagement() {
-  const [classSections, setClassSections] = useState<ClassSection[]>(initialClassSections)
+  const [classSections, setClassSections] = useState<ClassSection[]>([])
+  const [courses, setCourses] = useState<Course[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [editingSection, setEditingSection] = useState<ClassSection | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setClassSections(await classSectionService.fetchClassSections())
+        setCourses(await courseService.fetchCourses())
+
+      } catch (error: any) {
+        console.error("Error fetching class sections:", error)
+        toast.error(error || 'Có lỗi xảy ra khi tải danh sách lớp học.')
+      }
+    }
+    fetchData()
+  },[])
 
   // Filter class sections based on search term
   const filteredSections = classSections.filter(
