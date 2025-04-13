@@ -1,7 +1,7 @@
-const SettingController = require('../../controllers/SettingController');
-const SettingService = require('../../services/SettingService');
+const SettingController = require("../../src/api/controllers/SettingController");
+const SettingService = require("../../src/api/services/SettingService");
 
-jest.mock('../../services/SettingService');
+jest.mock("../../src/api/services/SettingService");
 
 describe('SettingController', () => {
     let req, res;
@@ -18,104 +18,124 @@ describe('SettingController', () => {
         jest.clearAllMocks();
     });
     
-    describe('getListSettings - success', () => {
-        it('should return list successfully', async () => {
-        const fakeData = [{ id: 1, name: 'Setting A' }];
-        SettingService.getListSettings.mockResolvedValue(fakeData);
-    
-        await SettingController.getListSettings(req, res);
-    
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(fakeData);
-        });
-    });
-
-    describe('getListSettings - failure', () => {
-        it('should handle error', async () => {
-        SettingService.getListSettings.mockRejectedValue(new Error('Error fetching'));
-    
-        await SettingController.getListSettings(req, res);
-    
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({ error: 'Lỗi khi lấy danh sách cài đặt' });
-        });
-    });
-
-    describe('addSetting - success', () => {
-        it('should add successfully', async () => {
-        const fakeResult = { success: true };
-        SettingService.addSetting.mockResolvedValue(fakeResult);
-        req.body = { name: 'Setting B' };
-    
-        await SettingController.addSetting(req, res);
-    
-        expect(res.status).toHaveBeenCalledWith(201);
-        expect(res.json).toHaveBeenCalledWith(fakeResult);
-        });
-    }); 
-
-    describe('addSetting - failure', () => {
-        it('should handle error when adding', async () => {
-        const error = new Error('Add failed');
-        error.status = 400;
-        SettingService.addSetting.mockRejectedValue(error);
-    
-        await SettingController.addSetting(req, res);
-    
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({ error: 'Add failed' });
-        });
-    }); 
-
-    describe('updateSetting - success', () => {
-        it('should update successfully', async () => {
+    describe('updateDomain - success', () => {
+        it('should update domain successfully', async () => {
             const fakeResult = { success: true };
-            SettingService.updateSetting.mockResolvedValue(fakeResult);
-            req.params.id = 1;
-            req.body = { name: 'Updated Setting' };
-    
-            await SettingController.updateSetting(req, res);
-    
+            SettingService.updateDomains.mockResolvedValue(fakeResult);
+            req.body = { domain: 'example.com' };
+
+            await SettingController.updateDomains(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(fakeResult);
+        });
+    });
+
+    describe('updateDomain - failure', () => {
+        it('should handle error when updating domain', async () => {
+            const error = new Error('Update failed');
+            error.status = 400;
+            SettingService.updateDomains.mockRejectedValue(error);
+
+            await SettingController.updateDomains(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Update failed' });
+        });
+    });
+
+    describe('getDomains - success', () => {
+        it('should get domains successfully', async () => {
+            const fakeData = { domain: 'example.com' };
+            SettingService.getDomains.mockResolvedValue(fakeData);
+
+            await SettingController.getDomains(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(fakeData);
+        });
+    }); 
+
+    describe('getDomains - failure', () => {
+        it('should handle error when getting domains', async () => {
+            SettingService.getDomains.mockRejectedValue(new Error('Error fetching'));
+
+            await SettingController.getDomains(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Lỗi khi lấy danh sách domain' });
+        });
+    }); 
+
+    describe('updatePhoneFormats - success', () => {
+        it('should update phone formats successfully', async () => {
+            const fakeResult = { success: true };
+            SettingService.updatePhoneFormats.mockResolvedValue(fakeResult);
+            req.body = { phoneFormats: ['+84', '0'] };
+
+            await SettingController.updatePhoneFormats(req, res);
+
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith(fakeResult);
         });
     }); 
 
-    describe('updateSetting - failure', () => {
-        it('should handle error when updating', async () => {
+    describe('updatePhoneFormats - failure', () => {
+        it('should handle error when updating phone formats', async () => {
             const error = new Error('Update failed');
             error.status = 400;
-            SettingService.updateSetting.mockRejectedValue(error);
-    
-            await SettingController.updateSetting(req, res);
-    
+            SettingService.updatePhoneFormats.mockRejectedValue(error);
+
+            await SettingController.updatePhoneFormats(req, res);
+
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.json).toHaveBeenCalledWith({ error: 'Update failed' });
         });
     }); 
 
-    describe('deleteSetting - success', () => {
-        it('should delete successfully', async () => {
-            SettingService.deleteSetting.mockResolvedValue({ success: true });
-            req.params.id = 1;
-    
-            await SettingController.deleteSetting(req, res);
-    
+    describe('getAllSettings - success', () => {
+        it('should get all settings successfully', async () => {
+            const fakeData = { setting1: 'value1', setting2: 'value2' };
+            SettingService.getAllSettings.mockResolvedValue(fakeData);
+
+            await SettingController.getAllSettings(req, res);
+
             expect(res.status).toHaveBeenCalledWith(200);
-            expect(res.json).toHaveBeenCalledWith({ message: 'Xóa thành công' });
+            expect(res.json).toHaveBeenCalledWith(fakeData);
         });
     }); 
 
-    describe('deleteSetting - failure', () => {
-        it('should handle error when deleting', async () => {
-            const error = new Error('Delete failed');
-            error.status = 400;
-            SettingService.deleteSetting.mockRejectedValue(error);
-    
-            await SettingController.deleteSetting(req, res);
-    
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Delete failed' });
+    describe('getAllSettings - failure', () => {
+        it('should handle error when getting all settings', async () => {
+            SettingService.getAllSettings.mockRejectedValue(new Error('Error fetching'));
+
+            await SettingController.getAllSettings(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Lỗi khi lấy danh sách setting' });
+        });
+    }); 
+
+    describe('getStatusRules - success', () => {
+        it('should get status rules successfully', async () => {
+            const fakeData = { rule1: 'value1', rule2: 'value2' };
+            SettingService.getStatusRules.mockResolvedValue(fakeData);
+
+            await SettingController.getStatusRules(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(fakeData);
+        });
+    }); 
+
+    describe('getStatusRules - failure', () => {
+        it('should handle error when getting status rules', async () => {
+            SettingService.getStatusRules.mockRejectedValue(new Error('Error fetching'));
+
+            await SettingController.getStatusRules(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Lỗi khi lấy danh sách setting' });
         });
     }); 
 });
