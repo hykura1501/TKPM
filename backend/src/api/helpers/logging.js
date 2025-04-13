@@ -5,6 +5,24 @@ const generateId = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
+const isTest = process.env.NODE_ENV === 'test';
+// Define transport list
+const transportList = [
+  new transports.Console()
+];
+
+if (!isTest) {
+  transportList.push(
+    new transports.MongoDB({
+      level: 'info',
+      db: process.env.MONGODB_URI,
+      collection: 'logs',
+      options: { useUnifiedTopology: true }
+    })
+  );
+}
+
+
 // Create logger with Winston and MongoDB transport
 const logger = createLogger({
   level: 'info',
@@ -12,15 +30,7 @@ const logger = createLogger({
     format.timestamp(),
     format.json()
   ),
-  transports: [
-    new transports.Console(),
-    new transports.MongoDB({
-      level: 'info',
-      db: process.env.MONGODB_URI,
-      collection: 'logs',
-      options: { useUnifiedTopology: true }
-    })
-  ],
+  transports: transportList,
 });
 
 // Function to add a new log entry

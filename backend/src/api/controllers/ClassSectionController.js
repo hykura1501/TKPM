@@ -3,7 +3,7 @@ const ClassSectionService = require('../services/ClassSectionService');
 class ClassSectionController {
   async getListClassSections(req, res) {
     try {
-      const classSections = await ClassSectionService.getListClassSectiones();
+      const classSections = await ClassSectionService.getListClassSections();
       res.status(200).json(classSections);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách khoa:", error);
