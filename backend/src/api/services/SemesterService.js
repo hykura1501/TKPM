@@ -8,7 +8,7 @@ const semesterSchema = z.object({
 });
 
 class SemesterService {
-  async getListSemesteres() {
+  async getListSemesters() {
     return await SemesterRepository.findAll();
   }
 
@@ -22,7 +22,7 @@ class SemesterService {
     const newId = await SemesterRepository.getNextId();
     const newSemester = { ...parsed.data, id: newId };
     await SemesterRepository.create(newSemester);
-    const semesteres = await SemesterRepository.findAll();
+    const semesters = await SemesterRepository.findAll();
     await addLogEntry({
       message: "Thêm học kỳ thành công",
       level: "info",
@@ -31,7 +31,7 @@ class SemesterService {
       user: "admin",
       details: "Add new semester: " + parsed.data.name,
     });
-    return { message: "Thêm học kỳ thành công", semesteres };
+    return { message: "Thêm học kỳ thành công", semesters };
   }
 
   async updateSemester(data) {
@@ -42,7 +42,7 @@ class SemesterService {
     }
 
     await SemesterRepository.update(parsed.data.id, parsed.data);
-    const semesteres = await SemesterRepository.findAll();
+    const semesters = await SemesterRepository.findAll();
     await addLogEntry({
       message: "Cập nhật học kỳ thành công",
       level: "info",
@@ -51,7 +51,7 @@ class SemesterService {
       user: "admin",
       details: "Updated semester: " + parsed.data.name,
     });
-    return { message: "Cập nhật học kỳ thành công", semesteres };
+    return { message: "Cập nhật học kỳ thành công", semesters };
   }
 
   async deleteSemester(id) {
@@ -67,7 +67,7 @@ class SemesterService {
     }
 
     await SemesterRepository.delete(id);
-    const semesteres = await SemesterRepository.findAll();
+    const semesters = await SemesterRepository.findAll();
     await addLogEntry({
       message: "Xóa học kỳ thành công",
       level: "info",
@@ -76,7 +76,7 @@ class SemesterService {
       user: "admin",
       details: `Deleted semester: ${id}`,
     });
-    return { message: "Xóa học kỳ thành công", semesteres };
+    return { message: "Xóa học kỳ thành công", semesters };
   }
 
   async semesterExists(id) {
