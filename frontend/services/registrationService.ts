@@ -8,8 +8,8 @@ class RegistrationService {
     return response.data;
   }
 
-  async addRegistration(faculty: Omit<Registration, "id">) {
-    const response = await apiClient.post(routes.registrations, faculty);
+  async addRegistration(registration: Omit<Registration, "id">) {
+    const response = await apiClient.post(routes.registrations, registration);
     return response.data;
   }
 
@@ -22,7 +22,12 @@ class RegistrationService {
     const response = await apiClient.delete(`${routes.registrations}/${id}`);
     return response.data;
   }
+  
+  async cancelRegistration(id: string) {
+    const response = await apiClient.patch(`${routes.registrations}/${id}/cancel`);
+    return response.data;
+  }
 }
 
-const facultyService = new RegistrationService();
-export default facultyService;
+const registrationService = new RegistrationService();
+export default registrationService;

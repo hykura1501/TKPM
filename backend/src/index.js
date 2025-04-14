@@ -36,7 +36,6 @@ app.use(morgan('combined'));
 
 route(app);
 
-
 // Xử lý lỗi 404 - Route không tồn tại
 app.use((req, res, next) => {
   res.status(404).json({

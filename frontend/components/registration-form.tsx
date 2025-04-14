@@ -6,11 +6,12 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { Student, ClassSection, Course } from "@/types"
+import type { ClassSection, Course } from "@/types"
+import { Student } from "@/types/student"
 import { getCourseById } from "@/data/sample-data"
 
 type RegistrationFormProps = {
-  onSubmit: (data: { studentId: string; classSectionId: string }) => void
+  onSubmit: (data: { mssv: string; classSectionId: string }) => void
   students: Student[]
   classSections: ClassSection[]
   courses: Course[]
@@ -19,7 +20,7 @@ type RegistrationFormProps = {
 export function RegistrationForm({ onSubmit, students, classSections, courses }: RegistrationFormProps) {
   // Define schema for registration
   const registrationSchema = z.object({
-    studentId: z.string({ required_error: "Vui lòng chọn sinh viên" }),
+    mssv: z.string({ required_error: "Vui lòng chọn sinh viên" }),
     classSectionId: z.string({ required_error: "Vui lòng chọn lớp học" }),
   })
 
@@ -27,7 +28,7 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
   const form = useForm<z.infer<typeof registrationSchema>>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      studentId: "",
+      mssv: "",
       classSectionId: "",
     },
   })
@@ -39,7 +40,7 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
 
   // Get course name by ID
   const getCourseName = (courseId: string): string => {
-    const course = getCourseById(courseId)
+    const course = getCourseById(courseId, courses)
     return course ? course.name : "Unknown Course"
   }
 
@@ -49,7 +50,7 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
         <div className="grid grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="studentId"
+            name="mssv"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Sinh viên</FormLabel>
@@ -61,8 +62,8 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
                   </FormControl>
                   <SelectContent>
                     {students.map((student) => (
-                      <SelectItem key={student.id} value={student.id}>
-                        {student.studentId} - {student.name}
+                      <SelectItem key={student.mssv} value={student.mssv}>
+                        {student.mssv} - {student.fullName}
                       </SelectItem>
                     ))}
                   </SelectContent>

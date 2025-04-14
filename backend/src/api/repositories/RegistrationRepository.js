@@ -1,4 +1,5 @@
 const Registration = require('../models/Registration');
+const Counter = require('../models/Counter');
 
 class RegistrationRepository {
   async findAll() {

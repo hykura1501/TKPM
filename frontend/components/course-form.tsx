@@ -8,12 +8,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MultiSelect } from "@/components/multi-select"
-import type { Course, Department } from "@/types"
+import type { Course } from "@/types"
+import type { Faculty } from "@/types/student"
 
 type CourseFormProps = {
   course: Course | null
   onSubmit: (data: any) => void
-  faculties: Department[]
+  faculties: Faculty[]
   existingCourses: Course[]
 }
 
