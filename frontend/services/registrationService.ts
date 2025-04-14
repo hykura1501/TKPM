@@ -22,9 +22,19 @@ class RegistrationService {
     const response = await apiClient.delete(`${routes.registrations}/${id}`);
     return response.data;
   }
-  
+
   async cancelRegistration(id: string) {
     const response = await apiClient.patch(`${routes.registrations}/${id}/cancel`);
+    return response.data;
+  }
+
+  async fetchGradesByClassId(id: string) {
+    const response = await apiClient.get(`${routes.registrations}/grade/${id}`);
+    return response.data;
+  }
+
+  async saveGradesByClassId(id: string, grades: { [key: string]: string }) {
+    const response = await apiClient.post(`${routes.registrations}/grade/${id}`, { grades: grades });
     return response.data;
   }
 }

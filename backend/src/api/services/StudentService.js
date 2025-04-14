@@ -348,6 +348,18 @@ class StudentService {
       throw new Error("Lỗi khi thêm sinh viên từ file: " + error.message);
     }
   }
+
+  async getStudentByMssv(mssv) {
+    try {
+      const student = await StudentRepository.findStudentByMssv(mssv);
+      if (!student) {
+        throw new Error("Sinh viên không tồn tại");
+      }
+      return student;
+    } catch (error) {
+      throw new Error("Lỗi khi lấy sinh viên: " + error.message);
+    }
+  }
 }
 
 module.exports = new StudentService();

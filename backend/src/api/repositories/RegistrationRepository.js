@@ -6,6 +6,10 @@ class RegistrationRepository {
     return await Registration.find({});
   }
 
+  async findAllByCondition(condition) {
+    return await Registration.find(condition);
+  }
+
   async create(data) {
     const newRegistration = new Registration(data);
     return await newRegistration.save();
@@ -13,6 +17,10 @@ class RegistrationRepository {
 
   async update(id, data) {
     return await Registration.updateOne({ id }, { $set: data });
+  }
+
+  async updateGrade(id, classId, grade) {
+    return await Registration.updateOne({ studentId: id, classSectionId: classId }, { grade: grade });
   }
 
   async delete(id) {

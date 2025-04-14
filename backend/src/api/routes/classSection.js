@@ -6,5 +6,6 @@ router.get('/', ClassSectionController.getListClassSections);
 router.post('/', ClassSectionController.addClassSection);
 router.put('/', ClassSectionController.updateClassSection);
 router.delete('/:id', ClassSectionController.deleteClassSection);
+router.get('/course/:courseId', ClassSectionController.getClassSectionByCourseId);
 
 module.exports = router;

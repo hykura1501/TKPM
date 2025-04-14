@@ -9,69 +9,69 @@ import { Faculty, Student} from "@/types/student"
 //   { id: "dept-4", name: "Khoa Điện - Điện tử", code: "DĐT" },
 // ]
 
-// // Sample courses
-// export const courses: Course[] = [
-//   {
-//     id: "course-1",
-//     code: "CNTT001",
-//     name: "Nhập môn Lập trình",
-//     credits: 3,
-//     department: "dept-1",
-//     description: "Khóa học cơ bản về lập trình cho sinh viên năm nhất.",
-//     prerequisites: [],
-//     isActive: true,
-//     createdAt: "2023-01-01T00:00:00Z",
-//     updatedAt: "2023-01-01T00:00:00Z",
-//   },
-//   {
-//     id: "course-2",
-//     code: "CNTT002",
-//     name: "Cấu trúc dữ liệu và Giải thuật",
-//     credits: 4,
-//     department: "dept-1",
-//     description: "Khóa học về cấu trúc dữ liệu và các thuật toán cơ bản.",
-//     prerequisites: ["CNTT001"],
-//     isActive: true,
-//     createdAt: "2023-01-02T00:00:00Z",
-//     updatedAt: "2023-01-02T00:00:00Z",
-//   },
-//   {
-//     id: "course-3",
-//     code: "CNTT003",
-//     name: "Cơ sở dữ liệu",
-//     credits: 4,
-//     department: "dept-1",
-//     description: "Khóa học về thiết kế và quản lý cơ sở dữ liệu.",
-//     prerequisites: ["CNTT001"],
-//     isActive: true,
-//     createdAt: "2023-01-03T00:00:00Z",
-//     updatedAt: "2023-01-03T00:00:00Z",
-//   },
-//   {
-//     id: "course-4",
-//     code: "KT001",
-//     name: "Kinh tế vĩ mô",
-//     credits: 3,
-//     department: "dept-2",
-//     description: "Khóa học cơ bản về kinh tế vĩ mô.",
-//     prerequisites: [],
-//     isActive: true,
-//     createdAt: "2023-01-04T00:00:00Z",
-//     updatedAt: "2023-01-04T00:00:00Z",
-//   },
-//   {
-//     id: "course-5",
-//     code: "NN001",
-//     name: "Tiếng Anh cơ bản",
-//     credits: 2,
-//     department: "dept-3",
-//     description: "Khóa học tiếng Anh cơ bản cho sinh viên năm nhất.",
-//     prerequisites: [],
-//     isActive: true,
-//     createdAt: "2023-01-05T00:00:00Z",
-//     updatedAt: "2023-01-05T00:00:00Z",
-//   },
-// ]
+// Sample courses
+export const courses: Course[] = [
+  {
+    id: "course-1",
+    code: "CNTT001",
+    name: "Nhập môn Lập trình",
+    credits: 3,
+    department: "dept-1",
+    description: "Khóa học cơ bản về lập trình cho sinh viên năm nhất.",
+    prerequisites: [],
+    isActive: true,
+    createdAt: "2023-01-01T00:00:00Z",
+    updatedAt: "2023-01-01T00:00:00Z",
+  },
+  {
+    id: "course-2",
+    code: "CNTT002",
+    name: "Cấu trúc dữ liệu và Giải thuật",
+    credits: 4,
+    department: "dept-1",
+    description: "Khóa học về cấu trúc dữ liệu và các thuật toán cơ bản.",
+    prerequisites: ["CNTT001"],
+    isActive: true,
+    createdAt: "2023-01-02T00:00:00Z",
+    updatedAt: "2023-01-02T00:00:00Z",
+  },
+  {
+    id: "course-3",
+    code: "CNTT003",
+    name: "Cơ sở dữ liệu",
+    credits: 4,
+    department: "dept-1",
+    description: "Khóa học về thiết kế và quản lý cơ sở dữ liệu.",
+    prerequisites: ["CNTT001"],
+    isActive: true,
+    createdAt: "2023-01-03T00:00:00Z",
+    updatedAt: "2023-01-03T00:00:00Z",
+  },
+  {
+    id: "course-4",
+    code: "KT001",
+    name: "Kinh tế vĩ mô",
+    credits: 3,
+    department: "dept-2",
+    description: "Khóa học cơ bản về kinh tế vĩ mô.",
+    prerequisites: [],
+    isActive: true,
+    createdAt: "2023-01-04T00:00:00Z",
+    updatedAt: "2023-01-04T00:00:00Z",
+  },
+  {
+    id: "course-5",
+    code: "NN001",
+    name: "Tiếng Anh cơ bản",
+    credits: 2,
+    department: "dept-3",
+    description: "Khóa học tiếng Anh cơ bản cho sinh viên năm nhất.",
+    prerequisites: [],
+    isActive: true,
+    createdAt: "2023-01-05T00:00:00Z",
+    updatedAt: "2023-01-05T00:00:00Z",
+  },
+]
 
 // // Sample class sections
 // export const classSections: ClassSection[] = [
@@ -213,7 +213,7 @@ export const getDepartmentName = (facultyId: string, faculties: Faculty[]): stri
 
 // Helper function to get course by ID
 export const getCourseById = (courseId: string, courses: Course[]): Course | undefined => {
-  return courses.find((course) => course.id === courseId)
+  return courses?.find((course) => course.id === courseId)
 }
 
 // Helper function to get course by code

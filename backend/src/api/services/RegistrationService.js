@@ -230,6 +230,59 @@ class RegistrationService {
     });
     return { message: "Hủy đăng ký học thành công", registrations };
   }
+  async getGradeByClassId(classId) {
+    if (!classId) {
+      await addLogEntry({
+        message: "ID lớp học không được để trống",
+        level: "warn",
+      });
+      throw { status: 400, message: "ID lớp học không được để trống" };
+    }
+
+    const grades = await RegistrationRepository.findAllByCondition({
+      classSectionId: classId,
+    });
+    if (!grades) {
+      await addLogEntry({
+        message: "Không tìm thấy đăng ký học nào cho lớp học này",
+        level: "warn",
+      });
+      throw { status: 404, message: "Không tìm thấy đăng ký học nào cho lớp học này" };
+    }
+
+    return grades;
+  }
+
+  async saveGradeByClassId(classId, data) {
+    if (!classId) {
+      await addLogEntry({
+        message: "ID lớp học không được để trống",
+        level: "warn",
+      });
+      throw { status: 400, message: "ID lớp học không được để trống" };
+    }
+
+    const grades = await RegistrationRepository.findAllByCondition({
+      classSectionId: classId,
+    });
+    if (!grades) {
+      await addLogEntry({
+        message: "Không tìm thấy đăng ký học nào cho lớp học này",
+        level: "warn",
+      });
+      throw { status: 404, message: "Không tìm thấy đăng ký học nào cho lớp học này" };
+    }
+
+    for (const grade of grades) {
+      const score = data[grade.studentId];
+      console.log("score", score);
+      console.log("grade.studentId", grade.studentId);
+      await RegistrationRepository.updateGrade(grade.studentId, classId, score);
+    }
+
+    return { message: "Cập nhật điểm thành công", grades };
+  }
+
 }
 
 module.exports = new RegistrationService();

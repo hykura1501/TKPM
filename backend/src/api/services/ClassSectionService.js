@@ -185,6 +185,18 @@ class ClassSectionService {
     });
     return !!classSection;
   }
+
+  async getClassSectionByCourseId(courseId) { 
+    const classSections = await ClassSectionRepository.findAllByCondition({ courseId });
+    if (!classSections) {
+      await addLogEntry({
+        message: "Không tìm thấy lớp học nào cho khóa học này",
+        level: "warn",
+      });
+      throw { status: 404, message: "Không tìm thấy lớp học nào cho khóa học này" };
+    }
+    return classSections;
+  }
 }
 
 module.exports = new ClassSectionService();

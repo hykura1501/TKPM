@@ -1,4 +1,5 @@
 const RegistrationService = require('../services/RegistrationService');
+const StudentService = require('../services/StudentService');
 
 class RegistrationController {
   async getListRegistrations(req, res) {
@@ -47,6 +48,40 @@ class RegistrationController {
     } catch (error) {
       console.error("Lỗi khi xóa khoa:", error);
       res.status(error.status || 500).json({ error: error.message || "Lỗi khi xóa khoa" });
+    }
+  }
+
+  async getGradeByClassId(req, res) {
+    try {
+      const { classId } = req.params;
+      console.log(classId);
+      
+      const grades = await RegistrationService.getGradeByClassId(classId);
+      
+      const _grades = grades.map((item) => item.toJSON());
+
+      for (let item of _grades) {
+        const student = (await StudentService.getStudentByMssv(item.studentId)).toJSON();
+        if (student) {
+          item.studentInfo = student;
+        }
+      }
+
+      res.status(200).json(_grades);
+    } catch (error) {
+      console.error("Lỗi khi lấy điểm theo lớp:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi lấy điểm theo lớp" });
+    }
+  }
+
+  async saveGradeByClassId(req, res) {
+    try {
+      const { classId } = req.params;
+      const { grades } = req.body;
+      const result = await RegistrationService.saveGradeByClassId(classId, grades);
+      res.status(200).json(result);
+    } catch (error) {
+      
     }
   }
 }
