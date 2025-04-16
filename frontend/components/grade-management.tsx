@@ -1,107 +1,178 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState, useEffect, useCallback } from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
 import { Search, Edit, Trash2 } from "lucide-react"
 import coursesServices from "@/services/courseService"
-import { ClassSection, Course, Registration, Student } from "@/types"
 import classSectionService from "@/services/classSectionService"
 import registrationService from "@/services/registrationService"
+import { ClassSection, Course, Registration } from "@/types"
+import { useSearchParams, useRouter } from "next/navigation"
 
 export default function GradeManagement() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
   const [courses, setCourses] = useState<Course[]>([])
-
+  const [classes, setClasses] = useState<ClassSection[]>([])
   const [grades, setGrades] = useState<Registration[]>([])
+  const [filteredGrades, setFilteredGrades] = useState<Registration[]>([])
 
-  useEffect(() => {
-    async function fetchData() {
-      const [coursesData] = await Promise.all([
-        coursesServices.fetchCourses(),
-      ])
-
-      if (coursesData) {
-        setCourses(coursesData)
-      }
-    }
-
-    fetchData()
-
-  }, [])
-
-  // State
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCourse, setSelectedCourse] = useState<string>("")
-  const [selectedClass, setSelectedClass] = useState<string>("")
+  const [selectedCourse, setSelectedCourse] = useState<string>("all")
+  const [selectedClass, setSelectedClass] = useState<string>("all")
+
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [currentGrade, setCurrentGrade] = useState<{ id: string; score: number } | null>(null)
+  const [currentGrade, setCurrentGrade] = useState<{ id: string; grade: number } | null>(null)
 
-  const [classes, setClasses] = useState<ClassSection[]>([])
+  const handleCourseChange = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (value === "all") {
+        params.delete("courseId")
+        params.delete("classId")
+        router.push(`?${params.toString()}`)
+        setSelectedCourse("all")
+        setSelectedClass("all")
+        setGrades([])
+        return
+      }
+
+      params.set("courseId", value)
+      params.delete("classId")
+      router.push(`?${params.toString()}`)
+      setSelectedCourse(value)
+      setSelectedClass("all")
+      setGrades([])
+    },
+    [router, searchParams]
+  )
+
+  const handleClassChange = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (value === "all") {
+        params.delete("classId")
+        router.push(`?${params.toString()}`)
+        setSelectedClass("all")
+        return
+      }
+
+      params.set("classId", value)
+      router.push(`?${params.toString()}`)
+      setSelectedClass(value)
+    },
+    [router, searchParams]
+  )
 
   useEffect(() => {
+    async function fetchInitialData() {
+      const coursesData = await coursesServices.fetchCourses()
+      if (coursesData) setCourses(coursesData)
 
-    async function fetchClasses(selectedCourse: string) {
-      if (!selectedCourse) return
-      const classesData = await classSectionService.fetchClassesByCourseId(selectedCourse)
-      setClasses(classesData)
+      const courseId = searchParams.get("courseId") || "all"
+      const classId = searchParams.get("classId") || "all"
+
+      setSelectedCourse(courseId)
+      setSelectedClass(classId)
     }
-    fetchClasses(selectedCourse)
+    fetchInitialData()
+  }, [])
+
+  useEffect(() => {
+    async function fetchClasses() {
+      if (!selectedCourse || selectedCourse === "all") return
+      const data = await classSectionService.fetchClassesByCourseId(selectedCourse)
+      setClasses(data)
+    }
+    fetchClasses()
   }, [selectedCourse])
 
   useEffect(() => {
-    async function fetchGrade(selectedClass: string) {
-      if (!selectedClass) return
-      const gradesData = await registrationService.fetchGradesByClassId(selectedClass)
-      setGrades(gradesData)
+    async function fetchGrades() {
+      if (!selectedClass || selectedClass === "all") return
+      const data = await registrationService.fetchGradesByClassId(selectedClass)
+      setGrades(data)
+      setFilteredGrades(data)
     }
-    fetchGrade(selectedClass)
+    fetchGrades()
   }, [selectedClass])
 
   useEffect(() => {
     if (!searchTerm) {
+      setFilteredGrades(grades)
       return
     }
-    const filteredStudents = grades.filter((grade) => {
-      return grade.studentId?.toLowerCase().includes(searchTerm.toLowerCase()) || grade.studentInfo?.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
-    })
-    setGrades(filteredStudents)
-  }, [searchTerm])
+    const filtered = grades.filter((grade) =>
+      grade.studentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      grade.studentInfo?.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    setFilteredGrades(filtered)
+  }, [searchTerm, grades])
 
-  // Handle edit
-  const handleEdit = (grade: any) => {
-    setCurrentGrade({ id: grade.id, score: grade.score })
+  const handleEdit = (grade: Registration) => {
+    setCurrentGrade({ id: grade.id, grade: grade.grade ?? 0 })
     setIsEditDialogOpen(true)
   }
 
-  // Handle delete
-  const handleDelete = (grade: any) => {
-    setCurrentGrade({ id: grade.id, score: grade.score })
+  const handleDelete = (grade: Registration) => {
+    setCurrentGrade({ id: grade.id, grade: grade.grade ?? 0 })
     setIsDeleteDialogOpen(true)
   }
 
-  // Save edited grade
   const saveGrade = () => {
     if (!currentGrade) return
-
-    const newScore = Number.parseFloat(currentGrade.score.toString())
+    const newScore = parseFloat(currentGrade.grade.toString())
     if (isNaN(newScore) || newScore < 0 || newScore > 10) {
       alert("Điểm phải là số từ 0 đến 10")
       return
     }
-
-    setGrades(grades.map((grade) => (grade.id === currentGrade.id ? { ...grade, score: newScore } : grade)))
+    setGrades((prev) =>
+      prev.map((g) => (g.id === currentGrade.id ? { ...g, score: newScore } : g))
+    )
+    setFilteredGrades((prev) =>
+      prev.map((g) => (g.id === currentGrade.id ? { ...g, score: newScore } : g))
+    )
     setIsEditDialogOpen(false)
   }
 
-  // Confirm delete
   const confirmDelete = () => {
     if (!currentGrade) return
-    setGrades(grades.filter((grade) => grade.id !== currentGrade.id))
+    setGrades((prev) => prev.filter((g) => g.id !== currentGrade.id))
+    setFilteredGrades((prev) => prev.filter((g) => g.id !== currentGrade.id))
     setIsDeleteDialogOpen(false)
   }
 
@@ -124,7 +195,7 @@ export default function GradeManagement() {
               />
             </div>
             <div className="w-full md:w-64">
-              <Select value={selectedCourse} onValueChange={setSelectedCourse}>
+              <Select value={selectedCourse} onValueChange={handleCourseChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Chọn môn học" />
                 </SelectTrigger>
@@ -139,7 +210,7 @@ export default function GradeManagement() {
               </Select>
             </div>
             <div className="w-full md:w-64">
-              <Select value={selectedClass} onValueChange={setSelectedClass}>
+              <Select value={selectedClass} onValueChange={handleClassChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Chọn lớp" />
                 </SelectTrigger>
@@ -163,27 +234,18 @@ export default function GradeManagement() {
                 <TableHead>Lớp</TableHead>
                 <TableHead>Tên môn học</TableHead>
                 <TableHead className="text-center">Điểm</TableHead>
-                <TableHead className="text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {grades?.length > 0 ? (
-                grades.map((grade) => (
+              {filteredGrades.length > 0 ? (
+                filteredGrades.map((grade) => (
                   <TableRow key={grade.id}>
                     <TableCell>{grade.studentId}</TableCell>
-                    <TableCell>{grade?.studentInfo?.fullName}</TableCell>
-                    <TableCell>{classes?.find((cls) => cls.id === selectedClass)?.code}</TableCell>
-                    <TableCell>{courses?.find((course) => course?.id === selectedCourse)?.name}</TableCell>
-                    <TableCell className="text-center font-medium">{grade?.grade?.toFixed(1)}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button size="sm" variant="outline" onClick={() => handleEdit(grade)}>
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDelete(grade)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                    <TableCell>{grade.studentInfo?.fullName}</TableCell>
+                    <TableCell>{classes.find((cls) => cls.id === selectedClass)?.code}</TableCell>
+                    <TableCell>{courses.find((course) => course.id === selectedCourse)?.name}</TableCell>
+                    <TableCell className="text-center font-medium">
+                      {grade?.grade?.toFixed(1)}
                     </TableCell>
                   </TableRow>
                 ))
@@ -197,58 +259,6 @@ export default function GradeManagement() {
             </TableBody>
           </Table>
         </div>
-
-        {/* Edit Dialog */}
-        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Sửa điểm</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="score" className="text-right">
-                  Điểm:
-                </label>
-                <Input
-                  id="score"
-                  type="number"
-                  min="0"
-                  max="10"
-                  step="0.1"
-                  value={currentGrade?.score || 0}
-                  onChange={(e) => setCurrentGrade({ ...currentGrade!, score: Number.parseFloat(e.target.value) })}
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                Hủy
-              </Button>
-              <Button onClick={saveGrade}>Lưu</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        {/* Delete Dialog */}
-        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Xác nhận xóa</DialogTitle>
-            </DialogHeader>
-            <div className="py-4">
-              <p>Bạn có chắc chắn muốn xóa điểm này?</p>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                Hủy
-              </Button>
-              <Button variant="destructive" onClick={confirmDelete}>
-                Xóa
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </CardContent>
     </Card>
   )
