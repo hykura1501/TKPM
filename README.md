@@ -108,13 +108,14 @@ Tại trang Quản lý Khóa học, có các chức năng như:
 <img width="1280" alt="Screenshot 2025-04-18 152628" src="https://github.com/user-attachments/assets/fa90f2bd-4f0e-4f28-8b1b-58e7b8a9e1be" />
 
 ### Quản lý Lớp học
-Giao diện trang Quản lý Khóa học:
+Giao diện trang Quản lý Lớp học:
 <img width="1280" alt="Screenshot 2025-04-18 214353" src="https://github.com/user-attachments/assets/9d43f781-e6d9-42c4-83ad-85081ddbf73b" />
 
+Tại trang Quản lý Lớp học, có các chức năng như:
 - Tìm kiếm lớp học:
 <img width="1280" alt="Screenshot 2025-04-18 213740" src="https://github.com/user-attachments/assets/2a62288f-1e5e-4c25-af57-2ff5e2589eb7" />
 
-- Thêm khóa học:
+- Thêm lớp học:
 <img width="1280" alt="Screenshot 2025-04-18 213948" src="https://github.com/user-attachments/assets/d0da3e09-777a-408b-bedc-17bd6d85ef0f" />
 <img width="1279" alt="Screenshot 2025-04-18 214009" src="https://github.com/user-attachments/assets/96e704f4-649b-4cbf-94f6-041ebf277569" />
 
