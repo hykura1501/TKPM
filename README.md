@@ -94,9 +94,13 @@ Giao diện trang Quản lý Khóa học:
 <img width="1280" alt="Screenshot 2025-04-18 151516" src="https://github.com/user-attachments/assets/1461cb3e-1e6c-4a33-b336-445dad118f52" />
 
 Tại trang Quản lý Khóa học, có các chức năng như:
+- Tìm kiếm khóa học
+<img width="1280" alt="Screenshot 2025-04-18 212251" src="https://github.com/user-attachments/assets/8242c475-9bd6-4df9-aaca-7c84e2353ec4" />
+
 - Thêm khóa học:
-  ![Uploading Screenshot 2025-04-18 152422.png…]<img width="1280" alt="Screenshot 2025-04-18 152447" src="https://github.com/user-attachments/assets/93c34d0e-4656-4d57-bfe0-cf2f97ad4105" />
-()
+<img width="1280" alt="Screenshot 2025-04-18 152422" src="https://github.com/user-attachments/assets/c70e396a-663d-4595-98a8-476073c9fd5d" />
+<img width="1280" alt="Screenshot 2025-04-18 152447" src="https://github.com/user-attachments/assets/2e75df56-8841-4508-85eb-41661a282b4a" />
+
 
 
 ### Quản lý Lớp học
