@@ -82,3 +82,20 @@ Mặc định frontend sẽ chạy tại **http://localhost:3000**.
 - Đảm bảo `.env` được cấu hình đúng nếu có sử dụng biến môi trường.
 - Backend cần khởi động trước frontend để đảm bảo kết nối API hoạt động chính xác.
 - Quá trình chạy chương trình có thể mất một chút thời gian tùy vào cấu hình máy tính.
+
+## Các chức năng
+
+### Trang chủ
+
+<img width="1280" alt="Screenshot 2025-04-18 151225" src="https://github.com/user-attachments/assets/00c9a697-eeef-47bf-94ac-fc2a21820dcc" />
+
+### Quản lý Khóa học
+
+### Quản lý Lớp học
+
+### Quản lý Sinh viên
+
+### Đăng ký Khóa học
+
+### Bảng điểm
+
