@@ -8,5 +8,6 @@ router.post('/',studentController.addStudent);
 router.put('/',studentController.updateStudent);
 router.delete('/:mssv',studentController.deleteStudent);
 router.post('/import',studentController.addStudentFromFile);
+router.get('/grades/:studentId',studentController.getGradeByStudentId);
 
 module.exports = router;

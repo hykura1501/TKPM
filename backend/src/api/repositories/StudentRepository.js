@@ -1,5 +1,4 @@
 const Student = require("../models/Student");
-const Faculty = require("../models/Faculty");
 const Program = require("../models/Program");
 const Status = require("../models/Status");
 const Counter = require("../models/Counter");
