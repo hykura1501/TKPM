@@ -120,16 +120,16 @@ Tại trang Quản lý Lớp học, có các chức năng như:
 <img width="1280" alt="Screenshot 2025-04-18 213948" src="https://github.com/user-attachments/assets/d0da3e09-777a-408b-bedc-17bd6d85ef0f" />
 <img width="1279" alt="Screenshot 2025-04-18 214009" src="https://github.com/user-attachments/assets/96e704f4-649b-4cbf-94f6-041ebf277569" />
 
-- Cập nhật khóa học
-  ![Screenshot 2025-04-18 214935](https://github.com/user-attachments/assets/7c7d4577-7c98-4aa6-b1a6-ac64c794e61e)
+- Cập nhật Lớp học:
+![Screenshot 2025-04-18 214935](https://github.com/user-attachments/assets/7c7d4577-7c98-4aa6-b1a6-ac64c794e61e)
 ![Screenshot 2025-04-18 214951](https://github.com/user-attachments/assets/a693c8d7-f9d9-469b-84fa-32fcf88473e5)
-
 
 ### Quản lý Sinh viên
 Giao diện trang Quản lý Lớp học:
 ![Screenshot 2025-04-18 215245](https://github.com/user-attachments/assets/d855a151-e05e-4b50-a6b2-a44401e6bf6f)
 
 ### Đăng ký Khóa học
+
 
 ### Bảng điểm
 
