@@ -1,4 +1,7 @@
 const StudentService = require("../services/StudentService");
+const Registration = require("../services/RegistrationService");
+const ClassSectionService = require("../services/ClassSectionService");
+const CourseService = require("../services/CourseService");
 
 class StudentController {
   async getListStudents(req, res) {
@@ -79,6 +82,48 @@ class StudentController {
         ? JSON.parse(error.message)
         : { error: error.message };
       res.status(400).json(errorMessage);
+    }
+  }
+
+  async getGradeByStudentId(req, res) {
+    try {
+      console.log("Student ID:", req.params.studentId); // Log the student ID
+      
+      const grades = (await Registration.getGradeByStudentId(req.params.studentId)).map((grade) => {
+        return grade.toJSON();
+      })
+
+      let gpa = 0
+      let totalCredits = 0
+
+      for (let i = 0; i < grades.length; i++) { 
+        const classInfo = await ClassSectionService.getClassSectionById(grades[i].classSectionId);
+        if (classInfo) {
+          grades[i].classInfo = classInfo.toJSON();
+          const courseInfo = await CourseService.getCourseById(classInfo.courseId);
+          if (courseInfo) {
+            grades[i].classInfo.courseInfo = courseInfo.toJSON();
+          }
+        } 
+        if (grades[i].grade) {
+          gpa += grades[i].grade * grades[i].classInfo.courseInfo.credits;
+          totalCredits += grades[i].classInfo.courseInfo.credits;
+        }
+      }
+
+      const studentInfo = await StudentService.getStudentByMssv(req.params.studentId);
+
+      res.status(200).json({
+        grades,
+        studentInfo,
+        gpa: gpa / totalCredits,
+        totalCredits,
+        totalCourses: grades.length,
+      });
+
+    } catch (error) {
+      console.error("Lỗi khi lấy điểm của sinh viên:", error);
+      res.status(500).json({ error: "Lỗi khi lấy điểm của sinh viên" });
     }
   }
 }

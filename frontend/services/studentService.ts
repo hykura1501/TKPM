@@ -32,6 +32,11 @@ class StudentService {
     const response = await apiClient.post(routes.studentsImport, student);
     return response.data;
   }
+
+  async getGradeByStudentId(studentId: string) { 
+    const response = await apiClient.get(`${routes.students}/grades/${studentId}`);
+    return response.data;
+  }
 }
 
 const studentService = new StudentService();

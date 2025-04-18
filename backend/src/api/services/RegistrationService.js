@@ -282,6 +282,29 @@ class RegistrationService {
 
     return { message: "Cập nhật điểm thành công", grades };
   }
+  async getGradeByStudentId(studentId) {
+    if (!studentId) {
+      await addLogEntry({
+        message: "ID sinh viên không được để trống",
+        level: "warn",
+      });
+      throw { status: 400, message: "ID sinh viên không được để trống" };
+    }
+
+    const grades = await RegistrationRepository.findAllByCondition({
+      studentId,
+    })
+    if (!grades) {
+      await addLogEntry({
+        message: "Không tìm thấy đăng ký học nào cho sinh viên này",
+        level: "warn",
+      });
+      throw { status: 404, message: "Không tìm thấy đăng ký học nào cho sinh viên này" };
+    }
+
+    return grades;
+  }
+
 
 }
 

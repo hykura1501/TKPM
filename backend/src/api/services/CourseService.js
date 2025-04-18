@@ -184,6 +184,27 @@ class CourseService {
     const course = await CourseRepository.findOneByCondition({ id });
     return !!course;
   }
+
+  async getCourseById(id) { 
+    if (!id) {
+      await addLogEntry({
+        message: "ID khóa học không được để trống",
+        level: "warn",
+      });
+      throw { status: 400, message: "ID khóa học không được để trống" };
+    }
+  
+    const course = await CourseRepository.findOneByCondition({ id });
+    if (!course) {
+      await addLogEntry({
+        message: "Khóa học không tồn tại",
+        level: "warn",
+      });
+      throw { status: 404, message: "Khóa học không tồn tại" };
+    }
+  
+    return course;
+  }
 }
 
 module.exports = new CourseService();

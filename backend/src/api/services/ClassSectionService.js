@@ -197,6 +197,21 @@ class ClassSectionService {
     }
     return classSections;
   }
+
+  async getClassSectionById(id) {
+    const classSection = await ClassSectionRepository.findOneByCondition({
+      id,
+    });
+    if (!classSection) {
+      await addLogEntry({
+        message: "Không tìm thấy lớp học",
+        level: "warn",
+      });
+      throw { status: 404, message: "Không tìm thấy lớp học" };
+    }
+    return classSection;
+  }
+
 }
 
 module.exports = new ClassSectionService();
