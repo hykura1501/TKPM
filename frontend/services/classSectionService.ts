@@ -8,6 +8,11 @@ class ClassSectionService {
     return response.data;
   }
 
+  async fetchClassSectionByCourseId(courseId: string) { 
+    const response = await apiClient.get(`${routes.classSections}/course/${courseId}`);
+    return response.data;
+  }
+
   async addClassSection(classSection: Omit<ClassSection, "id">) {
     const response = await apiClient.post(routes.classSections, classSection);
     return response.data;
@@ -20,6 +25,11 @@ class ClassSectionService {
 
   async deleteClassSection(id: string) {
     const response = await apiClient.delete(`${routes.classSections}/${id}`);
+    return response.data;
+  }
+
+  async fetchClassesByCourseId(id: string) {
+    const response = await apiClient.get(`${routes.classSections}/course/${id}`);
     return response.data;
   }
 }

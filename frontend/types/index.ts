@@ -4,7 +4,8 @@ export type Course = {
   code: string // Unique course code
   name: string
   credits: number
-  faculty: string
+  // faculty: string
+  department: string
   description: string
   prerequisites: string[] // Array of course codes that are prerequisites
   isActive: boolean
@@ -32,6 +33,7 @@ export type Student = {
   id: string
   studentId: string // Unique student ID
   name: string
+  fullName?: string
   email: string
   department: string
   enrollmentYear: string
@@ -46,6 +48,7 @@ export type Registration = {
   grade?: number
   registeredAt: string
   cancelledAt?: string
+  studentInfo?: Student // Optional field to include student info
 }
 
 // Department type

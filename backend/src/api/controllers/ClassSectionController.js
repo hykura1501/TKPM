@@ -40,6 +40,17 @@ class ClassSectionController {
       res.status(error.status || 500).json({ error: error.message || "Lỗi khi xóa khoa" });
     }
   }
+
+  async getClassSectionByCourseId(req, res) { 
+    try {
+      const { courseId } = req.params;
+      const classSections = await ClassSectionService.getClassSectionByCourseId(courseId);
+      res.status(200).json(classSections);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách khoa:", error);
+      res.status(500).json({ error: "Lỗi khi lấy danh sách khoa" });
+    }
+  }
 }
 
 module.exports = new ClassSectionController();

@@ -6,6 +6,10 @@ class ClassSectionRepository {
     return await ClassSection.find({});
   }
 
+  async findAllByCondition(condition) { 
+    return await ClassSection.find(condition);
+  }
+
   async create(data) {
     const newClassSection = new ClassSection(data);
     return await newClassSection.save();
