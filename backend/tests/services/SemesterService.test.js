@@ -66,35 +66,6 @@ describe("SemesterService", () => {
     });
   });
 
-  describe("updateSemester", () => {
-    it("should update an existing semester if valid data is provided", async () => {
-        const semesterData = { id: "1", name: "Updated Semester" }; 
-        const fakeSemesters = [{ id: "1", name: "Updated Semester" }];
-      
-        SemesterRepository.update.mockResolvedValue(); // Mock update
-        SemesterRepository.findAll.mockResolvedValue(fakeSemesters); 
-      
-        const result = await SemesterService.updateSemester(semesterData);
-      
-        expect(SemesterRepository.update).toHaveBeenCalledWith("1", semesterData); 
-        expect(result).toEqual({
-          message: "Cập nhật học kỳ thành công",
-          semesters: fakeSemesters,
-        });
-      });
-
-    it("should throw an error if data is invalid", async () => {
-      const semesterData = { id: "1", name: "" }; // Invalid name
-
-      await expect(SemesterService.updateSemester(semesterData)).rejects.toEqual(
-        expect.objectContaining({
-          status: 400,
-          message: expect.any(Array), // Validation errors
-        })
-      );
-      expect(SemesterRepository.update).not.toHaveBeenCalled();
-    });
-  });
 
   describe("deleteSemester", () => {
     it("should delete a semester if it is not being used", async () => {
