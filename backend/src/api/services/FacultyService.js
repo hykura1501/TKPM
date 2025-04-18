@@ -5,7 +5,8 @@ const { z } = require('zod');
 
 const facultySchema = z.object({
   id: z.string().optional(),
-  name: z.string(),
+  // name: z.string(),
+  name: z.string().min(1, { message: "Name is required" }),
 });
 
 class FacultyService {
