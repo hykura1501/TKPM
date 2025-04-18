@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import type { ClassSection, Course } from "@/types"
+import { getCourseById } from "@/data/sample-data"
 import { ClassSectionForm } from "@/components/class-section-form"
 import classSectionService from "@/services/classSectionService"
 import { toast } from "react-toastify";
@@ -37,14 +38,12 @@ export function ClassSectionManagement() {
   },[])
 
   // Filter class sections based on search term
-  const filteredSections = classSections.filter((section) => {
-    const course = courses.find((c) => c.id === section.courseId);
-    return (
+  const filteredSections = classSections.filter(
+    (section) =>
       section.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (course?.name.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
-      section.instructor.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+      getCourseById(section.courseId, courses)?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      section.instructor.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
 
   // Add new class section
   const addClassSection = async (section: Omit<ClassSection, "id" | "createdAt" | "currentEnrollment">) => {
@@ -55,10 +54,10 @@ export function ClassSectionManagement() {
     }
 
     // Check if course exists and is active
-    const course = courses.find((c) => c.id === section.courseId);
+    const course = getCourseById(section.courseId, courses)
     if (!course) {
-      toast.error("Khóa học không tồn tại.");
-      return;
+      toast.error("Khóa học không tồn tại.")
+      return
     }
 
     if (!course.isActive) {
@@ -137,9 +136,9 @@ export function ClassSectionManagement() {
 
   // Get course name by ID
   const getCourseName = (courseId: string): string => {
-    const course = courses.find((c) => c.id === courseId);
-    return course ? course.name : "Unknown Course";
-  };
+    const course = getCourseById(courseId, courses)
+    return course ? course.name : "Unknown Course"
+  }
 
   return (
     <Card>
