@@ -1,4 +1,4 @@
-<img width="1280" alt="Screenshot 2025-04-18 220718" src="https://github.com/user-attachments/assets/ac0b20d1-8d49-4b49-85b8-5fd37acf3ccb" />## Project: Dự án quản lý danh sách sinh viên.
+## Project: Dự án quản lý danh sách sinh viên.
 
 **Web demo**: [Student Management](https://fe-student-management.vercel.app/)
 
@@ -164,3 +164,6 @@ Tại trang Đăng ký Khóa học, có các chức năng như:
 
 ### Bảng điểm
 
+## Viết unit test cho các chức năng trong hệ thống:
+Nhóm đã thực hiện viết unit test cho các services:
+![5e9c295b7aabc9f590ba](https://github.com/user-attachments/assets/4f157daa-ba72-4176-81d4-7003292ce630)
