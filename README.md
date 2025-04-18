@@ -129,7 +129,19 @@ Giao diện trang Quản lý Lớp học:
 ![Screenshot 2025-04-18 215245](https://github.com/user-attachments/assets/d855a151-e05e-4b50-a6b2-a44401e6bf6f)
 
 ### Đăng ký Khóa học
+Giao diện trang Đăng ký Khóa học:
+<img width="1280" alt="Screenshot 2025-04-18 214911" src="https://github.com/user-attachments/assets/6c2bdf13-eab3-4456-8d22-220f62cc1e1a" />
 
+Tại trang Đăng ký Khóa học, có các chức năng như:
+- Tìm kiếm sinh viên theo môn học:
+<img width="1280" alt="Screenshot 2025-04-18 215212" src="https://github.com/user-attachments/assets/4f20718b-c9bd-4e9e-b749-b4e2a72adb42" />
+
+- Đăng ký Khóa học:
+<img width="1280" alt="Screenshot 2025-04-18 215234" src="https://github.com/user-attachments/assets/b8f84ebd-b571-489a-8c52-6a88407540c2" />
+<img width="1280" alt="Screenshot 2025-04-18 215300" src="https://github.com/user-attachments/assets/0f4c2b57-028f-427b-84e4-d547e172b839" />
+
+- Hủy đăng ký khóa học:
+<img width="1280" alt="Screenshot 2025-04-18 215320" src="https://github.com/user-attachments/assets/067d146f-b812-4716-9056-7b8e245fd2eb" />
 
 ### Bảng điểm
 
