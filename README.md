@@ -1,4 +1,4 @@
-## Project: Dự án quản lý danh sách sinh viên.
+<img width="1280" alt="Screenshot 2025-04-18 220718" src="https://github.com/user-attachments/assets/ac0b20d1-8d49-4b49-85b8-5fd37acf3ccb" />## Project: Dự án quản lý danh sách sinh viên.
 
 **Web demo**: [Student Management](https://fe-student-management.vercel.app/)
 
@@ -125,8 +125,27 @@ Tại trang Quản lý Lớp học, có các chức năng như:
 ![Screenshot 2025-04-18 214951](https://github.com/user-attachments/assets/a693c8d7-f9d9-469b-84fa-32fcf88473e5)
 
 ### Quản lý Sinh viên
-Giao diện trang Quản lý Lớp học:
+Giao diện trang Quản lý Sinh viên:
 ![Screenshot 2025-04-18 215245](https://github.com/user-attachments/assets/d855a151-e05e-4b50-a6b2-a44401e6bf6f)
+
+Tại trang Quản lý Sinh viên, có các chức năng như:
+- Tìm kiếm sinh viên:
+<img width="1280" alt="Screenshot 2025-04-18 220417" src="https://github.com/user-attachments/assets/fb8ddfa0-bbbc-4232-a053-5e0abadb881b" />
+
+- Thêm sinh viên:
+<img width="1280" alt="Screenshot 2025-04-18 220455" src="https://github.com/user-attachments/assets/3478935e-7c8e-494c-a335-6ce8de9535b9" />
+
+- Cập nhật sinh viên:
+<img width="1280" alt="Screenshot 2025-04-18 220540" src="https://github.com/user-attachments/assets/ccd51112-1f44-46cb-8797-370279c70cab" />
+
+- Ngoài ra, còn có cấu hình để chỉnh sửa các định dạng thông tin của sinh viên như: Mã vùng số điện thoại, email, ...
+<img width="1280" alt="Screenshot 2025-04-18 220704" src="https://github.com/user-attachments/assets/a811a28d-4bbe-42b2-a1ae-15e968a6420a" />
+
+- Nhật ký để xem các sự thay đổi của sinh viên:
+<img width="1280" alt="Screenshot 2025-04-18 220718" src="https://github.com/user-attachments/assets/abca7168-239b-42a6-a47c-3809a61a5ef8" />
+
+- Cài đặt để thay đổi các thông tin Khoa, Tình trạng, Chương trình học:
+<img width="1280" alt="Screenshot 2025-04-18 220733" src="https://github.com/user-attachments/assets/f004fcb4-aec2-4ca5-bd70-961855d57fea" />
 
 ### Đăng ký Khóa học
 Giao diện trang Đăng ký Khóa học:
