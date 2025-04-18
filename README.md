@@ -32,6 +32,7 @@ Dưới đây là mô tả các thư mục và tệp chính trong dự án:
     - `/services` - Chứa các file xử lý logic nghiệp vụ (business logic) và giao tiếp với database.
     - `/routes` - Chứa các file định nghĩa các endpoint API.
     - `/model` - Chứa các định nghĩa mô hình dữ liệu.
+    - `/repository` - Chứa các file truy cập dữ liệu
     - `/configs` - Chứa các tệp cấu hình, như kết nối database.
 - `package.json` - Danh sách các dependencies và scripts để chạy backend.
 - `.env` - Chứa biến môi trường cho backend.
@@ -125,6 +126,8 @@ Tại trang Quản lý Lớp học, có các chức năng như:
 
 
 ### Quản lý Sinh viên
+Giao diện trang Quản lý Lớp học:
+![Screenshot 2025-04-18 215245](https://github.com/user-attachments/assets/d855a151-e05e-4b50-a6b2-a44401e6bf6f)
 
 ### Đăng ký Khóa học
 
