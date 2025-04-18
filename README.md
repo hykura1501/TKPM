@@ -163,6 +163,8 @@ Tại trang Đăng ký Khóa học, có các chức năng như:
 <img width="1280" alt="Screenshot 2025-04-18 215320" src="https://github.com/user-attachments/assets/067d146f-b812-4716-9056-7b8e245fd2eb" />
 
 ### Bảng điểm
+![Screenshot 2025-04-18 224723](https://github.com/user-attachments/assets/187251f7-a37a-4043-a4ef-e05debaf8480)
+![Screenshot 2025-04-18 224730](https://github.com/user-attachments/assets/2cc55fc0-150e-46bd-955b-4674f071a346)
 
 ## Viết unit test cho các chức năng trong hệ thống:
 Nhóm đã thực hiện viết unit test cho các services:
