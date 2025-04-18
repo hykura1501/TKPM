@@ -97,7 +97,14 @@ class StatusService {
     const status = await StatusRepository.findOneByCondition({ id });
     return !!status;
   }
-
+  async findStatusById(id) {
+    const status = await StatusRepository.findOneByCondition({ id });
+    if (!status) {
+      await addLogEntry({ message: "Tình trạng sinh viên không tồn tại", level: "warn" });
+      throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
+    }
+    return status;
+  }
 }
 
 module.exports = new StatusService();

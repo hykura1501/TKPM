@@ -204,7 +204,7 @@ class StudentService {
         throw new Error("Trạng thái không tồn tại");
       }
 
-      const statusTransitionRules = generateStatusTransitionRules(await StatusService.getAllStatuses());
+      const statusTransitionRules = generateStatusTransitionRules(await StatusService.getListStatuses());
       const allowedStatus = statusTransitionRules[currentStatus.name];
       if (!allowedStatus.includes(newStatus.name) && newStatus.name !== currentStatus.name) {
         throw new Error("Không thể chuyển trạng thái");
