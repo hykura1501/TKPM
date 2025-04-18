@@ -1,11 +1,18 @@
 const LogRepository = require('../repositories/LogRepository');
 const { z } = require('zod');
 
+// const logEntrySchema = z.object({
+//   timestamp: z.string(),
+//   message: z.string(),
+//   level: z.enum(['info', 'warn', 'error']),
+//   metadata: z.record(z.any()).optional(),
+// });
+
 const logEntrySchema = z.object({
-  timestamp: z.string(),
-  message: z.string(),
-  level: z.enum(['info', 'warn', 'error']),
-  metadata: z.record(z.any()).optional(),
+  timestamp: z.string().min(1, { message: "Timestamp is required" }),
+  message: z.string().min(1, { message: "Message is required" }), 
+  level: z.enum(['info', 'warn', 'error']), 
+  metadata: z.record(z.any()).optional(), 
 });
 
 class LogService {
