@@ -1,4 +1,4 @@
-## Project Name
+<img width="1280" alt="Screenshot 2025-04-18 152422" src="https://github.com/user-attachments/assets/5b3343ec-02b1-432e-8453-3bd1c1572aa0" />## Project Name
 Dự án quản lý danh sách sinh viên.
 
 **Web demo**: [Student Management](https://fe-student-management.vercel.app/)
@@ -86,10 +86,18 @@ Mặc định frontend sẽ chạy tại **http://localhost:3000**.
 ## Các chức năng
 
 ### Trang chủ
-
+Giao diện trang chủ của hệ thống, gồm các nút để điều hướng sang các trang khác của hệ thống.
 <img width="1280" alt="Screenshot 2025-04-18 151225" src="https://github.com/user-attachments/assets/00c9a697-eeef-47bf-94ac-fc2a21820dcc" />
 
 ### Quản lý Khóa học
+Giao diện trang Quản lý Khóa học:
+<img width="1280" alt="Screenshot 2025-04-18 151516" src="https://github.com/user-attachments/assets/1461cb3e-1e6c-4a33-b336-445dad118f52" />
+
+Tại trang Quản lý Khóa học, có các chức năng như:
+- Thêm khóa học:
+  ![Uploading Screenshot 2025-04-18 152422.png…]<img width="1280" alt="Screenshot 2025-04-18 152447" src="https://github.com/user-attachments/assets/93c34d0e-4656-4d57-bfe0-cf2f97ad4105" />
+()
+
 
 ### Quản lý Lớp học
 
