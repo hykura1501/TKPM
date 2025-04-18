@@ -1,18 +1,9 @@
-const Log = require('../models/Log');
-const { z } = require('zod');
-
-// Define the schema for input validation
-const logEntrySchema = z.object({
-  timestamp: z.string(),
-  message: z.string(),
-  level: z.enum(['info', 'warn', 'error']),
-  metadata: z.record(z.any()).optional(),
-});
+const LogService = require('../services/LogService');
 
 class LogController {
   async getListLogs(req, res) {
     try {
-      const logs = await Log.find({});
+      const logs = await LogService.getListLogs();
       res.status(200).json(logs);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách log:", error);
@@ -22,18 +13,11 @@ class LogController {
 
   async addLog(req, res) {
     try {
-      const parsed = logEntrySchema.safeParse(req.body);
-
-      if (!parsed.success) {
-        return res.status(400).json({ error: parsed.error.errors });
-      }
-
-      const newLog = new Log(parsed.data);
-      await newLog.save();
-      res.status(201).json({ message: "Thêm log thành công", log: newLog });
+      const result = await LogService.addLog(req.body);
+      res.status(201).json(result);
     } catch (error) {
       console.error("Lỗi khi thêm log:", error);
-      res.status(500).json({ error: "Lỗi khi thêm log" });
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi thêm log" });
     }
   }
 }
