@@ -64,9 +64,12 @@ import StatusService from "@/services/statusService";
 import { toast } from "react-toastify";
 import { ConfigDialog } from "@/components/config-dialog";
 import settingService from "@/services/settingServices";
+import { useTranslations } from "next-intl"
 
 
 export default function Home() {
+  const t = useTranslations("students")
+
   // State for students and related data
   const [students, setStudents] = useState<Student[]>([]);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
@@ -583,7 +586,7 @@ export default function Home() {
               onClick={() => setIsConfigOpen(true)}
             >
               <Sliders className="h-4 w-4 mr-2" />
-              Cấu hình
+              {t("config")}
             </Button>
             <Button
               variant="outline"
@@ -591,7 +594,7 @@ export default function Home() {
               className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
               onClick={() => handleOpenLogs()}
             >
-              Logs
+              {t("logs")}
             </Button>
             <Button
               variant="outline"
@@ -600,7 +603,7 @@ export default function Home() {
               onClick={() => setIsSettingsOpen(true)}
             >
               <Settings className="h-4 w-4 mr-2" />
-              Cài đặt
+              {t("settings")}
             </Button>
           </div>
 
@@ -610,7 +613,7 @@ export default function Home() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Tổng số
+                {t("totalStudents")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -639,14 +642,14 @@ export default function Home() {
 
         <Tabs defaultValue="students" className="mb-6">
           <TabsList>
-            <TabsTrigger value="students">Danh sách Sinh viên</TabsTrigger>
-            <TabsTrigger value="faculty">Thống kê theo Khoa</TabsTrigger>
+            <TabsTrigger value="students">{t("studentList")}</TabsTrigger>
+            <TabsTrigger value="faculty">{t("facultyStatistics")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="students">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Danh sách Sinh viên</CardTitle>
+                <CardTitle>{t("studentList")}</CardTitle>
                 <div className="flex gap-2">
                   <Dialog
                     open={isImportExportOpen}
@@ -655,7 +658,7 @@ export default function Home() {
                     <DialogTrigger asChild>
                       <Button variant="outline">
                         <Download className="h-4 w-4 mr-2" />
-                        Import/Export
+                        {t("imExport")}
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -673,15 +676,15 @@ export default function Home() {
                         className="bg-blue-600 hover:bg-blue-700"
                       >
                         <PlusCircle className="mr-2 h-4 w-4" />
-                        Thêm Sinh viên
+                        {t("addStudent")}
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle>
                           {editingStudent
-                            ? "Cập nhật Thông tin Sinh viên"
-                            : "Thêm Sinh viên Mới"}
+                            ? t("updateStudent")
+                            : t("addStudent")}
                         </DialogTitle>
                         <DialogDescription>
                           {editingStudent
@@ -710,7 +713,7 @@ export default function Home() {
                     <div className="relative w-full">
                       <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Tìm kiếm theo tên hoặc MSSV..."
+                        placeholder= {t("searchPlaceholder")}
                         className="pl-8"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -725,7 +728,7 @@ export default function Home() {
                         <SelectValue placeholder="Chọn khoa" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">Tất cả các khoa</SelectItem>
+                        <SelectItem value="all">{t("allFaculties")}</SelectItem>
                         {faculties.map((faculty) => (
                           <SelectItem key={faculty.id} value={faculty.id}>
                             {faculty.name}
@@ -740,7 +743,7 @@ export default function Home() {
                   <Table>
                     <TableHeader className="bg-gray-100">
                       <TableRow>
-                        <TableHead>MSSV</TableHead>
+                        <TableHead>{t("ID")}</TableHead>
                         <TableHead>Họ tên</TableHead>
                         <TableHead className="hidden md:table-cell">
                           Ngày sinh
@@ -830,7 +833,7 @@ export default function Home() {
           <TabsContent value="faculty">
             <Card>
               <CardHeader>
-                <CardTitle>Thống kê theo Khoa</CardTitle>
+                <CardTitle>{t("facultyStatistics")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -93,7 +93,16 @@
     "email": "Email",
     "department": "Department",
     "enrollmentYear": "Enrollment Year",
-    "searchPlaceholder": "Search by name, student ID or email..."
+    "searchPlaceholder": "Search by name, student ID or email...",
+    "config": "Manage Configuration",
+    "logs": "System Logs",
+    "settings": "Settings",
+    "totalStudents": "Total Students",
+    "studentList": "Student List",
+    "facultyStatistics": "Statistics",
+    "ID": "ID",
+    "allFaculties": "All Faculties",
+    "imExport": "Import/Export"
   },
   "registration": {
     "title": "Course Registration",

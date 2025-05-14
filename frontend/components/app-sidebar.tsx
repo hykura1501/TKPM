@@ -15,9 +15,12 @@ import {
 } from "@/components/ui/sidebar"
 
 import styles from "@/styles/sidebar.module.css"
+import { use } from "react"
+import { useLocale } from "next-intl"
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const locale = useLocale()
 
   return (
     <Sidebar className={`${styles.background} text-white`}>
@@ -28,7 +31,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/"} className={`${pathname === "/" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/`} className={`${pathname === `/${locale}/` ? styles.active : ""}`}>
               <Link href="/">
                 <Home className="h-4 w-4 mr-2" />
                 <span >Trang chủ</span>
@@ -37,7 +40,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/courses"} className={`${pathname === "/courses" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/courses`} className={`${pathname === `/${locale}/courses` ? styles.active : ""}`}>
               <Link href="/courses">
                 <BookOpen className="h-4 w-4 mr-2" />
                 <span>Quản lý Khóa học</span>
@@ -46,7 +49,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/classes"} className={`${pathname === "/classes" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/classes`} className={`${pathname === `/${locale}/classes` ? styles.active : ""}`}>
               <Link href="/classes">
                 <Calendar className="h-4 w-4 mr-2" />
                 <span>Quản lý Lớp học</span>
@@ -55,7 +58,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/students"} className={`${pathname === "/students" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/students`} className={`${pathname === `/${locale}/students` ? styles.active : ""}`}>
               <Link href="/students">
                 <Users className="h-4 w-4 mr-2" />
                 <span>Quản lý Sinh viên</span>
@@ -64,7 +67,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/registration"} className={`${pathname === "/registration" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/registration`} className={`${pathname === `/${locale}/registration` ? styles.active : ""}`}>
               <Link href="/registration">
                 <FileText className="h-4 w-4 mr-2" />
                 <span>Đăng ký Khóa học</span>
@@ -73,7 +76,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/transcripts"} className={`${pathname === "/transcripts" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/transcripts`} className={`${pathname === `/${locale}/transcripts` ? styles.active : ""}`}>
               <Link href="/transcripts">
                 <BarChart3 className="h-4 w-4 mr-2" />
                 <span>Bảng điểm</span>
@@ -86,7 +89,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === "/settings"} className={`${pathname === "/settings" ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}/settings`} className={`${pathname === `/${locale}/settings` ? styles.active : ""}`}>
               <Link href="/settings">
                 <Settings className="h-4 w-4 mr-2" />
                 <span>Cài đặt</span>

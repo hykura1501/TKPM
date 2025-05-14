@@ -93,7 +93,16 @@
     "email": "Email",
     "department": "Khoa",
     "enrollmentYear": "Năm nhập học",
-    "searchPlaceholder": "Tìm kiếm theo tên, mã sinh viên hoặc email..."
+    "searchPlaceholder": "Tìm kiếm theo tên, mã sinh viên hoặc email...",
+    "config": "Quản lý Cấu hình",
+    "settings": "Cài đặt",
+    "logs": "Nhật ký hệ thống",
+    "totalStudents": "Tổng số sinh viên",
+    "studentList": "Danh sách sinh viên",
+    "facultyStatistics": "Thống kê theo khoa",
+    "id": "MSSV",
+    "allFaculties": "Tất cả các khoa",
+    "imExport": "Nhập/Xuất"
   },
   "registration": {
     "title": "Đăng ký Khóa học",

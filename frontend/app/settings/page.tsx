@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import LanguageSwitcher from "@/components/language-switcher"
+import { useTranslations } from "next-intl"
 
 export default function SettingsPage() {
   return (
@@ -17,6 +19,7 @@ export default function SettingsPage() {
           <TabsTrigger value="general">Cài đặt chung</TabsTrigger>
           <TabsTrigger value="notifications">Thông báo</TabsTrigger>
           <TabsTrigger value="security">Bảo mật</TabsTrigger>
+          <TabsTrigger value="language">Ngôn ngữ</TabsTrigger>
         </TabsList>
 
         <TabsContent value="general">
@@ -104,7 +107,20 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        <TabsContent value="language">
+          <Card>
+            <CardHeader>
+              <CardTitle>Cài đặt ngôn ngữ</CardTitle>
+              <CardDescription>Quản lý ngôn ngữ hiển thị của hệ thống</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <LanguageSwitcher />
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
+
     </div>
   )
 }
