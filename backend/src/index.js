@@ -16,6 +16,7 @@ const httpServer = http.createServer(app);
 const port = process.env.PORT || 3000;
 
 const route = require('./api/routes'); 
+const { getLanguage } = require('./api/middlewares/language');
 
 
 app.use(express.json());
@@ -33,6 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(methodOverride('_method'));
 app.use(morgan('combined'));
+
+app.use(getLanguage); // Middleware để lấy ngôn ngữ từ query
 
 route(app);
 

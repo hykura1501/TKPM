@@ -8,7 +8,7 @@ export function Header() {
         <div className="flex items-center">
           <SidebarTrigger className="mr-2 text-white" />
           <GraduationCap className="h-8 w-8 mr-3" />
-          <h1 className="text-2xl md:text-3xl font-bold">Hệ Thống Quản Lý Khóa Học & Bảng Điểm</h1>
+          <h1 className="text-2xl text-black md:text-3xl font-bold">Hệ Thống Quản Lý Khóa Học & Bảng Điểm</h1>
         </div>
       </div>
     </header>

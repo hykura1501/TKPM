@@ -3,7 +3,7 @@ const FacultyService = require('../services/FacultyService');
 class FacultyController {
   async getListFaculties(req, res) {
     try {
-      const faculties = await FacultyService.getListFaculties();
+      const faculties = await FacultyService.getListFaculties(req.language);
       res.status(200).json(faculties);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách khoa:", error);

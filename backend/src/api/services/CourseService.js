@@ -3,6 +3,7 @@ const ClassSectionRepository = require("../repositories/ClassSectionRepository")
 const { addLogEntry } = require("../helpers/logging");
 const { z } = require("zod");
 const FacultyRepository = require("../repositories/FacultyRepository");
+const Mapper = require("../helpers/Mapper");
 
 const courseSchema = z.object({
   id: z.string().optional(), // ID tự động tạo, không bắt buộc khi thêm mới
@@ -26,7 +27,7 @@ class CourseService {
       await addLogEntry({ message: "Khóa học không hợp lệ", level: "warn" });
       return { success: false, error: parsed.error.errors.message };
     }
-  
+
     const existingCourse = await CourseRepository.findOneByCondition({
       code: parsed.data.code,
     });
@@ -34,7 +35,7 @@ class CourseService {
       await addLogEntry({ message: "Mã khóa học đã tồn tại", level: "warn" });
       return { success: false, error: "Mã khóa học đã tồn tại" };
     }
-  
+
     const existingCourseName = await CourseRepository.findOneByCondition({
       name: parsed.data.name,
     });
@@ -42,7 +43,7 @@ class CourseService {
       await addLogEntry({ message: "Tên khóa học đã tồn tại", level: "warn" });
       return { success: false, error: "Tên khóa học đã tồn tại" };
     }
-  
+
     const existingFaculty = await FacultyRepository.findOneByCondition({
       id: parsed.data.faculty,
     });
@@ -53,16 +54,25 @@ class CourseService {
       });
       return { success: false, error: "Khoa phụ trách không tồn tại" };
     }
-  
+
     return { success: true, data: parsed.data };
   }
-  async getListCourses() {
-    return await CourseRepository.findAll();
+  async getListCourses(language = "vi") {
+    const courses = await CourseRepository.findAll();
+    if (!courses || courses.length === 0) {
+      await addLogEntry({
+        message: "Không tìm thấy khóa học nào",
+        level: "warn",
+      });
+      return [];
+    }
+    const formattedCourses = courses.map((course) => Mapper.formatCourse(course, language));
+    return formattedCourses;
   }
 
   async addCourse(data) {
     const validationResult = await this.validateCourse(data);
-  
+
     if (!validationResult.success) {
       await addLogEntry({
         message: "Thêm tình trạng sinh viên không hợp lệ",
@@ -70,13 +80,13 @@ class CourseService {
       });
       throw { status: 400, message: validationResult.error };
     }
-  
+
     const course = validationResult.data;
-  
+
     const newId = await CourseRepository.getNextId();
     const newCourse = { ...course, id: newId };
     await CourseRepository.create(newCourse);
-  
+
     const courses = await CourseRepository.findAll();
     await addLogEntry({
       message: "Thêm tình trạng sinh viên thành công",
@@ -86,7 +96,7 @@ class CourseService {
       user: "admin",
       details: "Add new course: " + course.name,
     });
-  
+
     return { success: true, message: "Thêm khóa học thành công", courses };
   }
 
@@ -100,7 +110,7 @@ class CourseService {
       });
       throw { status: 400, message: validationResult.error };
     }
-  
+
     // Kiểm tra xem khóa học có tồn tại hay không
     const existingCourse = await CourseRepository.findOneByCondition({
       id: validationResult.data.id,
@@ -112,11 +122,14 @@ class CourseService {
       });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
-  
+
     // Cập nhật khóa học
-    await CourseRepository.update(validationResult.data.id, validationResult.data);
+    await CourseRepository.update(
+      validationResult.data.id,
+      validationResult.data
+    );
     const courses = await CourseRepository.findAll();
-  
+
     // Ghi log thành công
     await addLogEntry({
       message: "Cập nhật khóa học thành công",
@@ -126,7 +139,7 @@ class CourseService {
       user: "admin",
       details: "Updated course: " + validationResult.data.name,
     });
-  
+
     return { success: true, message: "Cập nhật khóa học thành công", courses };
   }
   async deleteCourse(id) {
@@ -137,7 +150,7 @@ class CourseService {
       });
       throw { status: 400, message: "ID khóa học không được để trống" };
     }
-  
+
     // Kiểm tra xem khóa học có tồn tại hay không
     const existingCourse = await CourseRepository.findOneByCondition({ id });
     if (!existingCourse) {
@@ -147,9 +160,11 @@ class CourseService {
       });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
-  
+
     // Kiểm tra xem khóa học có đang được sử dụng bởi sinh viên hay không
-    const classSection = await ClassSectionRepository.findOneByCondition({ course: id });
+    const classSection = await ClassSectionRepository.findOneByCondition({
+      course: id,
+    });
     if (classSection) {
       await addLogEntry({
         message: "Không thể xóa khóa học đang được sử dụng",
@@ -159,14 +174,17 @@ class CourseService {
       await CourseRepository.update(id, { isActive: false });
       const courses = await CourseRepository.findAll();
 
-      return { success: true, message: "Khóa học đã được vô hiệu hóa", courses };
+      return {
+        success: true,
+        message: "Khóa học đã được vô hiệu hóa",
+        courses,
+      };
     }
-  
 
     // Xóa khóa học
     await CourseRepository.delete(id);
     const courses = await CourseRepository.findAll();
-  
+
     // Ghi log thành công
     await addLogEntry({
       message: "Xóa khóa học thành công",
@@ -176,7 +194,7 @@ class CourseService {
       user: "admin",
       details: `Deleted course: ${id}`,
     });
-  
+
     return { success: true, message: "Xóa khóa học thành công", courses };
   }
 
@@ -185,7 +203,7 @@ class CourseService {
     return !!course;
   }
 
-  async getCourseById(id) { 
+  async getCourseById(id, language = "vi") {
     if (!id) {
       await addLogEntry({
         message: "ID khóa học không được để trống",
@@ -193,7 +211,7 @@ class CourseService {
       });
       throw { status: 400, message: "ID khóa học không được để trống" };
     }
-  
+
     const course = await CourseRepository.findOneByCondition({ id });
     if (!course) {
       await addLogEntry({
@@ -202,8 +220,8 @@ class CourseService {
       });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
-  
-    return course;
+
+    return Mapper.formatCourse(course, language);
   }
 }
 

@@ -3,7 +3,7 @@ const StatusService = require('../services/StatusService');
 class StatusController {
   async getListStatuses(req, res) {
     try {
-      const statuses = await StatusService.getListStatuses();
+      const statuses = await StatusService.getListStatuses(req.language);
       res.status(200).json(statuses);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách tình trạng sinh viên:", error);

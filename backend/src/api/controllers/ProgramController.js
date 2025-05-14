@@ -3,7 +3,7 @@ const ProgramService = require('../services/ProgramService');
 class ProgramController {
   async getListPrograms(req, res) {
     try {
-      const programs = await ProgramService.getListPrograms();
+      const programs = await ProgramService.getListPrograms(req.language);
       res.status(200).json(programs);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách chương trình học:", error);

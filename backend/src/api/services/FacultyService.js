@@ -1,7 +1,8 @@
 const FacultyRepository = require('../repositories/FacultyRepository');
 const StudentRepository = require('../repositories/StudentRepository');
 const { addLogEntry } = require('../helpers/logging');
-const { z } = require('zod');
+const { z, map } = require('zod');
+const mapper = require('../helpers/Mapper');
 
 const facultySchema = z.object({
   id: z.string().optional(),
@@ -10,8 +11,10 @@ const facultySchema = z.object({
 });
 
 class FacultyService {
-  async getListFaculties() {
-    return await FacultyRepository.findAll();
+  async getListFaculties(language = "vi") {
+    const faculties = await FacultyRepository.findAll();
+    const mappedFaculties = faculties.map((faculty) => mapper.formatFaculty(faculty, language));
+    return mappedFaculties;
   }
 
   async addFaculty(data) {

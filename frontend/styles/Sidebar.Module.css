@@ -1,0 +1,7 @@
+.active {
+  background-color: #88a4ee !important; /* Màu xanh đậm hơn */
+  color: black; /* Màu chữ */
+}
+.background {
+  background-color: #1c2536; /* Màu nền */
+}

@@ -2,6 +2,7 @@ const ProgramRepository = require('../repositories/ProgramRepository');
 const StudentRepository = require('../repositories/StudentRepository');
 const { addLogEntry } = require('../helpers/logging');
 const { z } = require('zod');
+const mapper = require('../helpers/Mapper');
 
 const programSchema = z.object({
   id: z.string().optional(),
@@ -10,8 +11,10 @@ const programSchema = z.object({
 });
 
 class ProgramService {
-  async getListPrograms() {
-    return await ProgramRepository.findAll();
+  async getListPrograms(language = "vi") {
+    const programs = await ProgramRepository.findAll();
+    const mappedPrograms = programs.map((program) => mapper.formatProgram(program, language));
+    return mappedPrograms;
   }
 
   async addProgram(data) {

@@ -13,7 +13,8 @@ const CourseSchema = new mongoose.Schema(
       unique: true,
     },
     name: {
-      type: String,
+      type: Map,
+      of: String,
       required: true,
     },
     credits: {
@@ -26,7 +27,8 @@ const CourseSchema = new mongoose.Schema(
       required: true,
     },
     description: {
-      type: String,
+      type: Map,
+      of: String,
     },
     prerequisites: {
       type: [String], // Array of course codes

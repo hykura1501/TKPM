@@ -3,7 +3,7 @@ const CourseService = require('../services/CourseService');
 class CourseController {
   async getListCourses(req, res) {
     try {
-      const Courses = await CourseService.getListCourses();
+      const Courses = await CourseService.getListCourses(req.language);
       res.status(200).json(Courses);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách khoa:", error);

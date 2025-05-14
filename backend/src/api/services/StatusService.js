@@ -2,6 +2,7 @@ const StatusRepository = require('../repositories/StatusRepository');
 const StudentRepository = require('../repositories/StudentRepository');
 const { addLogEntry } = require('../helpers/logging');
 const { z } = require('zod');
+const mapper = require('../helpers/Mapper');
 
 const statusSchema = z.object({
   id: z.string().optional(),
@@ -10,8 +11,10 @@ const statusSchema = z.object({
 });
 
 class StatusService {
-  async getListStatuses() {
-    return await StatusRepository.findAll();
+  async getListStatuses(language = "vi") {
+    const statuses = await StatusRepository.findAll();
+    const mappedStatuses = statuses.map((status) => mapper.formatStatus(status, language));
+    return mappedStatuses;
   }
 
   async addStatus(data) {

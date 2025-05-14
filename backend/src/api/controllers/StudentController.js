@@ -100,9 +100,9 @@ class StudentController {
         const classInfo = await ClassSectionService.getClassSectionById(grades[i].classSectionId);
         if (classInfo) {
           grades[i].classInfo = classInfo.toJSON();
-          const courseInfo = await CourseService.getCourseById(classInfo.courseId);
+          const courseInfo = await CourseService.getCourseById(classInfo.courseId, req.language);
           if (courseInfo) {
-            grades[i].classInfo.courseInfo = courseInfo.toJSON();
+            grades[i].classInfo.courseInfo = courseInfo;
           }
         } 
         if (grades[i].grade) {

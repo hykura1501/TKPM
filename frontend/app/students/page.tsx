@@ -63,7 +63,7 @@ import LogService from "@/services/logService";
 import StatusService from "@/services/statusService";
 import { toast } from "react-toastify";
 import { ConfigDialog } from "@/components/config-dialog";
-import settingService from "@/services/settingSevices";
+import settingService from "@/services/settingServices";
 
 
 export default function Home() {
