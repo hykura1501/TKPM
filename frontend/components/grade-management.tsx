@@ -38,19 +38,35 @@ import classSectionService from "@/services/classSectionService"
 import registrationService from "@/services/registrationService"
 import { ClassSection, Course, Registration } from "@/types"
 import { useSearchParams, useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { useToast } from "@/components/ui/use-toast"
+
+interface Grade {
+  id: string
+  studentId: string
+  studentName: string
+  classId: string
+  className: string
+  courseId: string
+  courseName: string
+  grade: number
+}
 
 export default function GradeManagement() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { toast } = useToast()
+  const t = useTranslations("grades")
+  const common = useTranslations("common")
 
   const [courses, setCourses] = useState<Course[]>([])
   const [classes, setClasses] = useState<ClassSection[]>([])
-  const [grades, setGrades] = useState<Registration[]>([])
-  const [filteredGrades, setFilteredGrades] = useState<Registration[]>([])
+  const [grades, setGrades] = useState<Grade[]>([])
+  const [filteredGrades, setFilteredGrades] = useState<Grade[]>([])
 
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCourse, setSelectedCourse] = useState<string>("all")
-  const [selectedClass, setSelectedClass] = useState<string>("all")
+  const [selectedCourse, setSelectedCourse] = useState("all")
+  const [selectedClass, setSelectedClass] = useState("all")
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -137,36 +153,59 @@ export default function GradeManagement() {
       return
     }
     const filtered = grades.filter((grade) =>
-      grade.studentId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      grade.studentInfo?.fullName?.toLowerCase().includes(searchTerm.toLowerCase())
+      grade.studentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      grade.studentName.toLowerCase().includes(searchTerm.toLowerCase())
     )
     setFilteredGrades(filtered)
   }, [searchTerm, grades])
 
-  const handleEdit = (grade: Registration) => {
-    setCurrentGrade({ id: grade.id, grade: grade.grade ?? 0 })
+  const handleEdit = (grade: Grade) => {
+    setCurrentGrade({ id: grade.id, grade: grade.grade })
     setIsEditDialogOpen(true)
   }
 
-  const handleDelete = (grade: Registration) => {
-    setCurrentGrade({ id: grade.id, grade: grade.grade ?? 0 })
+  const handleDelete = (grade: Grade) => {
+    setCurrentGrade({ id: grade.id, grade: grade.grade })
     setIsDeleteDialogOpen(true)
   }
 
-  const saveGrade = () => {
+  const saveGrade = async () => {
     if (!currentGrade) return
     const newScore = parseFloat(currentGrade.grade.toString())
     if (isNaN(newScore) || newScore < 0 || newScore > 10) {
-      alert("Điểm phải là số từ 0 đến 10")
+      toast({
+        variant: "destructive",
+        title: t("invalidGrade")
+      })
       return
     }
-    setGrades((prev) =>
-      prev.map((g) => (g.id === currentGrade.id ? { ...g, score: newScore } : g))
-    )
-    setFilteredGrades((prev) =>
-      prev.map((g) => (g.id === currentGrade.id ? { ...g, score: newScore } : g))
-    )
-    setIsEditDialogOpen(false)
+    try {
+      const response = await fetch(`/api/grades/${currentGrade.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ grade: newScore }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update grade")
+      }
+
+      const updatedGrade = await response.json()
+      setGrades(grades.map((g) => (g.id === currentGrade.id ? updatedGrade : g)))
+      setFilteredGrades(grades.map((g) => (g.id === currentGrade.id ? updatedGrade : g)))
+      setIsEditDialogOpen(false)
+
+      toast({
+        title: t("gradeUpdated")
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t("errorUpdatingGrade")
+      })
+    }
   }
 
   const confirmDelete = () => {
@@ -176,11 +215,48 @@ export default function GradeManagement() {
     setIsDeleteDialogOpen(false)
   }
 
+  const handleGradeChange = async (gradeId: string, newGrade: number) => {
+    if (newGrade < 0 || newGrade > 10) {
+      toast({
+        variant: "destructive",
+        title: t("invalidGrade")
+      })
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/grades/${gradeId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ grade: newGrade }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update grade")
+      }
+
+      const updatedGrade = await response.json()
+      setGrades(grades.map((g) => (g.id === gradeId ? updatedGrade : g)))
+      setFilteredGrades(grades.map((g) => (g.id === gradeId ? updatedGrade : g)))
+
+      toast({
+        title: t("gradeUpdated")
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t("errorUpdatingGrade")
+      })
+    }
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Quản lý Điểm</CardTitle>
-        <CardDescription>Xem và quản lý điểm của sinh viên</CardDescription>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col space-y-4">
@@ -188,7 +264,7 @@ export default function GradeManagement() {
             <div className="flex-1 relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Tìm kiếm theo mã hoặc tên sinh viên"
+                placeholder={t("searchPlaceholder")}
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -197,10 +273,10 @@ export default function GradeManagement() {
             <div className="w-full md:w-64">
               <Select value={selectedCourse} onValueChange={handleCourseChange}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Chọn môn học" />
+                  <SelectValue placeholder={t("selectCourse")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tất cả môn học</SelectItem>
+                  <SelectItem value="all">{t("allCourses")}</SelectItem>
                   {courses.map((course) => (
                     <SelectItem key={course.id} value={course.id}>
                       {course.name}
@@ -212,10 +288,10 @@ export default function GradeManagement() {
             <div className="w-full md:w-64">
               <Select value={selectedClass} onValueChange={handleClassChange}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Chọn lớp" />
+                  <SelectValue placeholder={t("selectClass")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tất cả lớp</SelectItem>
+                  <SelectItem value="all">{t("allClasses")}</SelectItem>
                   {classes.map((cls) => (
                     <SelectItem key={cls.id} value={cls.id}>
                       {cls.code}
@@ -229,11 +305,11 @@ export default function GradeManagement() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Mã SV</TableHead>
-                <TableHead>Tên sinh viên</TableHead>
-                <TableHead>Lớp</TableHead>
-                <TableHead>Tên môn học</TableHead>
-                <TableHead className="text-center">Điểm</TableHead>
+                <TableHead>{t("studentId")}</TableHead>
+                <TableHead>{t("studentName")}</TableHead>
+                <TableHead>{t("class")}</TableHead>
+                <TableHead>{t("course")}</TableHead>
+                <TableHead className="text-center">{t("grade")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -241,18 +317,26 @@ export default function GradeManagement() {
                 filteredGrades.map((grade) => (
                   <TableRow key={grade.id}>
                     <TableCell>{grade.studentId}</TableCell>
-                    <TableCell>{grade.studentInfo?.fullName}</TableCell>
+                    <TableCell>{grade?.studentInfo?.fullName}</TableCell>
                     <TableCell>{classes.find((cls) => cls.id === selectedClass)?.code}</TableCell>
                     <TableCell>{courses.find((course) => course.id === selectedCourse)?.name}</TableCell>
-                    <TableCell className="text-center font-medium">
-                      {grade?.grade?.toFixed(1)}
+                    <TableCell className="text-center">
+                      <Input
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        value={grade.grade}
+                        onChange={(e) => handleGradeChange(grade.id, parseFloat(e.target.value))}
+                        className="w-20 mx-auto"
+                      />
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center">
-                    Không tìm thấy dữ liệu
+                    {common("noData")}
                   </TableCell>
                 </TableRow>
               )}
