@@ -25,6 +25,7 @@
     "error": "Error"
   },
   "navigation": {
+    "title": "Course Management & Transcript System",
     "home": "Home",
     "courses": "Course Management",
     "classes": "Class Management",

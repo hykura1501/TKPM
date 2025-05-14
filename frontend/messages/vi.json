@@ -25,6 +25,7 @@
     "error": "Lỗi"
   },
   "navigation": {
+    "title": "Hệ Thống Quản Lý Khóa Học & Bảng Điểm",
     "home": "Trang chủ",
     "courses": "Quản lý Khóa học",
     "classes": "Quản lý Lớp học",
@@ -35,7 +36,12 @@
   },
   "home": {
     "welcome": "Chào mừng đến với Hệ thống Quản lý Khóa học & Bảng điểm Sinh viên. Sử dụng các liên kết bên dưới hoặc thanh điều hướng để truy cập các chức năng của hệ thống.",
-    "accessButton": "Truy cập"
+    "accessButton": "Truy cập",
+    "coursesDescription": "Thêm, cập nhật và quản lý thông tin khóa học",
+    "classesDescription": "Mở lớp học và quản lý thông tin lớp học",
+    "studentsDescription": "Quản lý thông tin sinh viên",
+    "registrationDescription": "Đăng ký và hủy đăng ký khóa học cho sinh viên",
+    "transcriptsDescription": "Xem và in bảng điểm sinh viên"
   },
   "courses": {
     "title": "Quản lý Khóa học",
@@ -59,7 +65,22 @@
     "selectPrerequisites": "Chọn các môn tiên quyết",
     "prerequisitesDescription": "Chọn các khóa học mà sinh viên phải hoàn thành trước khi đăng ký khóa học này.",
     "descriptionPlaceholder": "Mô tả chi tiết về khóa học...",
-    "noPrerequisites": "Không có"
+    "noPrerequisites": "Không có",
+    "courseManagement": "Quản lý Khóa học",
+    "updateCourseTitle": "Cập nhật Thông tin Khóa học",
+    "addNewCourseTitle": "Thêm Khóa học Mới",
+    "noCourseFound": "Không tìm thấy khóa học nào",
+    "courseCodeExists": "Mã khóa học đã tồn tại trong hệ thống.",
+    "prerequisiteNotFound": "Môn tiên quyết {prerequisite} không tồn tại trong hệ thống.",
+    "courseAddedSuccessfully": "Đã thêm khóa học {courseName} thành công.",
+    "courseAddError": "Đã xảy ra lỗi khi thêm khóa học.",
+    "courseUpdatedSuccessfully": "Đã cập nhật khóa học {courseName} thành công.",
+    "courseUpdateError": "Đã xảy ra lỗi khi cập nhật khóa học.",
+    "courseCannotBeDeleted": "Không thể xóa khóa học đã tạo hơn 30 phút trước.",
+    "courseDeactivatedOrDeleted": "Khóa học đã bị vô hiệu hóa hoặc xóa.",
+    "courseDeleteError": "Đã xảy ra lỗi khi xóa khóa học.",
+    "courseFetchError": "Đã xảy ra lỗi khi tải danh sách khóa học.",
+    "actions": "Thao tác"
   },
   "classes": {
     "title": "Quản lý Lớp học",
@@ -360,5 +381,23 @@
     "signature": "(Ký và ghi rõ họ tên)",
     "signatureWithSeal": "(Ký, đóng dấu và ghi rõ họ tên)",
     "trainingOffice": "Phòng Đào tạo - Trường Đại học XYZ"
+  },
+  "grades": {
+    "title": "Quản lý Điểm",
+    "description": "Xem và quản lý điểm sinh viên",
+    "searchPlaceholder": "Tìm kiếm theo mã sinh viên hoặc tên",
+    "selectCourse": "Chọn môn học",
+    "allCourses": "Tất cả môn học",
+    "selectClass": "Chọn lớp",
+    "allClasses": "Tất cả lớp",
+    "studentId": "Mã sinh viên",
+    "studentName": "Tên sinh viên",
+    "class": "Lớp",
+    "course": "Môn học",
+    "grade": "Điểm",
+    "invalidGrade": "Điểm phải là số từ 0 đến 10",
+    "gradeUpdated": "Cập nhật điểm thành công",
+    "errorUpdatingGrade": "Lỗi khi cập nhật điểm",
+    "errorLoadingGrades": "Lỗi khi tải điểm"
   }
 }
