@@ -59,7 +59,22 @@
     "selectPrerequisites": "Select prerequisites",
     "prerequisitesDescription": "Select courses that students must complete before enrolling in this course.",
     "descriptionPlaceholder": "Detailed description of the course...",
-    "noPrerequisites": "None"
+    "noPrerequisites": "None",
+    "courseManagement": "Course Management",
+    "updateCourseTitle": "Update Course Information",
+    "addNewCourseTitle": "Add New Course",
+    "noCourseFound": "No courses found",
+    "courseCodeExists": "Course code already exists in the system.",
+    "prerequisiteNotFound": "Prerequisite {prerequisite} does not exist in the system.",
+    "courseAddedSuccessfully": "Course {courseName} added successfully.",
+    "courseAddError": "An error occurred while adding the course.",
+    "courseUpdatedSuccessfully": "Course {courseName} updated successfully.",
+    "courseUpdateError": "An error occurred while updating the course.",
+    "courseCannotBeDeleted": "The course was created more than 30 minutes ago and cannot be deleted.",
+    "courseDeactivatedOrDeleted": "The course has been deactivated or deleted.",
+    "courseDeleteError": "An error occurred while deleting the course.",
+    "courseFetchError": "An error occurred while fetching the course list.",
+    "actions": "Actions"
   },
   "classes": {
     "title": "Class Management",
