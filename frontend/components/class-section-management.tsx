@@ -12,11 +12,13 @@ import type { ClassSection, Course } from "@/types"
 import { getCourseById } from "@/data/sample-data"
 import { ClassSectionForm } from "@/components/class-section-form"
 import classSectionService from "@/services/classSectionService"
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"
 import { set } from "react-hook-form"
 import courseService from "@/services/courseService"
+import { useTranslations } from "next-intl"
 
 export function ClassSectionManagement() {
+  const t = useTranslations("classes")
   const [classSections, setClassSections] = useState<ClassSection[]>([])
   const [courses, setCourses] = useState<Course[]>([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -28,10 +30,9 @@ export function ClassSectionManagement() {
       try {
         setClassSections(await classSectionService.fetchClassSections())
         setCourses(await courseService.fetchCourses())
-
       } catch (error: any) {
         console.error("Error fetching class sections:", error)
-        toast.error(error || 'Có lỗi xảy ra khi tải danh sách lớp học.')
+        toast.error(error || t("errorLoadingData"))
       }
     }
     fetchData()
@@ -49,19 +50,19 @@ export function ClassSectionManagement() {
   const addClassSection = async (section: Omit<ClassSection, "id" | "createdAt" | "currentEnrollment">) => {
     // Check if class section code already exists
     if (classSections.some((s) => s.code === section.code)) {
-      toast.error("Mã lớp học đã tồn tại trong hệ thống.")
+      toast.error(t("codeUnique"))
       return
     }
 
     // Check if course exists and is active
     const course = getCourseById(section.courseId, courses)
     if (!course) {
-      toast.error("Khóa học không tồn tại.")
+      toast.error(t("classNotFound"))
       return
     }
 
     if (!course.isActive) {
-      toast.error("Khóa học không hoạt động.")
+      toast.error(t("courseInactive"))
       return
     }
 
@@ -72,31 +73,27 @@ export function ClassSectionManagement() {
       createdAt: new Date().toISOString(),
     }
     try{
-    await classSectionService.addClassSection(newSection)
+      await classSectionService.addClassSection(newSection)
       setClassSections([...classSections, newSection])
-      toast.success(`Lớp học ${newSection.code} đã được mở thành công.`)
+      toast.success(t("addSuccess"))
       setIsFormOpen(false)
     } catch(error: any) {
       console.error("Error adding class section:", error)
-      toast.error(error || 'Có lỗi xảy ra khi thêm lớp học.')
+      toast.error(error || t("addError"))
     }
-
   }
 
   // Update class section
   const updateClassSection = async (updatedSection: ClassSection) => {
     try{
       const data = await classSectionService.updateClassSection(updatedSection)
-      // setClassSections(classSections.map((section) => (section.id === updatedSection.id ? data : section)))
       setClassSections(data.classSections)
       setEditingSection(null)
       setIsFormOpen(false)
-
-      toast.success(`Lớp học ${updatedSection.code} đã được cập nhật thành công.`)
-
+      toast.success(t("updateSuccess"))
     } catch(error: any) {
-      console.error("Error adding class section:", error)
-      toast.error(error || 'Có lỗi xảy ra khi thêm lớp học.')
+      console.error("Error updating class section:", error)
+      toast.error(error || t("updateError"))
     }
   }
 
@@ -107,19 +104,18 @@ export function ClassSectionManagement() {
 
     // Check if class section has enrollments
     if (sectionToDelete.currentEnrollment > 0) {
-      toast.error("Không thể xóa lớp học đã có sinh viên đăng ký.")
+      toast.error(t("cannotDeleteWithEnrollments"))
       return
     }
 
     try{
       const data = await classSectionService.deleteClassSection(id)
       setClassSections(data.classSections)
-      toast.success(`Lớp học ${sectionToDelete.code} đã được xóa thành công.`)
+      toast.success(t("deleteSuccess"))
     } catch (error: any) {
       console.error("Error deleting class section:", error)
-      toast.error(error || 'Có lỗi xảy ra khi xóa lớp học.')
+      toast.error(error || t("deleteError"))
     }
-
   }
 
   // Handle edit button click
@@ -137,23 +133,25 @@ export function ClassSectionManagement() {
   // Get course name by ID
   const getCourseName = (courseId: string): string => {
     const course = getCourseById(courseId, courses)
-    return course ? course.name : "Unknown Course"
+    return course ? course.name : t("unknownCourse")
   }
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Quản lý Lớp học</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <DialogTrigger asChild>
             <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700">
               <PlusCircle className="mr-2 h-4 w-4" />
-              Mở Lớp học
+              {t("addClass")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>{editingSection ? "Cập nhật Thông tin Lớp học" : "Mở Lớp học Mới"}</DialogTitle>
+              <DialogTitle>
+                {editingSection ? t("updateClass") : t("addClass")}
+              </DialogTitle>
             </DialogHeader>
             <ClassSectionForm
               classSection={editingSection}
@@ -169,7 +167,7 @@ export function ClassSectionManagement() {
           <div className="relative w-full md:w-1/3">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Tìm kiếm theo mã lớp, tên khóa học hoặc giảng viên..."
+              placeholder={t("searchPlaceholder")}
               className="pl-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -181,13 +179,13 @@ export function ClassSectionManagement() {
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
-                <TableHead>Mã lớp</TableHead>
-                <TableHead>Khóa học</TableHead>
-                <TableHead>Học kỳ</TableHead>
-                <TableHead>Giảng viên</TableHead>
-                <TableHead>Lịch học</TableHead>
-                <TableHead>Sĩ số</TableHead>
-                <TableHead className="text-right">Thao tác</TableHead>
+                <TableHead>{t("classCode")}</TableHead>
+                <TableHead>{t("course")}</TableHead>
+                <TableHead>{t("semester")}</TableHead>
+                <TableHead>{t("instructor")}</TableHead>
+                <TableHead>{t("schedule")}</TableHead>
+                <TableHead>{t("capacity")}</TableHead>
+                <TableHead className="text-right">{t("actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -197,13 +195,13 @@ export function ClassSectionManagement() {
                     <TableCell className="font-medium">{section.code}</TableCell>
                     <TableCell>{getCourseName(section.courseId)}</TableCell>
                     <TableCell>
-                      {section.semester === "1" ? "I" : section.semester === "2" ? "II" : "Hè"} - {section.academicYear}
+                      {section.semester === "1" ? t("semesterI") : section.semester === "2" ? t("semesterII") : t("semesterSummer")} - {section.academicYear}
                     </TableCell>
                     <TableCell>{section.instructor}</TableCell>
                     <TableCell>
                       <div className="flex flex-col">
                         <span>{section.schedule}</span>
-                        <span className="text-xs text-gray-500">Phòng: {section.classroom}</span>
+                        <span className="text-xs text-gray-500">{t("classroom")}: {section.classroom}</span>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -213,7 +211,7 @@ export function ClassSectionManagement() {
                           {section.currentEnrollment}/{section.maxCapacity}
                         </span>
                         {section.currentEnrollment === section.maxCapacity && (
-                          <Badge className="ml-2 bg-red-500">Đầy</Badge>
+                          <Badge className="ml-2 bg-red-500">{t("full")}</Badge>
                         )}
                       </div>
                     </TableCell>
@@ -243,7 +241,7 @@ export function ClassSectionManagement() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-10 text-gray-500">
-                    Không tìm thấy lớp học nào
+                    {t("noData")}
                   </TableCell>
                 </TableRow>
               )}
