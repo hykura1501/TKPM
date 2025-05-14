@@ -35,7 +35,12 @@
   },
   "home": {
     "welcome": "Welcome to the Course Management & Student Transcript System. Use the links below or the navigation bar to access the system's features.",
-    "accessButton": "Access"
+    "accessButton": "Access",
+    "coursesDescription": "Add, update and manage course information",
+    "classesDescription": "Open classes and manage class information",
+    "studentsDescription": "Manage student information",
+    "registrationDescription": "Register and cancel course registration for students",
+    "transcriptsDescription": "View and print student transcripts"
   },
   "courses": {
     "title": "Course Management",
