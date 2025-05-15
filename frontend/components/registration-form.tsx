@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { ClassSection, Course } from "@/types"
 import { Student } from "@/types/student"
 import { getCourseById } from "@/data/sample-data"
+import { useTranslations } from "next-intl"
 
 type RegistrationFormProps = {
   onSubmit: (data: { mssv: string; classSectionId: string }) => void
@@ -18,10 +19,11 @@ type RegistrationFormProps = {
 }
 
 export function RegistrationForm({ onSubmit, students, classSections, courses }: RegistrationFormProps) {
+  const t = useTranslations("registrationForm")
   // Define schema for registration
   const registrationSchema = z.object({
-    mssv: z.string({ required_error: "Vui lòng chọn sinh viên" }),
-    classSectionId: z.string({ required_error: "Vui lòng chọn lớp học" }),
+    mssv: z.string({ required_error: t("studentRequired") }),
+    classSectionId: z.string({ required_error: t("classSectionRequired") }),
   })
 
   // Initialize form
@@ -41,7 +43,7 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
   // Get course name by ID
   const getCourseName = (courseId: string): string => {
     const course = getCourseById(courseId, courses)
-    return course ? course.name : "Unknown Course"
+    return course ? course.name : t("unknownCourse")
   }
 
   return (
@@ -53,11 +55,11 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
             name="mssv"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sinh viên</FormLabel>
+                <FormLabel>{t("student")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn sinh viên" />
+                      <SelectValue placeholder={t("selectStudent")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -78,11 +80,11 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
             name="classSectionId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Lớp học</FormLabel>
+                <FormLabel>{t("classSection")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn lớp học" />
+                      <SelectValue placeholder={t("selectClassSection")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -94,7 +96,7 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>Chỉ hiển thị các lớp học còn chỗ trống.</FormDescription>
+                <FormDescription>{t("onlyAvailableClasses")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -103,10 +105,10 @@ export function RegistrationForm({ onSubmit, students, classSections, courses }:
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Hủy bỏ
+            {t("cancel")}
           </Button>
           <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-            Đăng ký
+            {t("submit")}
           </Button>
         </div>
       </form>

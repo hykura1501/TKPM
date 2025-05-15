@@ -522,5 +522,17 @@
     "entity": "Entity",
     "timestamp": "Timestamp",
     "details": "Details"
+  },
+  "registrationForm": {
+    "student": "Student",
+    "selectStudent": "Select student",
+    "classSection": "Class",
+    "selectClassSection": "Select class",
+    "onlyAvailableClasses": "Only shows classes with available seats.",
+    "cancel": "Cancel",
+    "submit": "Register",
+    "studentRequired": "Please select a student",
+    "classSectionRequired": "Please select a class",
+    "unknownCourse": "Unknown Course"
   }
 }

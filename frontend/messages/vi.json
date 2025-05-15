@@ -270,6 +270,18 @@
     "cancelButtonDisabledReason9": "Đăng ký đã được hủy",
     "cancelButtonDisabledReason10": "Đăng ký đã được hủy"
   },
+  "registrationForm": {
+    "student": "Sinh viên",
+    "selectStudent": "Chọn sinh viên",
+    "classSection": "Lớp học",
+    "selectClassSection": "Chọn lớp học",
+    "onlyAvailableClasses": "Chỉ hiển thị các lớp học còn chỗ trống.",
+    "cancel": "Hủy bỏ",
+    "submit": "Đăng ký",
+    "studentRequired": "Vui lòng chọn sinh viên",
+    "classSectionRequired": "Vui lòng chọn lớp học",
+    "unknownCourse": "Khóa học không xác định"
+  },
   "transcripts": {
     "title": "Bảng điểm Sinh viên",
     "printTranscript": "In bảng điểm",
