@@ -506,5 +506,21 @@
         }
       }
     }
+  },
+  "logs": {
+    "title": "System Logs",
+    "description": "View system activity and event history",
+    "searchPlaceholder": "Search...",
+    "allActions": "All Actions",
+    "allEntities": "All Entities",
+    "exportLogs": "Export Logs",
+    "activityLogs": "Activity Logs",
+    "noLogsFound": "No logs found",
+    "user": "User",
+    "unknownUser": "Unknown",
+    "action": "Action",
+    "entity": "Entity",
+    "timestamp": "Timestamp",
+    "details": "Details"
   }
 }

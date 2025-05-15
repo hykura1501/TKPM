@@ -506,5 +506,21 @@
         }
       }
     }
+  },
+  "logs": {
+    "title": "Nhật ký Hệ thống",
+    "description": "Xem lịch sử hoạt động và sự kiện trong hệ thống",
+    "searchPlaceholder": "Tìm kiếm...",
+    "allActions": "Tất cả hành động",
+    "allEntities": "Tất cả đối tượng",
+    "exportLogs": "Xuất nhật ký",
+    "activityLogs": "Nhật ký hoạt động",
+    "noLogsFound": "Không tìm thấy nhật ký nào",
+    "user": "Người dùng",
+    "unknownUser": "Không xác định",
+    "action": "Hành động",
+    "entity": "Đối tượng",
+    "timestamp": "Thời gian",
+    "details": "Chi tiết"
   }
 }
