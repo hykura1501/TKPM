@@ -13,6 +13,7 @@ import {
 import { Plus, X, Save, Pencil } from "lucide-react";
 import type { Faculty, StudentStatus, Program } from "@/types/student";
 import { toast } from "react-toastify";
+import { useTranslations } from "next-intl";
 
 import programService from "@/services/programService";
 import statusService from "@/services/statusService";
@@ -51,6 +52,8 @@ export function SettingsDialog({
     faculties[0]?.id || ""
   );
 
+  const t = useTranslations("settingsDialog");
+
   // useEffect(() => {
   //   return () => {
   //     onSave(localFaculties, localStatuses, localPrograms)
@@ -72,7 +75,7 @@ export function SettingsDialog({
       setLocalFaculties(data.faculties);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi thêm khoa");
+      toast.error(t("faculties.addError"));
     }
     setNewFacultyName("");
   };
@@ -87,7 +90,7 @@ export function SettingsDialog({
       setLocalFaculties(data.faculties);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi cập nhật khoa");
+      toast.error(t("faculties.updateError"));
     }
   };
 
@@ -96,7 +99,7 @@ export function SettingsDialog({
     const isUsed = localPrograms.some((p) => p.faculty === id);
 
     if (isUsed) {
-      toast.error("Không thể xóa khoa đang được sử dụng");
+      toast.error(t("faculties.deleteInUse"));
       return;
     }
 
@@ -105,7 +108,7 @@ export function SettingsDialog({
       const data = await facultyService.deleteFaculty(id);
       setLocalFaculties(data.faculties);
     } catch (error) {
-      toast.error("Lỗi khi xóa khoa");
+      toast.error(t("faculties.deleteError"));
       console.error(error);
     }
   };
@@ -132,7 +135,7 @@ export function SettingsDialog({
       setLocalStatuses(data.statuses);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi thêm tình trạng");
+      toast.error(t("statuses.addError"));
     }
   };
 
@@ -146,7 +149,7 @@ export function SettingsDialog({
       setLocalStatuses(data.statuses);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi cập nhật tình trạng");
+      toast.error(t("statuses.updateError"));
     }
   };
 
@@ -157,7 +160,7 @@ export function SettingsDialog({
       setLocalStatuses(data.statuses);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi xóa tình trạng");
+      toast.error(t("statuses.deleteError"));
     }
   };
 
@@ -183,7 +186,7 @@ export function SettingsDialog({
       setLocalPrograms(data.programs);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi thêm chương trình");
+      toast.error(t("programs.addError"));
     }
   };
 
@@ -198,7 +201,7 @@ export function SettingsDialog({
     }
     catch (error) {
       console.error(error);
-      toast.error("Lỗi khi cập nhật chương trình");
+      toast.error(t("programs.updateError"));
     }
     
   };
@@ -210,7 +213,7 @@ export function SettingsDialog({
       setLocalPrograms(data.programs);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi xóa chương trình");
+      toast.error(t("programs.deleteError"));
     }
   };
 
@@ -222,35 +225,33 @@ export function SettingsDialog({
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Cài đặt Hệ thống</DialogTitle>
-        <DialogDescription>
-          Quản lý khoa, tình trạng sinh viên và chương trình học.
-        </DialogDescription>
+        <DialogTitle>{t("title")}</DialogTitle>
+        <DialogDescription>{t("description")}</DialogDescription>
       </DialogHeader>
 
       <Tabs defaultValue="faculties" className="mt-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="faculties">Khoa</TabsTrigger>
-          <TabsTrigger value="statuses">Tình trạng</TabsTrigger>
-          <TabsTrigger value="programs">Chương trình</TabsTrigger>
+          <TabsTrigger value="faculties">{t("tabs.faculties")}</TabsTrigger>
+          <TabsTrigger value="statuses">{t("tabs.statuses")}</TabsTrigger>
+          <TabsTrigger value="programs">{t("tabs.programs")}</TabsTrigger>
         </TabsList>
 
         {/* Faculties Tab */}
         <TabsContent value="faculties" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Danh sách Khoa</CardTitle>
+              <CardTitle>{t("faculties.list")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Tên khoa mới"
+                  placeholder={t("faculties.newPlaceholder")}
                   value={newFacultyName}
                   onChange={(e) => setNewFacultyName(e.target.value)}
                 />
                 <Button onClick={addFaculty}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("faculties.add")}
                 </Button>
               </div>
 
@@ -321,12 +322,12 @@ export function SettingsDialog({
         <TabsContent value="statuses" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Danh sách Tình trạng Sinh viên</CardTitle>
+              <CardTitle>{t("statuses.list")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Tên tình trạng mới"
+                  placeholder={t("statuses.newPlaceholder")}
                   value={newStatusName}
                   onChange={(e) => setNewStatusName(e.target.value)}
                   className="flex-1"
@@ -339,7 +340,7 @@ export function SettingsDialog({
                 />
                 <Button onClick={addStatus}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("statuses.add")}
                 </Button>
               </div>
 
@@ -425,12 +426,12 @@ export function SettingsDialog({
         <TabsContent value="programs" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Danh sách Chương trình Học</CardTitle>
+              <CardTitle>{t("programs.list")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Tên chương trình mới"
+                  placeholder={t("programs.newPlaceholder")}
                   value={newProgramName}
                   onChange={(e) => setNewProgramName(e.target.value)}
                   className="flex-1"
@@ -448,7 +449,7 @@ export function SettingsDialog({
                 </select>
                 <Button onClick={addProgram}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("programs.add")}
                 </Button>
               </div>
 
@@ -509,7 +510,7 @@ export function SettingsDialog({
                           <div className="flex flex-col">
                             <span>{program.name}</span>
                             <span className="text-sm text-muted-foreground">
-                              {faculty?.name || "Khoa không xác định"}
+                              {faculty?.name || t("programs.unknownFaculty")}
                             </span>
                           </div>
                           <div className="flex gap-2">
@@ -546,7 +547,7 @@ export function SettingsDialog({
       <div className="flex justify-end mt-6">
         <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
           <Save className="h-4 w-4 mr-2" />
-          Lưu thay đổi
+          {t("saveChanges")}
         </Button>
       </div>
     </>

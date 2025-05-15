@@ -534,5 +534,53 @@
     "studentRequired": "Please select a student",
     "classSectionRequired": "Please select a class",
     "unknownCourse": "Unknown Course"
+  },
+  "settingsDialog": {
+    "title": "System Settings",
+    "description": "Manage faculties, student statuses, and programs.",
+    "tabs": {
+      "faculties": "Faculties",
+      "statuses": "Statuses",
+      "programs": "Programs"
+    },
+    "faculties": {
+      "list": "Faculty List",
+      "newPlaceholder": "New faculty name",
+      "add": "Add",
+      "edit": "Edit",
+      "save": "Save",
+      "delete": "Delete",
+      "unknown": "Unknown Faculty",
+      "deleteInUse": "Cannot delete a faculty that is in use.",
+      "addError": "Error adding faculty.",
+      "updateError": "Error updating faculty.",
+      "deleteError": "Error deleting faculty."
+    },
+    "statuses": {
+      "list": "Student Status List",
+      "newPlaceholder": "New status name",
+      "add": "Add",
+      "edit": "Edit",
+      "save": "Save",
+      "delete": "Delete",
+      "color": "Color",
+      "updateError": "Error updating status.",
+      "addError": "Error adding status.",
+      "deleteError": "Error deleting status."
+    },
+    "programs": {
+      "list": "Program List",
+      "newPlaceholder": "New program name",
+      "faculty": "Faculty",
+      "add": "Add",
+      "edit": "Edit",
+      "save": "Save",
+      "delete": "Delete",
+      "unknownFaculty": "Unknown Faculty",
+      "addError": "Error adding program.",
+      "updateError": "Error updating program.",
+      "deleteError": "Error deleting program."
+    },
+    "saveChanges": "Save Changes"
   }
 }

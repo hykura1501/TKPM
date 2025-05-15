@@ -534,5 +534,53 @@
     "entity": "Đối tượng",
     "timestamp": "Thời gian",
     "details": "Chi tiết"
+  },
+  "settingsDialog": {
+    "title": "Cài đặt Hệ thống",
+    "description": "Quản lý khoa, tình trạng sinh viên và chương trình học.",
+    "tabs": {
+      "faculties": "Khoa",
+      "statuses": "Tình trạng",
+      "programs": "Chương trình"
+    },
+    "faculties": {
+      "list": "Danh sách Khoa",
+      "newPlaceholder": "Tên khoa mới",
+      "add": "Thêm",
+      "edit": "Sửa",
+      "save": "Lưu",
+      "delete": "Xóa",
+      "unknown": "Khoa không xác định",
+      "deleteInUse": "Không thể xóa khoa đang được sử dụng.",
+      "addError": "Lỗi khi thêm khoa.",
+      "updateError": "Lỗi khi cập nhật khoa.",
+      "deleteError": "Lỗi khi xóa khoa."
+    },
+    "statuses": {
+      "list": "Danh sách Tình trạng Sinh viên",
+      "newPlaceholder": "Tên tình trạng mới",
+      "add": "Thêm",
+      "edit": "Sửa",
+      "save": "Lưu",
+      "delete": "Xóa",
+      "color": "Màu sắc",
+      "updateError": "Lỗi khi cập nhật tình trạng.",
+      "addError": "Lỗi khi thêm tình trạng.",
+      "deleteError": "Lỗi khi xóa tình trạng."
+    },
+    "programs": {
+      "list": "Danh sách Chương trình Học",
+      "newPlaceholder": "Tên chương trình mới",
+      "faculty": "Khoa",
+      "add": "Thêm",
+      "edit": "Sửa",
+      "save": "Lưu",
+      "delete": "Xóa",
+      "unknownFaculty": "Khoa không xác định",
+      "addError": "Lỗi khi thêm chương trình.",
+      "updateError": "Lỗi khi cập nhật chương trình.",
+      "deleteError": "Lỗi khi xóa chương trình."
+    },
+    "saveChanges": "Lưu thay đổi"
   }
 }
