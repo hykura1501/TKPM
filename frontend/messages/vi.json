@@ -410,5 +410,55 @@
     "gradeUpdated": "Cập nhật điểm thành công",
     "errorUpdatingGrade": "Lỗi khi cập nhật điểm",
     "errorLoadingGrades": "Lỗi khi tải điểm"
+  },
+  "config": {
+    "title": "Cấu hình Hệ thống",
+    "description": "Quản lý các quy tắc kiểm tra dữ liệu trong hệ thống",
+    "tabs": {
+      "email": "Tên miền Email",
+      "phone": "Định dạng Số điện thoại",
+      "status": "Quy tắc Chuyển đổi Trạng thái"
+    },
+    "email": {
+      "title": "Tên miền Email được phép",
+      "placeholder": "Nhập tên miền (vd: gmail.com)",
+      "add": "Thêm",
+      "remove": "Xóa"
+    },
+    "phone": {
+      "title": "Định dạng Số điện thoại theo Quốc gia",
+      "editTitle": "Chỉnh sửa định dạng số điện thoại",
+      "addTitle": "Thêm định dạng số điện thoại mới",
+      "countryCode": "Mã quốc gia",
+      "countryName": "Tên quốc gia",
+      "prefix": "Tiền tố",
+      "pattern": "Mẫu Regex",
+      "example": "Ví dụ",
+      "cancel": "Hủy",
+      "save": "Lưu",
+      "add": "Thêm",
+      "edit": "Sửa",
+      "remove": "Xóa",
+      "table": {
+        "countryCode": "Mã quốc gia",
+        "countryName": "Tên quốc gia",
+        "prefix": "Tiền tố",
+        "example": "Ví dụ",
+        "actions": "Thao tác"
+      },
+      "errors": {
+        "incomplete": "Vui lòng nhập đầy đủ thông tin định dạng số điện thoại",
+        "exists": "Định dạng số điện thoại đã tồn tại",
+        "success": "Thêm định dạng số điện thoại thành công",
+        "updateSuccess": "Cập nhật định dạng số điện thoại thành công",
+        "removeSuccess": "Xóa định dạng số điện thoại thành công"
+      }
+    },
+    "status": {
+      "title": "Quy tắc Chuyển đổi Trạng thái",
+      "description": "Chọn các trạng thái mà sinh viên có thể chuyển đổi. Ô được đánh dấu nghĩa là có thể chuyển từ trạng thái ở hàng sang trạng thái ở cột.",
+      "fromTo": "Từ \\ Đến"
+    },
+    "save": "Lưu cấu hình"
   }
 }

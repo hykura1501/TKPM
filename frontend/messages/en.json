@@ -410,5 +410,55 @@
     "signature": "(Sign and write full name)",
     "signatureWithSeal": "(Sign, seal and write full name)",
     "trainingOffice": "Training Office - XYZ University"
+  },
+  "config": {
+    "title": "System Configuration",
+    "description": "Manage data validation rules in the system",
+    "tabs": {
+      "email": "Email Domains",
+      "phone": "Phone Number Formats",
+      "status": "Status Transition Rules"
+    },
+    "email": {
+      "title": "Allowed Email Domains",
+      "placeholder": "Enter domain (e.g., gmail.com)",
+      "add": "Add",
+      "remove": "Remove"
+    },
+    "phone": {
+      "title": "Phone Number Formats by Country",
+      "editTitle": "Edit phone number format",
+      "addTitle": "Add new phone number format",
+      "countryCode": "Country Code",
+      "countryName": "Country Name",
+      "prefix": "Prefix",
+      "pattern": "Regex Pattern",
+      "example": "Example",
+      "cancel": "Cancel",
+      "save": "Save",
+      "add": "Add",
+      "edit": "Edit",
+      "remove": "Remove",
+      "table": {
+        "countryCode": "Country Code",
+        "countryName": "Country Name",
+        "prefix": "Prefix",
+        "example": "Example",
+        "actions": "Actions"
+      },
+      "errors": {
+        "incomplete": "Please fill in all phone format information",
+        "exists": "Phone format already exists",
+        "success": "Phone format added successfully",
+        "updateSuccess": "Phone format updated successfully",
+        "removeSuccess": "Phone format removed successfully"
+      }
+    },
+    "status": {
+      "title": "Status Transition Rules",
+      "description": "Select the statuses that students can transition to. A marked cell means it is possible to transition from the status in the row to the status in the column.",
+      "fromTo": "From \\ To"
+    },
+    "save": "Save Configuration"
   }
 }
