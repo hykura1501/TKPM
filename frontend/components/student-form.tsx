@@ -136,7 +136,7 @@ export function StudentForm({
   );
   // Định nghĩa schema cho sinh viên
   const studentSchema = z.object({
-    fullName: z.string().min(2, { message: "Họ tên phải có ít nhất 2 ký tự" }),
+    fullName: z.string().min(2, { message: t("fullNameMinLength") }),
     dateOfBirth: z.string().refine(
       (date) => {
         const today = new Date();
@@ -144,53 +144,48 @@ export function StudentForm({
         const age = today.getFullYear() - dob.getFullYear();
         return age >= 16 && age <= 100;
       },
-      { message: "Tuổi phải từ 16 đến 100" }
+      { message: t("dateOfBirthAgeRange") }
     ),
     gender: z.enum(["male", "female", "other"], {
-      required_error: "Vui lòng chọn giới tính",
+      required_error: t("genderRequired"),
     }),
     faculty: z.string({
-      required_error: "Vui lòng chọn khoa",
+      required_error: t("facultyRequired"),
     }),
-    course: z.string().min(1, { message: "Vui lòng nhập khóa học" }),
+    course: z.string().min(1, { message: t("courseRequired") }),
     program: z.string({
-      required_error: "Vui lòng chọn chương trình học",
+      required_error: t("programRequired"),
     }),
     permanentAddress: addressSchema,
     temporaryAddress: addressSchema,
     mailingAddress: addressSchema,
     identityDocument: identityDocumentSchema,
-    nationality: z.string().min(1, { message: "Vui lòng nhập quốc tịch" }),
+    nationality: z.string().min(1, { message: t("nationalityRequired") }),
     email: z
       .string()
-      .email({ message: "Email không hợp lệ" })
+      .email({ message: t("emailInvalid") })
       .refine(
         (email) => {
           const domain = email.split("@")[1];
           return allowedDomains.includes(domain);
         },
         {
-          message:
-            "Email phải thuộc một trong các tên miền: " +
-            allowedDomains.join(", "),
+          message: t("emailDomainInvalid", { domains: allowedDomains.join(", ") }),
         }
       ),
-    // phone: z.string().regex(
-    //     /^(0|\+84)(\d{9}|\d{10})$/),
     phone: z.string().refine(
       (phone) => {
-        // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
         return phoneFormats.some((format) => {
-          const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+          const regex = new RegExp(format.pattern);
           return regex.test(phone);
         });
       },
       {
-        message: `Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng theo quốc gia.`,
+        message: t("phoneInvalid"),
       }
     ),
     status: z.string({
-      required_error: "Vui lòng chọn tình trạng",
+      required_error: t("statusRequired"),
     }),
   });
   // Initialize form with default values or existing student data
@@ -326,10 +321,10 @@ export function StudentForm({
       >
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-4 mb-4">
-            <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
-            <TabsTrigger value="address">Địa chỉ</TabsTrigger>
-            <TabsTrigger value="identity">Giấy tờ tùy thân</TabsTrigger>
-            <TabsTrigger value="academic">Thông tin học tập</TabsTrigger>
+            <TabsTrigger value="basic">{t("basicInfo")}</TabsTrigger>
+            <TabsTrigger value="address">{t("address")}</TabsTrigger>
+            <TabsTrigger value="identity">{t("identityDocument")}</TabsTrigger>
+            <TabsTrigger value="academic">{t("academicInfo")}</TabsTrigger>
           </TabsList>
 
           {/* Thông tin cơ bản */}
@@ -405,9 +400,9 @@ export function StudentForm({
                 name="nationality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Quốc tịch</FormLabel>
+                    <FormLabel>{t("nationality")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Việt Nam" {...field} />
+                      <Input placeholder={t("nationalityPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -453,7 +448,7 @@ export function StudentForm({
             {/* Địa chỉ thường trú */}
             <Card>
               <CardHeader>
-                <CardTitle>{t("address")}</CardTitle>
+                <CardTitle>{t("permanentAddress")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -462,9 +457,9 @@ export function StudentForm({
                     name="permanentAddress.streetAddress"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("address.street")}</FormLabel>
+                        <FormLabel>{t("addressStreet")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("address.streetPlaceholder")} {...field} />
+                          <Input placeholder={t("addressStreetPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -476,9 +471,9 @@ export function StudentForm({
                     name="permanentAddress.ward"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("address.ward")}</FormLabel>
+                        <FormLabel>{t("addressWard")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("address.wardPlaceholder")} {...field} />
+                          <Input placeholder={t("addressWardPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -490,9 +485,9 @@ export function StudentForm({
                     name="permanentAddress.district"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("address.district")}</FormLabel>
+                        <FormLabel>{t("addressDistrict")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("address.districtPlaceholder")} {...field} />
+                          <Input placeholder={t("addressDistrictPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -504,9 +499,9 @@ export function StudentForm({
                     name="permanentAddress.province"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("address.province")}</FormLabel>
+                        <FormLabel>{t("addressProvince")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("address.provincePlaceholder")} {...field} />
+                          <Input placeholder={t("addressProvincePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -518,9 +513,9 @@ export function StudentForm({
                     name="permanentAddress.country"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("address.country")}</FormLabel>
+                        <FormLabel>{t("addressCountry")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("address.countryPlaceholder")} {...field} />
+                          <Input placeholder={t("addressCountryPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -560,9 +555,9 @@ export function StudentForm({
                       name="temporaryAddress.streetAddress"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.street")}</FormLabel>
+                          <FormLabel>{t("addressStreet")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.streetPlaceholder")} {...field} />
+                            <Input placeholder={t("addressStreetPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -574,9 +569,9 @@ export function StudentForm({
                       name="temporaryAddress.ward"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.ward")}</FormLabel>
+                          <FormLabel>{t("addressWard")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.wardPlaceholder")} {...field} />
+                            <Input placeholder={t("addressWardPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -588,9 +583,9 @@ export function StudentForm({
                       name="temporaryAddress.district"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.district")}</FormLabel>
+                          <FormLabel>{t("addressDistrict")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.districtPlaceholder")} {...field} />
+                            <Input placeholder={t("addressDistrictPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -602,9 +597,9 @@ export function StudentForm({
                       name="temporaryAddress.province"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.province")}</FormLabel>
+                          <FormLabel>{t("addressProvince")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.provincePlaceholder")} {...field} />
+                            <Input placeholder={t("addressProvincePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -616,9 +611,9 @@ export function StudentForm({
                       name="temporaryAddress.country"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.country")}</FormLabel>
+                          <FormLabel>{t("addressCountry")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.countryPlaceholder")} {...field} />
+                            <Input placeholder={t("addressCountryPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -659,9 +654,9 @@ export function StudentForm({
                       name="mailingAddress.streetAddress"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.street")}</FormLabel>
+                          <FormLabel>{t("addressStreet")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.streetPlaceholder")} {...field} />
+                            <Input placeholder={t("addressStreetPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -673,9 +668,9 @@ export function StudentForm({
                       name="mailingAddress.ward"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.ward")}</FormLabel>
+                          <FormLabel>{t("addressWard")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.wardPlaceholder")} {...field} />
+                            <Input placeholder={t("addressWardPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -687,9 +682,9 @@ export function StudentForm({
                       name="mailingAddress.district"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.district")}</FormLabel>
+                          <FormLabel>{t("addressDistrict")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.districtPlaceholder")} {...field} />
+                            <Input placeholder={t("addressDistrictPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -701,9 +696,9 @@ export function StudentForm({
                       name="mailingAddress.province"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.province")}</FormLabel>
+                          <FormLabel>{t("addressProvince")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.provincePlaceholder")} {...field} />
+                            <Input placeholder={t("addressProvincePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -715,9 +710,9 @@ export function StudentForm({
                       name="mailingAddress.country"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("address.country")}</FormLabel>
+                          <FormLabel>{t("addressCountry")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("address.countryPlaceholder")} {...field} />
+                            <Input placeholder={t("addressCountryPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -745,21 +740,21 @@ export function StudentForm({
                     variant={idType === "CMND" ? "default" : "outline"}
                     onClick={() => setIdType("CMND")}
                   >
-                    CMND
+                    {t("idDocumentCmnd")}
                   </Button>
                   <Button
                     type="button"
                     variant={idType === "CCCD" ? "default" : "outline"}
                     onClick={() => setIdType("CCCD")}
                   >
-                    CCCD
+                    {t("idDocumentCccd")}
                   </Button>
                   <Button
                     type="button"
                     variant={idType === "Passport" ? "default" : "outline"}
                     onClick={() => setIdType("Passport")}
                   >
-                    Hộ chiếu
+                    {t("idDocumentPassport")}
                   </Button>
                 </div>
 
@@ -778,9 +773,9 @@ export function StudentForm({
                         name="identityDocument.number"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.number")}</FormLabel>
+                            <FormLabel>{t("idDocumentNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("idDocument.numberPlaceholder")} {...field} />
+                              <Input placeholder={t("idDocumentNumberPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -792,7 +787,7 @@ export function StudentForm({
                         name="identityDocument.issueDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issueDate")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssueDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -806,10 +801,10 @@ export function StudentForm({
                         name="identityDocument.issuePlace"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issuePlace")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssuePlace")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder={t("idDocument.issuePlacePlaceholder")}
+                                placeholder={t("idDocumentIssuePlacePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -823,7 +818,7 @@ export function StudentForm({
                         name="identityDocument.expiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.expiryDate")}</FormLabel>
+                            <FormLabel>{t("idDocumentExpiryDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -842,9 +837,9 @@ export function StudentForm({
                         name="identityDocument.number"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.number")}</FormLabel>
+                            <FormLabel>{t("idDocumentNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("idDocument.numberPlaceholder")} {...field} />
+                              <Input placeholder={t("idDocumentNumberPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -856,7 +851,7 @@ export function StudentForm({
                         name="identityDocument.issueDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issueDate")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssueDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -870,10 +865,10 @@ export function StudentForm({
                         name="identityDocument.issuePlace"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issuePlace")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssuePlace")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder={t("idDocument.issuePlacePlaceholder")}
+                                placeholder={t("idDocumentIssuePlacePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -887,7 +882,7 @@ export function StudentForm({
                         name="identityDocument.expiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.expiryDate")}</FormLabel>
+                            <FormLabel>{t("idDocumentExpiryDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -908,9 +903,9 @@ export function StudentForm({
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>{t("idDocument.hasChip")}</FormLabel>
+                              <FormLabel>{t("idDocumentHasChip")}</FormLabel>
                               <FormDescription>
-                                {t("idDocument.hasChipDescription")}
+                                {t("idDocumentHasChipDescription")}
                               </FormDescription>
                             </div>
                           </FormItem>
@@ -927,9 +922,9 @@ export function StudentForm({
                         name="identityDocument.number"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.number")}</FormLabel>
+                            <FormLabel>{t("idDocumentNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("idDocument.numberPlaceholder")} {...field} />
+                              <Input placeholder={t("idDocumentNumberPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -941,7 +936,7 @@ export function StudentForm({
                         name="identityDocument.issueDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issueDate")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssueDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -955,10 +950,10 @@ export function StudentForm({
                         name="identityDocument.issuePlace"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issuePlace")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssuePlace")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder={t("idDocument.issuePlacePlaceholder")}
+                                placeholder={t("idDocumentIssuePlacePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -972,7 +967,7 @@ export function StudentForm({
                         name="identityDocument.expiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.expiryDate")}</FormLabel>
+                            <FormLabel>{t("idDocumentExpiryDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -986,9 +981,9 @@ export function StudentForm({
                         name="identityDocument.issuingCountry"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.issuingCountry")}</FormLabel>
+                            <FormLabel>{t("idDocumentIssuingCountry")}</FormLabel>
                             <FormControl>
-                              <Input placeholder={t("idDocument.issuingCountryPlaceholder")} {...field} />
+                              <Input placeholder={t("idDocumentIssuingCountryPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -1000,10 +995,10 @@ export function StudentForm({
                         name="identityDocument.notes"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("idDocument.notes")}</FormLabel>
+                            <FormLabel>{t("idDocumentNotes")}</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder={t("idDocument.notesPlaceholder")}
+                                placeholder={t("idDocumentNotesPlaceholder")}
                                 {...field}
                               />
                             </FormControl>
