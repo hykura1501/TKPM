@@ -464,5 +464,47 @@
       "fromTo": "From \\ To"
     },
     "save": "Save Configuration"
+  },
+  "importExport": {
+    "title": "Import/Export Data",
+    "description": "Import or export student data in various formats",
+    "tabs": {
+      "import": "Import",
+      "export": "Export"
+    },
+    "import": {
+      "description": "Support importing data from JSON or Excel files",
+      "noFile": "No file selected",
+      "fileSelected": "Selected file: {fileName}",
+      "importButton": "Import from File",
+      "errors": {
+        "noFile": "Please select a file to import data",
+        "invalidJson": "Invalid JSON file. Data must be an array of students",
+        "readError": "Error reading file: {error}"
+      }
+    },
+    "export": {
+      "description": "Choose a format to export student data from the system",
+      "selected": "Selected: {format}",
+      "exportButton": "Export ({count} students)",
+      "formats": {
+        "json": {
+          "title": "JSON",
+          "description": "Common structured data format"
+        },
+        "csv": {
+          "title": "CSV",
+          "description": "Simple text format, easy to use"
+        },
+        "excel": {
+          "title": "Excel",
+          "description": "Microsoft Excel spreadsheet format"
+        },
+        "xml": {
+          "title": "XML",
+          "description": "Extensible Markup Language format"
+        }
+      }
+    }
   }
 }

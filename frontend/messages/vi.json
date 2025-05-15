@@ -464,5 +464,47 @@
       "fromTo": "Từ \\ Đến"
     },
     "save": "Lưu cấu hình"
+  },
+  "importExport": {
+    "title": "Nhập/Xuất Dữ liệu",
+    "description": "Nhập hoặc xuất dữ liệu sinh viên với nhiều định dạng khác nhau",
+    "tabs": {
+      "import": "Import",
+      "export": "Export"
+    },
+    "import": {
+      "description": "Hỗ trợ nhập dữ liệu từ file JSON hoặc Excel",
+      "noFile": "Chưa chọn file",
+      "fileSelected": "File đã chọn: {fileName}",
+      "importButton": "Import từ File",
+      "errors": {
+        "noFile": "Vui lòng chọn một file để nhập dữ liệu",
+        "invalidJson": "File JSON không hợp lệ. Dữ liệu phải là một mảng sinh viên",
+        "readError": "Lỗi đọc file: {error}"
+      }
+    },
+    "export": {
+      "description": "Chọn định dạng file để xuất dữ liệu sinh viên từ hệ thống",
+      "selected": "Đã chọn: {format}",
+      "exportButton": "Export ({count} sinh viên)",
+      "formats": {
+        "json": {
+          "title": "JSON",
+          "description": "Định dạng dữ liệu cấu trúc phổ biến"
+        },
+        "csv": {
+          "title": "CSV",
+          "description": "Định dạng văn bản đơn giản, dễ sử dụng"
+        },
+        "excel": {
+          "title": "Excel",
+          "description": "Định dạng bảng tính Microsoft Excel"
+        },
+        "xml": {
+          "title": "XML",
+          "description": "Định dạng ngôn ngữ đánh dấu mở rộng"
+        }
+      }
+    }
   }
 }
