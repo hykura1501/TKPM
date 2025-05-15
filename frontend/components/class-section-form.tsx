@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { ClassSection, Course } from "@/types"
+import { useTranslations } from "next-intl"
 
 type ClassSectionFormProps = {
   classSection: ClassSection | null
@@ -17,11 +18,14 @@ type ClassSectionFormProps = {
 }
 
 export function ClassSectionForm({ classSection, onSubmit, courses, existingClassSections }: ClassSectionFormProps) {
+  const t = useTranslations("classes")
+  const tCommon = useTranslations("common")
+
   // Define schema for class section
   const classSectionSchema = z.object({
     code: z
       .string()
-      .min(3, { message: "Mã lớp học phải có ít nhất 3 ký tự" })
+      .min(3, { message: t("codeMinLength") })
       .refine(
         (code) => {
           // If editing, allow the same code
@@ -29,18 +33,18 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
           // Otherwise, check if code is unique
           return !existingClassSections.some((c) => c.code === code)
         },
-        { message: "Mã lớp học đã tồn tại" },
+        { message: t("codeUnique") },
       ),
-    courseId: z.string({ required_error: "Vui lòng chọn khóa học" }),
-    academicYear: z.string().min(4, { message: "Vui lòng nhập năm học" }),
-    semester: z.string({ required_error: "Vui lòng chọn học kỳ" }),
-    instructor: z.string().min(3, { message: "Tên giảng viên phải có ít nhất 3 ký tự" }),
+    courseId: z.string({ required_error: t("selectCourse") }),
+    academicYear: z.string().min(4, { message: t("academicYearRequired") }),
+    semester: z.string({ required_error: t("selectSemester") }),
+    instructor: z.string().min(3, { message: t("instructorMinLength") }),
     maxCapacity: z
       .number()
-      .min(1, { message: "Sĩ số tối đa phải lớn hơn 0" })
-      .max(100, { message: "Sĩ số tối đa không được vượt quá 100" }),
-    schedule: z.string().min(3, { message: "Vui lòng nhập lịch học" }),
-    classroom: z.string().min(1, { message: "Vui lòng nhập phòng học" }),
+      .min(1, { message: t("capacityMin") })
+      .max(100, { message: t("capacityMax") }),
+    schedule: z.string().min(3, { message: t("scheduleRequired") }),
+    classroom: z.string().min(1, { message: t("classroomRequired") }),
   })
 
   // Initialize form with default values or existing class section data
@@ -92,11 +96,11 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="code"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mã lớp học</FormLabel>
+                <FormLabel>{t("classCode")}</FormLabel>
                 <FormControl>
                   <Input placeholder="CNTT001-01" {...field} disabled={!!classSection} />
                 </FormControl>
-                <FormDescription>Mã lớp học phải là duy nhất và không thể thay đổi sau khi tạo.</FormDescription>
+                <FormDescription>{t("codeUnique")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -107,11 +111,11 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="courseId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Khóa học</FormLabel>
+                <FormLabel>{t("course")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!classSection}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn khóa học" />
+                      <SelectValue placeholder={t("selectCourse")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -122,7 +126,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
                     ))}
                   </SelectContent>
                 </Select>
-                {classSection && <FormDescription>Không thể thay đổi khóa học sau khi đã tạo lớp.</FormDescription>}
+                {classSection && <FormDescription>{t("cannotChangeCourse")}</FormDescription>}
                 <FormMessage />
               </FormItem>
             )}
@@ -133,7 +137,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="academicYear"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Năm học</FormLabel>
+                <FormLabel>{t("academicYear")}</FormLabel>
                 <FormControl>
                   <Input placeholder="2023-2024" {...field} />
                 </FormControl>
@@ -147,17 +151,17 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="semester"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Học kỳ</FormLabel>
+                <FormLabel>{t("semester")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn học kỳ" />
+                      <SelectValue placeholder={t("selectSemester")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">Học kỳ I</SelectItem>
-                    <SelectItem value="2">Học kỳ II</SelectItem>
-                    <SelectItem value="Summer">Học kỳ Hè</SelectItem>
+                    <SelectItem value="1">{t("semesterI")}</SelectItem>
+                    <SelectItem value="2">{t("semesterII")}</SelectItem>
+                    <SelectItem value="Summer">{t("semesterSummer")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -170,7 +174,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="instructor"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Giảng viên</FormLabel>
+                <FormLabel>{t("instructor")}</FormLabel>
                 <FormControl>
                   <Input placeholder="Nguyễn Văn A" {...field} />
                 </FormControl>
@@ -184,7 +188,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="maxCapacity"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sĩ số tối đa</FormLabel>
+                <FormLabel>{t("capacity")}</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -199,7 +203,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
                   />
                 </FormControl>
                 {classSection && classSection.currentEnrollment > 0 && (
-                  <FormDescription>Không thể thay đổi sĩ số tối đa vì lớp học đã có sinh viên đăng ký.</FormDescription>
+                  <FormDescription>{t("cannotChangeCapacity")}</FormDescription>
                 )}
                 <FormMessage />
               </FormItem>
@@ -211,7 +215,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="schedule"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Lịch học</FormLabel>
+                <FormLabel>{t("schedule")}</FormLabel>
                 <FormControl>
                   <Input placeholder="Thứ 2, 7:30 - 9:30" {...field} />
                 </FormControl>
@@ -225,7 +229,7 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
             name="classroom"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phòng học</FormLabel>
+                <FormLabel>{t("classroom")}</FormLabel>
                 <FormControl>
                   <Input placeholder="A101" {...field} />
                 </FormControl>
@@ -237,10 +241,10 @@ export function ClassSectionForm({ classSection, onSubmit, courses, existingClas
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Hủy bỏ
+            {tCommon("cancel")}
           </Button>
           <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-            {classSection ? "Cập nhật" : "Thêm mới"}
+            {classSection ? tCommon("update") : tCommon("add")}
           </Button>
         </div>
       </form>

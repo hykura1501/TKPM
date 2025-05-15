@@ -111,7 +111,19 @@
     "deleteSuccess": "Class has been deleted successfully.",
     "deleteError": "An error occurred while deleting class.",
     "cannotDeleteWithEnrollments": "Cannot delete class with enrolled students.",
-    "unknownCourse": "Unknown Course"
+    "unknownCourse": "Unknown Course",
+    "codeMinLength": "Class code must be at least 3 characters",
+    "selectCourse": "Select course",
+    "academicYearRequired": "Please enter academic year",
+    "selectSemester": "Select semester",
+    "instructorMinLength": "Instructor name must be at least 3 characters",
+    "capacityMin": "Maximum capacity must be greater than 0",
+    "capacityMax": "Maximum capacity cannot exceed 100",
+    "scheduleRequired": "Please enter schedule",
+    "classroomRequired": "Please enter classroom",
+    "cannotChangeCourse": "Course cannot be changed after class creation",
+    "cannotChangeCapacity": "Cannot change maximum capacity because the class has enrolled students",
+    "academicYear": "Academic Year"
   },
   "students": {
     "title": "Student Management",
@@ -233,7 +245,6 @@
     "capacity": "Capacity",
     "availableSeats": "Available Seats",
     "registrationStatus": "Registration Status",
-    "registrationDate": "Registration Date",
     "cancelDate": "Cancel Date",
     "reason": "Reason",
     "confirmCancel": "Are you sure you want to cancel this registration?",

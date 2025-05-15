@@ -111,7 +111,19 @@
     "deleteSuccess": "Lớp học đã được xóa thành công.",
     "deleteError": "Có lỗi xảy ra khi xóa lớp học.",
     "cannotDeleteWithEnrollments": "Không thể xóa lớp học đã có sinh viên đăng ký.",
-    "unknownCourse": "Khóa học không xác định"
+    "unknownCourse": "Khóa học không xác định",
+    "codeMinLength": "Mã lớp học phải có ít nhất 3 ký tự",
+    "selectCourse": "Chọn khóa học",
+    "academicYearRequired": "Vui lòng nhập năm học",
+    "selectSemester": "Chọn học kỳ",
+    "instructorMinLength": "Tên giảng viên phải có ít nhất 3 ký tự",
+    "capacityMin": "Sĩ số tối đa phải lớn hơn 0",
+    "capacityMax": "Sĩ số tối đa không được vượt quá 100",
+    "scheduleRequired": "Vui lòng nhập lịch học",
+    "classroomRequired": "Vui lòng nhập phòng học",
+    "cannotChangeCourse": "Không thể thay đổi khóa học sau khi đã tạo lớp",
+    "cannotChangeCapacity": "Không thể thay đổi sĩ số tối đa vì lớp học đã có sinh viên đăng ký",
+    "academicYear": "Năm học"
   },
   "students": {
     "title": "Quản lý Sinh viên",
@@ -233,7 +245,6 @@
     "capacity": "Sĩ số",
     "availableSeats": "Chỗ trống",
     "registrationStatus": "Trạng thái đăng ký",
-    "registrationDate": "Ngày đăng ký",
     "cancelDate": "Ngày hủy",
     "reason": "Lý do",
     "confirmCancel": "Bạn có chắc chắn muốn hủy đăng ký này?",
