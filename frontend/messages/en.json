@@ -80,7 +80,11 @@
     "courseDeactivatedOrDeleted": "The course has been deactivated or deleted.",
     "courseDeleteError": "An error occurred while deleting the course.",
     "courseFetchError": "An error occurred while fetching the course list.",
-    "actions": "Actions"
+    "actions": "Actions",
+    "codeMinLength": "Course code must be at least 3 characters",
+    "nameMinLength": "Course name must be at least 3 characters",
+    "namePlaceholder": "Enter course name",
+    "cannotChangeCredits": "Cannot change credits because this course has enrolled students"
   },
   "classes": {
     "title": "Class Management",

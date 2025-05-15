@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MultiSelect } from "@/components/multi-select"
 import type { Course } from "@/types"
 import type { Faculty } from "@/types/student"
+import { useTranslations } from "next-intl"
 
 type CourseFormProps = {
   course: Course | null
@@ -18,12 +19,25 @@ type CourseFormProps = {
   existingCourses: Course[]
 }
 
+// Define the form schema type
+type CourseFormValues = {
+  code: string
+  name: string
+  credits: number
+  faculty: string
+  description: string
+  prerequisites: string[]
+}
+
 export function CourseForm({ course, onSubmit, faculties, existingCourses }: CourseFormProps) {
+  const t = useTranslations("courses")
+  const tCommon = useTranslations("common")
+
   // Define schema for course
   const courseSchema = z.object({
     code: z
       .string()
-      .min(3, { message: "Mã khóa học phải có ít nhất 3 ký tự" })
+      .min(3, { message: t("codeMinLength") })
       .refine(
         (code) => {
           // If editing, allow the same code
@@ -31,20 +45,20 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
           // Otherwise, check if code is unique
           return !existingCourses.some((c) => c.code === code)
         },
-        { message: "Mã khóa học đã tồn tại" },
+        { message: t("codeUnique") },
       ),
-    name: z.string().min(3, { message: "Tên khóa học phải có ít nhất 3 ký tự" }),
+    name: z.string().min(3, { message: t("nameMinLength") }),
     credits: z
       .number()
-      .min(2, { message: "Số tín chỉ phải lớn hơn hoặc bằng 2" })
-      .max(10, { message: "Số tín chỉ không được vượt quá 10" }),
-    faculty: z.string({ required_error: "Vui lòng chọn khoa phụ trách" }),
-    description: z.string().min(10, { message: "Mô tả phải có ít nhất 10 ký tự" }),
+      .min(2, { message: t("minCredits") })
+      .max(10, { message: t("maxCredits") }),
+    faculty: z.string({ required_error: t("selectDepartment") }),
+    description: z.string().min(10, { message: t("minDescription") }),
     prerequisites: z.array(z.string()).default([]),
   })
 
   // Initialize form with default values or existing course data
-  const form = useForm<z.infer<typeof courseSchema>>({
+  const form = useForm<CourseFormValues>({
     resolver: zodResolver(courseSchema),
     defaultValues: course
       ? {
@@ -74,7 +88,7 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
     }))
 
   // Handle form submission
-  const handleSubmit = (values: z.infer<typeof courseSchema>) => {
+  const handleSubmit = (values: CourseFormValues) => {
     if (course) {
       // If editing, preserve the ID and other fields
       onSubmit({
@@ -96,11 +110,11 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
             name="code"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mã khóa học</FormLabel>
+                <FormLabel>{t("courseCode")}</FormLabel>
                 <FormControl>
                   <Input placeholder="CNTT001" {...field} disabled={!!course} />
                 </FormControl>
-                <FormDescription>Mã khóa học phải là duy nhất và không thể thay đổi sau khi tạo.</FormDescription>
+                <FormDescription>{t("codeUnique")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -111,9 +125,9 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tên khóa học</FormLabel>
+                <FormLabel>{t("courseName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nhập môn Lập trình" {...field} />
+                  <Input placeholder={t("namePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -125,7 +139,7 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
             name="credits"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Số tín chỉ</FormLabel>
+                <FormLabel>{t("credits")}</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -141,7 +155,7 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
                 </FormControl>
                 {course && course.prerequisites.length > 0 && (
                   <FormDescription>
-                    Không thể thay đổi số tín chỉ vì khóa học này đã có sinh viên đăng ký.
+                    {t("cannotChangeCredits")}
                   </FormDescription>
                 )}
                 <FormMessage />
@@ -154,11 +168,11 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
             name="faculty"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Khoa phụ trách</FormLabel>
+                <FormLabel>{t("department")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn khoa" />
+                      <SelectValue placeholder={t("selectDepartment")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -179,17 +193,17 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
             name="prerequisites"
             render={({ field }) => (
               <FormItem className="col-span-2">
-                <FormLabel>Môn tiên quyết</FormLabel>
+                <FormLabel>{t("prerequisites")}</FormLabel>
                 <FormControl>
                   <MultiSelect
                     selected={field.value}
                     options={availablePrerequisites}
                     onChange={field.onChange}
-                    placeholder="Chọn các môn tiên quyết"
+                    placeholder={t("selectPrerequisites")}
                   />
                 </FormControl>
                 <FormDescription>
-                  Chọn các khóa học mà sinh viên phải hoàn thành trước khi đăng ký khóa học này.
+                  {t("prerequisitesDescription")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -201,9 +215,9 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
             name="description"
             render={({ field }) => (
               <FormItem className="col-span-2">
-                <FormLabel>Mô tả</FormLabel>
+                <FormLabel>{t("description")}</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Mô tả chi tiết về khóa học..." className="min-h-[120px]" {...field} />
+                  <Textarea placeholder={t("descriptionPlaceholder")} className="min-h-[120px]" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,10 +227,10 @@ export function CourseForm({ course, onSubmit, faculties, existingCourses }: Cou
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Hủy bỏ
+            {tCommon("cancel")}
           </Button>
           <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-            {course ? "Cập nhật" : "Thêm mới"}
+            {course ? tCommon("update") : tCommon("add")}
           </Button>
         </div>
       </form>
