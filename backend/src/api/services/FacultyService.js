@@ -90,7 +90,7 @@ class FacultyService {
     return { message: "Cập nhật khoa thành công", faculties };
   }
 
-  async deleteFaculty(id) {
+  async deleteFaculty(id, language = "vi") {
     if (!id) throw { status: 400, message: "ID không được để trống" };
 
     const student = await StudentRepository.findOneByCondition({
@@ -105,7 +105,9 @@ class FacultyService {
     }
 
     await FacultyRepository.delete(id);
-    const faculties = await FacultyRepository.findAll();
+    const faculties = (await FacultyRepository.findAll()).map((faculty) =>
+      mapper.formatFaculty(faculty, language)
+    );
     await addLogEntry({
       message: "Xóa khoa thành công",
       level: "info",

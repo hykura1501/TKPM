@@ -177,7 +177,7 @@ class CourseService {
 
     return { success: true, message: "Cập nhật khóa học thành công", courses };
   }
-  async deleteCourse(id) {
+  async deleteCourse(id, language = "vi") {
     if (!id) {
       await addLogEntry({
         message: "ID khóa học không được để trống",
@@ -207,7 +207,9 @@ class CourseService {
       });
       // Deactivate the course instead of deleting it
       await CourseRepository.update(id, { isActive: false });
-      const courses = await CourseRepository.findAll();
+      const courses = (await CourseRepository.findAll()).map((course) => {
+        return Mapper.formatCourse(course, language);
+      })
 
       return {
         success: true,
@@ -218,7 +220,9 @@ class CourseService {
 
     // Xóa khóa học
     await CourseRepository.delete(id);
-    const courses = await CourseRepository.findAll();
+    const courses = (await CourseRepository.findAll()).map((course) => {
+      return Mapper.formatCourse(course, language);
+    })
 
     // Ghi log thành công
     await addLogEntry({

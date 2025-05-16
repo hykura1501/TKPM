@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Search, Download, AlertCircle, Info, Check, X, FileDown, FileUp, User } from "lucide-react"
+import { useTranslations } from "next-intl"
 import type { LogEntry } from "@/types/student"
 
 type LogsDialogProps = {
@@ -13,21 +14,21 @@ type LogsDialogProps = {
 }
 
 export function LogsDialog({ logs }: LogsDialogProps) {
+  const t = useTranslations("logs")
   const [searchTerm, setSearchTerm] = useState("")
   const [filterAction, setFilterAction] = useState<string | null>(null)
   const [filterEntity, setFilterEntity] = useState<string | null>(null)
 
   // Filter logs based on search term and filters
   const filteredLogs = logs.filter((log) => {
-    const details = log.metadata?.details?.toLowerCase() || "";
-    const user = log.metadata?.user?.toLowerCase() || "";
-    const entityId = log.metadata?.entityId?.toLowerCase() || "";
+    const details = log.metadata?.details?.toLowerCase() || ""
+    const user = log.metadata?.user?.toLowerCase() || ""
+    const entityId = log.metadata?.entityId?.toLowerCase() || ""
 
     return details.includes(searchTerm.toLowerCase()) ||
       user.includes(searchTerm.toLowerCase()) ||
-      entityId.includes(searchTerm.toLowerCase());
-  });
-
+      entityId.includes(searchTerm.toLowerCase())
+  })
 
   // Get unique actions and entities for filters
   const uniqueActions = Array.from(new Set(logs.map((log) => log?.metadata?.action)))
@@ -73,8 +74,8 @@ export function LogsDialog({ logs }: LogsDialogProps) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Nhật ký Hệ thống</DialogTitle>
-        <DialogDescription>Xem lịch sử hoạt động và sự kiện trong hệ thống.</DialogDescription>
+        <DialogTitle>{t("title")}</DialogTitle>
+        <DialogDescription>{t("description")}</DialogDescription>
       </DialogHeader>
 
       <div className="mt-4 space-y-4">
@@ -82,7 +83,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
           <div className="relative flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Tìm kiếm..."
+              placeholder={t("searchPlaceholder")}
               className="pl-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -94,7 +95,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             value={filterAction || ""}
             onChange={(e) => setFilterAction(e.target.value || null)}
           >
-            <option value="">Tất cả hành động</option>
+            <option value="">{t("allActions")}</option>
             {uniqueActions.map((action, index) => (
               <option key={index} value={action}>
                 {action ? action.charAt(0).toUpperCase() + action.slice(1) : ""}
@@ -107,7 +108,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
             value={filterEntity || ""}
             onChange={(e) => setFilterEntity(e.target.value || null)}
           >
-            <option value="">Tất cả đối tượng</option>
+            <option value="">{t("allEntities")}</option>
             {uniqueEntities.map((entity, index) => (
               <option key={index} value={entity}>
                 {entity ? entity.charAt(0).toUpperCase() + entity.slice(1) : ""}
@@ -117,13 +118,13 @@ export function LogsDialog({ logs }: LogsDialogProps) {
 
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
-            Xuất nhật ký
+            {t("exportLogs")}
           </Button>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Nhật ký hoạt động ({filteredLogs.length})</CardTitle>
+            <CardTitle>{t("activityLogs")} ({filteredLogs.length})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-[400px] overflow-y-auto">
@@ -136,7 +137,7 @@ export function LogsDialog({ logs }: LogsDialogProps) {
                         <span className="font-medium">
                           {log.metadata?.action
                             ? log.metadata.action.charAt(0).toUpperCase() + log.metadata.action.slice(1)
-                            : "Hành động"}{" "}
+                            : t("action")}{" "}
                           {log.metadata?.entity ?? ""}
                           {log.metadata?.entityId && <span className="text-muted-foreground"> #{log.metadata.entityId}</span>}
                         </span>
@@ -144,16 +145,17 @@ export function LogsDialog({ logs }: LogsDialogProps) {
                       </div>
                       <p className="text-sm mt-1">{log.metadata?.details ?? ""}</p>
                       <div className="flex justify-between mt-1">
-                        <span className="text-xs text-muted-foreground">Người dùng: {log.metadata?.user ?? "Không xác định"}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {t("user")}: {log.metadata?.user ?? t("unknownUser")}
+                        </span>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-muted-foreground">Không tìm thấy nhật ký nào</div>
+                <div className="text-center py-8 text-muted-foreground">{t("noLogsFound")}</div>
               )}
             </div>
-
           </CardContent>
         </Card>
       </div>

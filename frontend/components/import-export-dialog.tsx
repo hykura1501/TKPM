@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { FileUp, FileDown, FileJson, FileSpreadsheet, FileText } from "lucide-react"
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx"
+import { useTranslations } from "next-intl"
 import type { Student, ImportFormat } from "@/types/student"
 
 type ImportExportDialogProps = {
@@ -15,20 +16,20 @@ type ImportExportDialogProps = {
 }
 
 export function ImportExportDialog({ onAction, students }: ImportExportDialogProps) {
+  const t = useTranslations("importExport")
   const [selectedTab, setSelectedTab] = useState<"import" | "export">("export")
   const [selectedFormat, setSelectedFormat] = useState<ImportFormat>("json")
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  console.log(selectedTab);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  // Xử lý khi chọn file JSON hoặc Excel
+  // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]
     if (file) {
-      setSelectedFile(file);
+      setSelectedFile(file)
     }
-  };
+  }
 
-  // Chuẩn hóa dữ liệu từ Excel trước khi import
+  // Normalize student data from Excel before import
   const normalizeStudentData = (data: any) => {
     return data.map((row: any) => ({
       fullName: row["fullName"] || "",
@@ -72,47 +73,47 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
       status: row["status"] || "",
       createdAt: row["createdAt"] || "",
       updatedAt: row["updatedAt"] || "",
-    }));
-  };
+    }))
+  }
 
-  // Xử lý import từ JSON hoặc Excel
+  // Handle import from JSON or Excel
   const handleImport = () => {
     if (!selectedFile) {
-      console.error("Vui lòng chọn một file để nhập dữ liệu.");
-      return;
+      console.error(t("import.errors.noFile"))
+      return
     }
 
-    const reader = new FileReader();
+    const reader = new FileReader()
     if (selectedFile.name.endsWith(".json")) {
       reader.onload = (event) => {
         try {
-          const jsonData = JSON.parse(event.target?.result as string);
+          const jsonData = JSON.parse(event.target?.result as string)
           if (!Array.isArray(jsonData)) {
-            console.error("File JSON không hợp lệ. Dữ liệu phải là một mảng sinh viên.");
-            return;
+            console.error(t("import.errors.invalidJson"))
+            return
           }
-          onAction("import", "json", jsonData);
+          onAction("import", "json", jsonData)
         } catch (error) {
-          console.error("Lỗi đọc file JSON:", error);
+          console.error(t("import.errors.readError", { error: error.message }))
         }
-      };
-      reader.readAsText(selectedFile);
+      }
+      reader.readAsText(selectedFile)
     } else if (selectedFile.name.endsWith(".xlsx")) {
       reader.onload = (event) => {
         try {
-          const data = new Uint8Array(event.target?.result as ArrayBuffer);
-          const workbook = XLSX.read(data, { type: "array" });
-          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet);
-          const normalizedData = normalizeStudentData(jsonData);
-          onAction("import", "json", normalizedData);
+          const data = new Uint8Array(event.target?.result as ArrayBuffer)
+          const workbook = XLSX.read(data, { type: "array" })
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+          const jsonData = XLSX.utils.sheet_to_json(worksheet)
+          const normalizedData = normalizeStudentData(jsonData)
+          onAction("import", "json", normalizedData)
         } catch (error) {
-          console.error("Lỗi đọc file Excel:", error);
+          console.error(t("import.errors.readError", { error: error.message }))
         }
-      };
-      reader.readAsArrayBuffer(selectedFile);
+      }
+      reader.readAsArrayBuffer(selectedFile)
     }
-  };
+  }
 
   const handleExport = () => {
     onAction("export", selectedFormat)
@@ -121,31 +122,31 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Import/Export Dữ liệu</DialogTitle>
-        <DialogDescription>Nhập hoặc xuất dữ liệu sinh viên với nhiều định dạng khác nhau.</DialogDescription>
+        <DialogTitle>{t("title")}</DialogTitle>
+        <DialogDescription>{t("description")}</DialogDescription>
       </DialogHeader>
 
       <Tabs defaultValue="export" onValueChange={(value) => setSelectedTab(value as "import" | "export")}>
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="import">Import</TabsTrigger>
-          <TabsTrigger value="export">Export</TabsTrigger>
+          <TabsTrigger value="import">{t("tabs.import")}</TabsTrigger>
+          <TabsTrigger value="export">{t("tabs.export")}</TabsTrigger>
         </TabsList>
         <TabsContent value="import" className="space-y-4">
-          <p className="text-sm text-muted-foreground">Hỗ trợ nhập dữ liệu từ file JSON hoặc Excel.</p>
+          <p className="text-sm text-muted-foreground">{t("import.description")}</p>
           <input type="file" accept=".json,.xlsx" onChange={handleFileChange} className="border p-2 w-full" />
           <div className="flex justify-between mt-4">
             <p className="text-sm text-muted-foreground">
-              {selectedFile ? `📂 File đã chọn: ${selectedFile.name}` : "Chưa chọn file"}
+              {selectedFile ? t("import.fileSelected", { fileName: selectedFile.name }) : t("import.noFile")}
             </p>
             <Button onClick={handleImport} className="bg-blue-600 hover:bg-blue-700" disabled={!selectedFile}>
               <FileUp className="h-4 w-4 mr-2" />
-              Import từ File
+              {t("import.importButton")}
             </Button>
           </div>
         </TabsContent>
 
         <TabsContent value="export" className="space-y-4">
-          <p className="text-sm text-muted-foreground">Chọn định dạng file để xuất dữ liệu sinh viên từ hệ thống.</p>
+          <p className="text-sm text-muted-foreground">{t("export.description")}</p>
 
           <div className="grid grid-cols-2 gap-4">
             <Card
@@ -155,11 +156,11 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
               <CardHeader className="p-4">
                 <CardTitle className="text-lg flex items-center">
                   <FileJson className="h-5 w-5 mr-2" />
-                  JSON
+                  {t("export.formats.json.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <CardDescription>Định dạng dữ liệu cấu trúc phổ biến</CardDescription>
+                <CardDescription>{t("export.formats.json.description")}</CardDescription>
               </CardContent>
             </Card>
 
@@ -170,11 +171,11 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
               <CardHeader className="p-4">
                 <CardTitle className="text-lg flex items-center">
                   <FileText className="h-5 w-5 mr-2" />
-                  CSV
+                  {t("export.formats.csv.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <CardDescription>Định dạng văn bản đơn giản, dễ sử dụng</CardDescription>
+                <CardDescription>{t("export.formats.csv.description")}</CardDescription>
               </CardContent>
             </Card>
 
@@ -185,11 +186,11 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
               <CardHeader className="p-4">
                 <CardTitle className="text-lg flex items-center">
                   <FileSpreadsheet className="h-5 w-5 mr-2" />
-                  Excel
+                  {t("export.formats.excel.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <CardDescription>Định dạng bảng tính Microsoft Excel</CardDescription>
+                <CardDescription>{t("export.formats.excel.description")}</CardDescription>
               </CardContent>
             </Card>
 
@@ -200,22 +201,22 @@ export function ImportExportDialog({ onAction, students }: ImportExportDialogPro
               <CardHeader className="p-4">
                 <CardTitle className="text-lg flex items-center">
                   <FileText className="h-5 w-5 mr-2" />
-                  XML
+                  {t("export.formats.xml.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <CardDescription>Định dạng ngôn ngữ đánh dấu mở rộng</CardDescription>
+                <CardDescription>{t("export.formats.xml.description")}</CardDescription>
               </CardContent>
             </Card>
           </div>
 
           <div className="flex justify-between mt-4">
             <p className="text-sm text-muted-foreground">
-              Đã chọn: <span className="font-medium">{selectedFormat.toUpperCase()}</span>
+              {t("export.selected", { format: selectedFormat.toUpperCase() })}
             </p>
             <Button onClick={handleExport} className="bg-blue-600 hover:bg-blue-700">
               <FileDown className="h-4 w-4 mr-2" />
-              Export ({students.length} sinh viên)
+              {t("export.exportButton", { count: students.length })}
             </Button>
           </div>
         </TabsContent>

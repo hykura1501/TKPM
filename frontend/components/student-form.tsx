@@ -36,6 +36,7 @@ import {
 import type { Student, Faculty, StudentStatus, Program } from "@/types/student";
 import { toast } from "react-toastify";
 import { PhoneFormat } from "@/types/student";
+import { useTranslations } from "next-intl";
 
 // Định nghĩa schema cho địa chỉ
 const addressSchema = z
@@ -108,6 +109,8 @@ export function StudentForm({
   phoneFormats,
   allowedDomains,
 }: StudentFormProps) {
+  const t = useTranslations("studentForm");
+
   const [idType, setIdType] = useState<"CMND" | "CCCD" | "Passport">(
     student?.identityDocument?.type || "CMND"
   );
@@ -133,7 +136,7 @@ export function StudentForm({
   );
   // Định nghĩa schema cho sinh viên
   const studentSchema = z.object({
-    fullName: z.string().min(2, { message: "Họ tên phải có ít nhất 2 ký tự" }),
+    fullName: z.string().min(2, { message: t("fullNameMinLength") }),
     dateOfBirth: z.string().refine(
       (date) => {
         const today = new Date();
@@ -141,53 +144,48 @@ export function StudentForm({
         const age = today.getFullYear() - dob.getFullYear();
         return age >= 16 && age <= 100;
       },
-      { message: "Tuổi phải từ 16 đến 100" }
+      { message: t("dateOfBirthAgeRange") }
     ),
     gender: z.enum(["male", "female", "other"], {
-      required_error: "Vui lòng chọn giới tính",
+      required_error: t("genderRequired"),
     }),
     faculty: z.string({
-      required_error: "Vui lòng chọn khoa",
+      required_error: t("facultyRequired"),
     }),
-    course: z.string().min(1, { message: "Vui lòng nhập khóa học" }),
+    course: z.string().min(1, { message: t("courseRequired") }),
     program: z.string({
-      required_error: "Vui lòng chọn chương trình học",
+      required_error: t("programRequired"),
     }),
     permanentAddress: addressSchema,
     temporaryAddress: addressSchema,
     mailingAddress: addressSchema,
     identityDocument: identityDocumentSchema,
-    nationality: z.string().min(1, { message: "Vui lòng nhập quốc tịch" }),
+    nationality: z.string().min(1, { message: t("nationalityRequired") }),
     email: z
       .string()
-      .email({ message: "Email không hợp lệ" })
+      .email({ message: t("emailInvalid") })
       .refine(
         (email) => {
           const domain = email.split("@")[1];
           return allowedDomains.includes(domain);
         },
         {
-          message:
-            "Email phải thuộc một trong các tên miền: " +
-            allowedDomains.join(", "),
+          message: t("emailDomainInvalid", { domains: allowedDomains.join(", ") }),
         }
       ),
-    // phone: z.string().regex(
-    //     /^(0|\+84)(\d{9}|\d{10})$/),
     phone: z.string().refine(
       (phone) => {
-        // Kiểm tra số điện thoại dựa trên pattern từ phoneFormats
         return phoneFormats.some((format) => {
-          const regex = new RegExp(format.pattern); // Sử dụng pattern từ phoneFormats
+          const regex = new RegExp(format.pattern);
           return regex.test(phone);
         });
       },
       {
-        message: `Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng theo quốc gia.`,
+        message: t("phoneInvalid"),
       }
     ),
     status: z.string({
-      required_error: "Vui lòng chọn tình trạng",
+      required_error: t("statusRequired"),
     }),
   });
   // Initialize form with default values or existing student data
@@ -323,10 +321,10 @@ export function StudentForm({
       >
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-4 mb-4">
-            <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
-            <TabsTrigger value="address">Địa chỉ</TabsTrigger>
-            <TabsTrigger value="identity">Giấy tờ tùy thân</TabsTrigger>
-            <TabsTrigger value="academic">Thông tin học tập</TabsTrigger>
+            <TabsTrigger value="basic">{t("basicInfo")}</TabsTrigger>
+            <TabsTrigger value="address">{t("address")}</TabsTrigger>
+            <TabsTrigger value="identity">{t("identityDocument")}</TabsTrigger>
+            <TabsTrigger value="academic">{t("academicInfo")}</TabsTrigger>
           </TabsList>
 
           {/* Thông tin cơ bản */}
@@ -337,9 +335,9 @@ export function StudentForm({
                 name="fullName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Họ tên</FormLabel>
+                    <FormLabel>{t("fullName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nguyễn Văn A" {...field} />
+                      <Input placeholder={t("fullNamePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -351,7 +349,7 @@ export function StudentForm({
                 name="dateOfBirth"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Ngày sinh</FormLabel>
+                    <FormLabel>{t("dateOfBirth")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -365,7 +363,7 @@ export function StudentForm({
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel>Giới tính</FormLabel>
+                    <FormLabel>{t("gender")}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         onValueChange={field.onChange}
@@ -376,19 +374,19 @@ export function StudentForm({
                           <FormControl>
                             <RadioGroupItem value="male" />
                           </FormControl>
-                          <FormLabel className="font-normal">Nam</FormLabel>
+                          <FormLabel className="font-normal">{t("genderMale")}</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2 space-y-0">
                           <FormControl>
                             <RadioGroupItem value="female" />
                           </FormControl>
-                          <FormLabel className="font-normal">Nữ</FormLabel>
+                          <FormLabel className="font-normal">{t("genderFemale")}</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2 space-y-0">
                           <FormControl>
                             <RadioGroupItem value="other" />
                           </FormControl>
-                          <FormLabel className="font-normal">Khác</FormLabel>
+                          <FormLabel className="font-normal">{t("genderOther")}</FormLabel>
                         </FormItem>
                       </RadioGroup>
                     </FormControl>
@@ -402,9 +400,9 @@ export function StudentForm({
                 name="nationality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Quốc tịch</FormLabel>
+                    <FormLabel>{t("nationality")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Việt Nam" {...field} />
+                      <Input placeholder={t("nationalityPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -416,11 +414,11 @@ export function StudentForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="example@email.com"
+                        placeholder={t("emailPlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -434,9 +432,9 @@ export function StudentForm({
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Số điện thoại</FormLabel>
+                    <FormLabel>{t("phone")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="0901234567" {...field} />
+                      <Input placeholder={t("phonePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -450,7 +448,7 @@ export function StudentForm({
             {/* Địa chỉ thường trú */}
             <Card>
               <CardHeader>
-                <CardTitle>Địa chỉ thường trú</CardTitle>
+                <CardTitle>{t("permanentAddress")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -459,9 +457,9 @@ export function StudentForm({
                     name="permanentAddress.streetAddress"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Số nhà, tên đường</FormLabel>
+                        <FormLabel>{t("addressStreet")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="123 Đường ABC" {...field} />
+                          <Input placeholder={t("addressStreetPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -473,9 +471,9 @@ export function StudentForm({
                     name="permanentAddress.ward"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Phường/Xã</FormLabel>
+                        <FormLabel>{t("addressWard")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Phường 1" {...field} />
+                          <Input placeholder={t("addressWardPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -487,9 +485,9 @@ export function StudentForm({
                     name="permanentAddress.district"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Quận/Huyện</FormLabel>
+                        <FormLabel>{t("addressDistrict")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Quận 1" {...field} />
+                          <Input placeholder={t("addressDistrictPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -501,9 +499,9 @@ export function StudentForm({
                     name="permanentAddress.province"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Tỉnh/Thành phố</FormLabel>
+                        <FormLabel>{t("addressProvince")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="TP. Hồ Chí Minh" {...field} />
+                          <Input placeholder={t("addressProvincePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -515,9 +513,9 @@ export function StudentForm({
                     name="permanentAddress.country"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Quốc gia</FormLabel>
+                        <FormLabel>{t("addressCountry")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Việt Nam" {...field} />
+                          <Input placeholder={t("addressCountryPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -531,7 +529,7 @@ export function StudentForm({
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle>Địa chỉ tạm trú</CardTitle>
+                  <CardTitle>{t("temporaryAddress")}</CardTitle>
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="useTemporaryAddress"
@@ -544,7 +542,7 @@ export function StudentForm({
                       htmlFor="useTemporaryAddress"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Có địa chỉ tạm trú
+                      {t("useTemporaryAddress")}
                     </label>
                   </div>
                 </div>
@@ -557,9 +555,9 @@ export function StudentForm({
                       name="temporaryAddress.streetAddress"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Số nhà, tên đường</FormLabel>
+                          <FormLabel>{t("addressStreet")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="123 Đường ABC" {...field} />
+                            <Input placeholder={t("addressStreetPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -571,9 +569,9 @@ export function StudentForm({
                       name="temporaryAddress.ward"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phường/Xã</FormLabel>
+                          <FormLabel>{t("addressWard")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Phường 1" {...field} />
+                            <Input placeholder={t("addressWardPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -585,9 +583,9 @@ export function StudentForm({
                       name="temporaryAddress.district"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Quận/Huyện</FormLabel>
+                          <FormLabel>{t("addressDistrict")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Quận 1" {...field} />
+                            <Input placeholder={t("addressDistrictPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -599,9 +597,9 @@ export function StudentForm({
                       name="temporaryAddress.province"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tỉnh/Thành phố</FormLabel>
+                          <FormLabel>{t("addressProvince")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="TP. Hồ Chí Minh" {...field} />
+                            <Input placeholder={t("addressProvincePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -613,9 +611,9 @@ export function StudentForm({
                       name="temporaryAddress.country"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Quốc gia</FormLabel>
+                          <FormLabel>{t("addressCountry")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Việt Nam" {...field} />
+                            <Input placeholder={t("addressCountryPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -630,7 +628,7 @@ export function StudentForm({
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle>Địa chỉ nhận thư</CardTitle>
+                  <CardTitle>{t("mailingAddress")}</CardTitle>
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="useSameMailingAddress"
@@ -643,7 +641,7 @@ export function StudentForm({
                       htmlFor="useSameMailingAddress"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
-                      Sử dụng địa chỉ thường trú
+                      {t("useSameMailingAddress")}
                     </label>
                   </div>
                 </div>
@@ -656,9 +654,9 @@ export function StudentForm({
                       name="mailingAddress.streetAddress"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Số nhà, tên đường</FormLabel>
+                          <FormLabel>{t("addressStreet")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="123 Đường ABC" {...field} />
+                            <Input placeholder={t("addressStreetPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -670,9 +668,9 @@ export function StudentForm({
                       name="mailingAddress.ward"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phường/Xã</FormLabel>
+                          <FormLabel>{t("addressWard")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Phường 1" {...field} />
+                            <Input placeholder={t("addressWardPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -684,9 +682,9 @@ export function StudentForm({
                       name="mailingAddress.district"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Quận/Huyện</FormLabel>
+                          <FormLabel>{t("addressDistrict")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Quận 1" {...field} />
+                            <Input placeholder={t("addressDistrictPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -698,9 +696,9 @@ export function StudentForm({
                       name="mailingAddress.province"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tỉnh/Thành phố</FormLabel>
+                          <FormLabel>{t("addressProvince")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="TP. Hồ Chí Minh" {...field} />
+                            <Input placeholder={t("addressProvincePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -712,9 +710,9 @@ export function StudentForm({
                       name="mailingAddress.country"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Quốc gia</FormLabel>
+                          <FormLabel>{t("addressCountry")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="Việt Nam" {...field} />
+                            <Input placeholder={t("addressCountryPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -730,9 +728,9 @@ export function StudentForm({
           <TabsContent value="identity" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Giấy tờ tùy thân</CardTitle>
+                <CardTitle>{t("identityDocument")}</CardTitle>
                 <CardDescription>
-                  Chọn một loại giấy tờ tùy thân
+                  {t("selectIdentityDocumentType")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -742,21 +740,21 @@ export function StudentForm({
                     variant={idType === "CMND" ? "default" : "outline"}
                     onClick={() => setIdType("CMND")}
                   >
-                    CMND
+                    {t("idDocumentCmnd")}
                   </Button>
                   <Button
                     type="button"
                     variant={idType === "CCCD" ? "default" : "outline"}
                     onClick={() => setIdType("CCCD")}
                   >
-                    CCCD
+                    {t("idDocumentCccd")}
                   </Button>
                   <Button
                     type="button"
                     variant={idType === "Passport" ? "default" : "outline"}
                     onClick={() => setIdType("Passport")}
                   >
-                    Hộ chiếu
+                    {t("idDocumentPassport")}
                   </Button>
                 </div>
 
@@ -775,9 +773,9 @@ export function StudentForm({
                         name="identityDocument.number"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Số CMND</FormLabel>
+                            <FormLabel>{t("idDocumentNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="123456789" {...field} />
+                              <Input placeholder={t("idDocumentNumberPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -789,7 +787,7 @@ export function StudentForm({
                         name="identityDocument.issueDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ngày cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssueDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -803,10 +801,10 @@ export function StudentForm({
                         name="identityDocument.issuePlace"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nơi cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssuePlace")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="CA TP. Hồ Chí Minh"
+                                placeholder={t("idDocumentIssuePlacePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -820,7 +818,7 @@ export function StudentForm({
                         name="identityDocument.expiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ngày hết hạn</FormLabel>
+                            <FormLabel>{t("idDocumentExpiryDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -839,9 +837,9 @@ export function StudentForm({
                         name="identityDocument.number"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Số CCCD</FormLabel>
+                            <FormLabel>{t("idDocumentNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="123456789012" {...field} />
+                              <Input placeholder={t("idDocumentNumberPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -853,7 +851,7 @@ export function StudentForm({
                         name="identityDocument.issueDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ngày cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssueDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -867,10 +865,10 @@ export function StudentForm({
                         name="identityDocument.issuePlace"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nơi cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssuePlace")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư"
+                                placeholder={t("idDocumentIssuePlacePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -884,7 +882,7 @@ export function StudentForm({
                         name="identityDocument.expiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ngày hết hạn</FormLabel>
+                            <FormLabel>{t("idDocumentExpiryDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -905,9 +903,9 @@ export function StudentForm({
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>Có gắn chip</FormLabel>
+                              <FormLabel>{t("idDocumentHasChip")}</FormLabel>
                               <FormDescription>
-                                CCCD có gắn chip điện tử
+                                {t("idDocumentHasChipDescription")}
                               </FormDescription>
                             </div>
                           </FormItem>
@@ -924,9 +922,9 @@ export function StudentForm({
                         name="identityDocument.number"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Số hộ chiếu</FormLabel>
+                            <FormLabel>{t("idDocumentNumber")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="A12345678" {...field} />
+                              <Input placeholder={t("idDocumentNumberPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -938,7 +936,7 @@ export function StudentForm({
                         name="identityDocument.issueDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ngày cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssueDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -952,10 +950,10 @@ export function StudentForm({
                         name="identityDocument.issuePlace"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nơi cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssuePlace")}</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Cục Quản lý Xuất nhập cảnh"
+                                placeholder={t("idDocumentIssuePlacePlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -969,7 +967,7 @@ export function StudentForm({
                         name="identityDocument.expiryDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ngày hết hạn</FormLabel>
+                            <FormLabel>{t("idDocumentExpiryDate")}</FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
@@ -983,9 +981,9 @@ export function StudentForm({
                         name="identityDocument.issuingCountry"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Quốc gia cấp</FormLabel>
+                            <FormLabel>{t("idDocumentIssuingCountry")}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Việt Nam" {...field} />
+                              <Input placeholder={t("idDocumentIssuingCountryPlaceholder")} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -997,10 +995,10 @@ export function StudentForm({
                         name="identityDocument.notes"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Ghi chú</FormLabel>
+                            <FormLabel>{t("idDocumentNotes")}</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Ghi chú thêm (nếu có)"
+                                placeholder={t("idDocumentNotesPlaceholder")}
                                 {...field}
                               />
                             </FormControl>
@@ -1023,14 +1021,14 @@ export function StudentForm({
                 name="faculty"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Khoa</FormLabel>
+                    <FormLabel>{t("faculty")}</FormLabel>
                     <Select
                       onValueChange={(value) => handleFacultyChange(value)}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn khoa" />
+                          <SelectValue placeholder={t("selectFaculty")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1051,14 +1049,14 @@ export function StudentForm({
                 name="program"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Chương trình</FormLabel>
+                    <FormLabel>{t("program")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn chương trình" />
+                          <SelectValue placeholder={t("selectProgram")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1079,9 +1077,9 @@ export function StudentForm({
                 name="course"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Khóa</FormLabel>
+                    <FormLabel>{t("course")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="2020" {...field} />
+                      <Input placeholder={t("coursePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -1093,7 +1091,7 @@ export function StudentForm({
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tình trạng</FormLabel>
+                    <FormLabel>{t("status")}</FormLabel>
                     <Select
                       onValueChange={(newStatus) => {
                         const currentStatus = student?.status || "";
@@ -1105,7 +1103,7 @@ export function StudentForm({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn tình trạng" />
+                          <SelectValue placeholder={t("selectStatus")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -1164,10 +1162,10 @@ export function StudentForm({
               cancelForm();
             }}
           >
-            Hủy bỏ
+            {t("cancel")}
           </Button>
           <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-            {student ? "Cập nhật" : "Thêm mới"}
+            {t("submit")}
           </Button>
         </div>
       </form>

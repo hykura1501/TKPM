@@ -65,9 +65,9 @@ export default function SettingsPage() {
               <div className="space-y-2">
                 <Label htmlFor="semester">{t("currentSemester")}</Label>
                 <select id="semester" className="w-full p-2 border rounded-md">
-                  <option value="1">Học kỳ I</option>
-                  <option value="2">Học kỳ II</option>
-                  <option value="summer">Học kỳ Hè</option>
+                  <option value="1">{t("semesterI")}</option>
+                  <option value="2">{t("semesterII")}</option>
+                  <option value="summer">{t("semesterSummer")}</option>
                 </select>
               </div>
 

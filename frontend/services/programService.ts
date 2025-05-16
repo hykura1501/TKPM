@@ -28,6 +28,16 @@ class ProgramService {
       throw error; // Ném lỗi để nơi gọi có thể xử lý tiếp
     }
   }
+
+  async getTranslationProgramById(id: string) {
+    const response = await apiClient.get(`${routes.programs}/${id}/translation`);
+    return response.data;
+  }
+
+  async updateTranslationProgram(id: string, translation: any) {
+    const response = await apiClient.put(`${routes.programs}/${id}/translation`, translation);
+    return response.data;
+  }
 }
 
 const programService = new ProgramService();

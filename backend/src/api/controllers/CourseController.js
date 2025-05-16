@@ -33,7 +33,7 @@ class CourseController {
 
   async deleteCourse(req, res) {
     try {
-      const result = await CourseService.deleteCourse(req.params.id);
+      const result = await CourseService.deleteCourse(req.params.id, req.language);
       res.status(200).json(result);
     } catch (error) {
       console.error("Lỗi khi xóa khoa:", error);

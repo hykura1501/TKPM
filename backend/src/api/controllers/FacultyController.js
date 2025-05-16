@@ -33,7 +33,7 @@ class FacultyController {
 
   async deleteFaculty(req, res) {
     try {
-      const result = await FacultyService.deleteFaculty(req.params.id);
+      const result = await FacultyService.deleteFaculty(req.params.id, req.language);
       res.status(200).json(result);
     } catch (error) {
       console.error("Lỗi khi xóa khoa:", error);

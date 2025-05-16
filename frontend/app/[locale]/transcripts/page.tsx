@@ -1,30 +1,37 @@
+"use client"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import GradeManagement from "@/components/grade-management"
+import { useTranslations } from "next-intl"
 import GradeEntry from "@/components/grade-entry"
 import GradeExport from "@/components/grade-export"
+import GradeManagement from "@/components/grade-management"
 
-export default function GradingSystem() {
+export default function TranscriptsPage() {
+  const t = useTranslations("transcripts")
+
   return (
-    <div className="container mx-auto py-6">
-      <h1 className="text-2xl font-bold mb-6">Quản lý Điểm Học Tập</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold mb-6">{t("pageTitle")}</h1>
 
-      <Tabs defaultValue="management" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="management">Quản lý Điểm</TabsTrigger>
-          <TabsTrigger value="entry">Nhập Điểm</TabsTrigger>
-          <TabsTrigger value="export">Xuất Điểm</TabsTrigger>
+      <Tabs defaultValue="management">
+        <TabsList>
+          <TabsTrigger value="management">{t("managementTab")}</TabsTrigger>
+          <TabsTrigger value="entry">{t("entryTab")}</TabsTrigger>
+          <TabsTrigger value="export">{t("exportTab")}</TabsTrigger>
         </TabsList>
+
         <TabsContent value="management">
           <GradeManagement />
         </TabsContent>
+
         <TabsContent value="entry">
           <GradeEntry />
         </TabsContent>
+
         <TabsContent value="export">
           <GradeExport />
         </TabsContent>
       </Tabs>
-
     </div>
   )
 }
