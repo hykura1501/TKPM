@@ -226,8 +226,29 @@ Nội dung động là dữ liệu lấy từ backend.
 `
 
 ## Viết unit test cho các chức năng trong hệ thống:
+
 Sau bài tập lần 5, nhóm đã thực hiện được đầy đủ tất cả các unit test. Tuy nhiên, sau khi tích hợp đa ngôn ngữ, một vài test không còn đảm bảo thực hiện được đúng. Do đó, nhóm đã thực hiện hiệu chỉnh, bổ sung lại unit test cho các controllers và services:
 
 ![image](https://github.com/user-attachments/assets/b845ad8d-635f-4d8b-a315-de7b80219958)
 
 Ảnh trên chứng minh cho việc các unit test được thực hiện một cách đầy đủ và được kiểm tra lại kỹ càng. Qua đó, đảm bảo rằng các chức năng mà nhóm thực hiện cho ra kết quả đúng như mong đợi.
+
+## Áp dụng các nguyên tắc Clean Code
+
+Trong quá trình phát triển, nhóm cũng đã chú trọng áp dụng một số nguyên tắc Clean Code nhằm nâng cao chất lượng mã nguồn và đảm bảo khả năng bảo trì về sau. Một số điểm chính gồm:
+
+- Đặt tên hàm và biến rõ ràng, dễ hiểu, phản ánh đúng chức năng (ví dụ: getListFaculties, addFaculty, updateFaculty).
+
+- Tách logic xử lý ra khỏi controller, đưa vào service, tuân thủ nguyên tắc phân tách trách nhiệm (Single Responsibility Principle).
+
+- Sử dụng try-catch để bắt lỗi và phản hồi rõ ràng về phía client, giúp dễ dàng debug và xử lý sự cố.
+
+- Mã nguồn được định dạng đồng nhất, dễ đọc, giúp các thành viên trong nhóm dễ hiểu và làm việc chung hiệu quả hơn.
+
+- Tiến hành refactor một số đoạn mã có dấu hiệu code smells.
+
+Bài làm của nhóm luôn cố gắng để tuân thủ tốt các nguyên tắc viết mã sạch, góp phần nâng cao chất lượng tổng thể của hệ thống.Đồng thời, đảm bảo được tính nhất quán, tránh dư thừa các đoạn mã và giúp dễ dàng mở rộng về sau. 
+
+
+
+
