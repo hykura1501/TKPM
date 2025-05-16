@@ -56,7 +56,7 @@ export default async function RootLayout({
                 </footer>
               </div>
             </SidebarInset>
-            <Toaster />
+            <ToastContainer/>
           </SidebarProvider>
         </Providers>
       </body>
