@@ -34,6 +34,16 @@ class StatusService {
     });
     return response.data;
   }
+
+  async getTranslationStatusById(id: string) {
+    const response = await apiClient.get(`${routes.statuses}/${id}/translation`);
+    return response.data;
+  }
+
+  async updateTranslationStatus(id: string, translation: any) {
+    const response = await apiClient.put(`${routes.statuses}/${id}/translation`, translation);
+    return response.data;
+  }
 }
 
 const statusService = new StatusService();

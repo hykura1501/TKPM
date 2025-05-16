@@ -1,5 +1,7 @@
 function getLanguage(req, res, next) {
-  req.language = req.query.lang || "en"; // Lấy ngôn ngữ từ query hoặc mặc định là "en"
+  //Lấy từ header
+  const language = req.headers["accept-language"];
+  req.language = req.query.lang || language || "vi"; // Lấy ngôn ngữ từ query hoặc mặc định là "en"
   next();
 }
 

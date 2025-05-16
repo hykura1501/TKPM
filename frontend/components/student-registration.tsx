@@ -22,6 +22,8 @@ import studentService from "@/services/studentService";
 import classSectionService from "@/services/classSectionService";
 import { set } from "react-hook-form";
 import courseService from "@/services/courseService";
+import { useTranslations } from "next-intl"
+import { useToast } from "@/components/ui/use-toast"
 
 export function StudentRegistration() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
@@ -30,7 +32,9 @@ export function StudentRegistration() {
   const [students, setStudents] = useState<Student[]>([])
   const [courses, setCourses] = useState<Course[]>([])
   const [classSections, setClassSections] = useState<ClassSection[]>([])
-  
+  const { toast } = useToast()
+  const t = useTranslations("registration")
+  const common = useTranslations("common")
   
   useEffect(() => {
     async function fetchData() {
@@ -40,13 +44,14 @@ export function StudentRegistration() {
         setStudents(await studentService.fetchStudents())
         setRegistrations(await registrationService.fetchRegistrations())
       } catch (error: any) {
-        toast.error("Đã xảy ra lỗi khi tải dữ liệu.")
-
+        toast({
+          variant: "destructive",
+          title: t("errorLoadingData")
+        })
       }
     }
     fetchData()
   }, [])
-
 
   // Filter registrations based on search term
   const filteredRegistrations = registrations.filter((registration) => {
@@ -64,130 +69,154 @@ export function StudentRegistration() {
 
   // Add new registration
   const addRegistration = async (data: { mssv: string; classSectionId: string }) => {
-    // Check if student exists
-    const student = getStudentById(data.mssv, students)
-    if (!student) {
-      toast.error("Sinh viên không tồn tại trong hệ thống.");
-      return
-    }
-
-    // Check if class section exists
-    const classSection = getClassSectionById(data.classSectionId, classSections)
-    if (!classSection) {
-      toast.error("Lớp học không tồn tại trong hệ thống.");
-      return
-    }
-
-    // Check if class is full
-    if (classSection.currentEnrollment >= classSection.maxCapacity) {
-      toast.error("Lớp học đã đủ số lượng sinh viên.");
-      return
-    }
-
-    // Check if student is already registered for this class
-    if (
-      registrations.some(
-        (r) => r.studentId === data.mssv && r.classSectionId === data.classSectionId && r.status === "active",
-      )
-    ) {
-      toast.error("Sinh viên đã đăng ký lớp học này.");
-      return
-    }
-
-    // Check prerequisites
-    const course = getCourseById(classSection.courseId, courses)
-    if (course && course.prerequisites.length > 0) {
-      // Get all courses the student has completed
-      const completedCourses = registrations
-        .filter((r) => r.studentId === data.mssv && r.status === "active" && r.grade && r.grade >= 5)
-        .map((r) => {
-          const section = getClassSectionById(r.classSectionId, classSections)
-          if (!section) return null
-          const course = getCourseById(section.courseId, courses)
-          return course?.code || null
+    try {
+      // Validate student
+      const student = getStudentById(data.mssv, students)
+      if (!student) {
+        toast({
+          variant: "destructive",
+          title: t("studentNotFound")
         })
-        .filter(Boolean) as string[]
-
-      // Check if all prerequisites are met
-      const missingPrerequisites = course.prerequisites.filter((prereq) => !completedCourses.includes(prereq))
-
-      if (missingPrerequisites.length > 0) {
-        toast.error(
-          `Sinh viên chưa hoàn thành các khóa học tiên quyết: ${missingPrerequisites.join(", ")}.`,
-        )
         return
       }
-    }
 
-    // Create new registration
-    const newRegistration: Registration = {
-      id: `reg-${registrations.length + 1}`,
-      studentId: data.mssv,
-      classSectionId: data.classSectionId,
-      status: "active",
-      registeredAt: new Date().toISOString(),
-    }
+      // Validate class
+      const classSection = getClassSectionById(data.classSectionId, classSections)
+      if (!classSection) {
+        toast({
+          variant: "destructive",
+          title: t("classNotFound")
+        })
+        return
+      }
 
-    try {
-      const data = await registrationService.addRegistration(newRegistration); // Call the API to add the registratio;
-      setRegistrations(data.registrations);
-      
-      // Update class section enrollment count
-      const updatedClassSections = classSections.map((section) =>
-        section.id === data.classSectionId ? { ...section, currentEnrollment: section.currentEnrollment + 1 } : section,
+      // Check if class is full
+      if (classSection.currentEnrollment >= classSection.maxCapacity) {
+        toast({
+          variant: "destructive",
+          title: t("classFull")
+        })
+        return
+      }
+
+      // Check if student is already registered
+      const existingRegistration = registrations.find(
+        (reg) => reg.studentId === data.mssv && reg.classSectionId === data.classSectionId && reg.status === "active"
       )
+      if (existingRegistration) {
+        toast({
+          variant: "destructive",
+          title: t("alreadyRegistered")
+        })
+        return
+      }
 
-      setIsFormOpen(false)
-      toast.success("Đăng ký khóa học thành công.");
-    } catch (error: any) {
-      toast.error(error || "Đã xảy ra lỗi khi thêm khóa học.");
+      // Check prerequisites
+      const course = getCourseById(classSection.courseId, courses)
+      if (course && course.prerequisites.length > 0) {
+        // Get all courses the student has completed
+        const completedCourses = registrations
+          .filter((r) => r.studentId === data.mssv && r.status === "active" && r.grade && r.grade >= 5)
+          .map((r) => {
+            const section = getClassSectionById(r.classSectionId, classSections)
+            if (!section) return null
+            const course = getCourseById(section.courseId, courses)
+            return course?.code || null
+          })
+          .filter(Boolean) as string[]
+
+        // Check if all prerequisites are met
+        const missingPrerequisites = course.prerequisites.filter((prereq) => !completedCourses.includes(prereq))
+
+        if (missingPrerequisites.length > 0) {
+          toast({
+            variant: "destructive",
+            title: `${t("missingPrerequisites")} ${missingPrerequisites.join(", ")}.`
+          })
+          return
+        }
+      }
+
+      // Register student
+      try {
+        const newRegistration: Registration = {
+          id: `reg-${registrations.length + 1}`,
+          studentId: data.mssv,
+          classSectionId: data.classSectionId,
+          status: "active",
+          registeredAt: new Date().toISOString(),
+        }
+
+        const response = await registrationService.addRegistration(newRegistration)
+        setRegistrations(response.registrations)
+        
+        // Update class section enrollment count
+        const updatedClassSections = classSections.map((section) =>
+          section.id === data.classSectionId ? { ...section, currentEnrollment: section.currentEnrollment + 1 } : section,
+        )
+
+        setIsFormOpen(false)
+        toast({
+          title: t("registrationSuccess")
+        })
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: error || t("registrationError")
+        })
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t("errorLoadingData")
+      })
     }
   }
 
   // Cancel registration
   const cancelRegistration = async (id: string) => {
-    const registrationToCancel = registrations.find((r) => r.id === id)
-    if (!registrationToCancel) return
+    try {
+      const registrationToCancel = registrations.find((r) => r.id === id)
+      if (!registrationToCancel) return
 
-    // Check if registration can be cancelled (e.g., within a certain time period)
-    const registeredAt = new Date(registrationToCancel.registeredAt)
-    const now = new Date()
-    const daysDiff = (now.getTime() - registeredAt.getTime()) / (1000 * 60 * 60 * 24)
+      // Check if registration is within 14 days
+      const registeredAt = new Date(registrationToCancel.registeredAt)
+      const now = new Date()
+      const daysDiff = Math.floor((now.getTime() - registeredAt.getTime()) / (1000 * 60 * 60 * 24))
 
-    // Assume there's a deadline of 14 days after registration
-    if (daysDiff > 14) {
-      toast.error("Không thể hủy đăng ký sau 14 ngày kể từ ngày đăng ký.")
-      return
+      if (daysDiff > 14) {
+        toast({
+          variant: "destructive",
+          title: t("cannotCancelAfter14Days")
+        })
+        return
+      }
+
+      try {
+        const response = await registrationService.cancelRegistration(id)
+        setRegistrations(response.registrations)
+
+        toast({
+          title: t("cancelSuccess")
+        })
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: t("cancelError")
+        })
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: t("errorLoadingData")
+      })
     }
-
-    // Update class section enrollment count
-    // const classSection = getClassSectionById(registrationToCancel.classSectionId, classSections)
-    // if (classSection && registrationToCancel.status === "active") {
-    //   const updatedClassSections = classSections.map((section) =>
-    //     section.id === registrationToCancel.classSectionId
-    //       ? { ...section, currentEnrollment: Math.max(0, section.currentEnrollment - 1) }
-    //       : section,
-    //   )
-    // }
-
-    try{
-      const data = await registrationService.cancelRegistration(id); // Call the API to cancel the registration
-      setRegistrations(data.registrations); // Update the registrations state with the new data
-
-
-    } catch (error: any) {
-      toast.error("Đã xảy ra lỗi khi hủy đăng ký.")
-      return
-    }
-
-    toast.success("Đăng ký đã được hủy thành công.")
   }
 
   // Handle add button click
   const handleAdd = async() => {
     setIsFormOpen(true)
     setClassSections(await classSectionService.fetchClassSections())
-
   }
 
   // Get student fullName by ID
@@ -211,17 +240,17 @@ export function StudentRegistration() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Đăng ký Khóa học cho Sinh viên</CardTitle>
+        <CardTitle>{t("titleForStudent")}</CardTitle>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <DialogTrigger asChild>
             <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700">
               <PlusCircle className="mr-2 h-4 w-4" />
-              Đăng ký Khóa học
+              {t("addRegistration")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Đăng ký Khóa học cho Sinh viên</DialogTitle>
+              <DialogTitle>{t("titleForStudent")}</DialogTitle>
             </DialogHeader>
             <RegistrationForm
               onSubmit={addRegistration}
@@ -237,7 +266,7 @@ export function StudentRegistration() {
           <div className="relative w-full md:w-1/3">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Tìm kiếm theo tên sinh viên, mã sinh viên, lớp học..."
+              placeholder={t("searchPlaceholder")}
               className="pl-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -249,13 +278,13 @@ export function StudentRegistration() {
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
-                <TableHead>Mã SV</TableHead>
-                <TableHead>Tên sinh viên</TableHead>
-                <TableHead>Mã lớp</TableHead>
-                <TableHead>Tên khóa học</TableHead>
-                <TableHead>Ngày đăng ký</TableHead>
-                <TableHead>Trạng thái</TableHead>
-                <TableHead className="text-right">Thao tác</TableHead>
+                <TableHead>{t("student")}</TableHead>
+                <TableHead>{t("name")}</TableHead>
+                <TableHead>{t("class")}</TableHead>
+                <TableHead>{t("course")}</TableHead>
+                <TableHead>{t("registrationDate")}</TableHead>
+                <TableHead>{t("status")}</TableHead>
+                <TableHead className="text-right">{common("actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -275,12 +304,12 @@ export function StudentRegistration() {
                         {registration.status === "active" ? (
                           <Badge className="bg-green-500 flex items-center gap-1">
                             <CheckCircle className="h-3 w-3" />
-                            Đang học
+                            {t("active")}
                           </Badge>
                         ) : (
                           <Badge className="bg-red-500 flex items-center gap-1">
                             <AlertCircle className="h-3 w-3" />
-                            Đã hủy
+                            {t("cancelled")}
                           </Badge>
                         )}
                       </TableCell>
@@ -293,7 +322,7 @@ export function StudentRegistration() {
                             className="text-red-600 border-red-200 hover:bg-red-50"
                           >
                             <Trash2 className="h-4 w-4 mr-2" />
-                            Hủy đăng ký
+                            {t("cancelRegistration")}
                           </Button>
                         )}
                       </TableCell>
@@ -303,7 +332,7 @@ export function StudentRegistration() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-10 text-gray-500">
-                    Không tìm thấy đăng ký nào
+                    {common("noData")}
                   </TableCell>
                 </TableRow>
               )}

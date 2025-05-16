@@ -15,12 +15,14 @@ import classSectionService from "@/services/classSectionService"
 import registrationService from "@/services/registrationService"
 import coursesServices from "@/services/courseService"
 import { toast } from "react-toastify";
+import { useTranslations } from "next-intl"
 
 export default function GradeEntry() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const courseIdFromUrl = searchParams.get("courseId")
   const classIdFromUrl = searchParams.get("classId")
+  const t = useTranslations("gradeEntry")
 
   const [courses, setCourses] = useState<Course[]>([])
   const [classes, setClasses] = useState<ClassSection[]>([])
@@ -114,17 +116,17 @@ export default function GradeEntry() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Nhập Điểm</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="manual" className="w-full">
           <TabsContent value="manual" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="course">Môn học</Label>
+                <Label htmlFor="course">{t("course")}</Label>
                 <Select value={selectedCourse} onValueChange={handleCourseChange}>
                   <SelectTrigger id="course">
-                    <SelectValue placeholder="Chọn môn học" />
+                    <SelectValue placeholder={t("selectCourse")} />
                   </SelectTrigger>
                   <SelectContent>
                     {courses.map((course) => (
@@ -137,10 +139,10 @@ export default function GradeEntry() {
               </div>
 
               <div>
-                <Label htmlFor="class">Lớp</Label>
+                <Label htmlFor="class">{t("class")}</Label>
                 <Select value={selectedClass} onValueChange={handleClassChange}>
                   <SelectTrigger id="class">
-                    <SelectValue placeholder="Chọn lớp" />
+                    <SelectValue placeholder={t("selectClass")} />
                   </SelectTrigger>
                   <SelectContent>
                     {classes.map((cls) => (
@@ -158,11 +160,11 @@ export default function GradeEntry() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Mã SV</TableHead>
-                      <TableHead>Tên sinh viên</TableHead>
-                      <TableHead>Lớp</TableHead>
-                      <TableHead>Tên môn học</TableHead>
-                      <TableHead className="text-center">Điểm</TableHead>
+                      <TableHead>{t("studentId")}</TableHead>
+                      <TableHead>{t("studentName")}</TableHead>
+                      <TableHead>{t("class")}</TableHead>
+                      <TableHead>{t("courseName")}</TableHead>
+                      <TableHead className="text-center">{t("grade")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -182,6 +184,7 @@ export default function GradeEntry() {
                               value={studentGrades[student.studentId] ?? student.grade ?? ""}
                               onChange={(e) => handleGradeChange(student.studentId, e.target.value)}
                               className="w-20 mx-auto text-center"
+                              placeholder={t("gradePlaceholder")}
                             />
                           </TableCell>
                         </TableRow>
@@ -189,7 +192,7 @@ export default function GradeEntry() {
                     ) : (
                       <TableRow>
                         <TableCell colSpan={5} className="text-center">
-                          Không có sinh viên trong lớp này
+                          {t("noStudentsInClass")}
                         </TableCell>
                       </TableRow>
                     )}
@@ -198,13 +201,13 @@ export default function GradeEntry() {
 
                 {grades?.length > 0 && (
                   <div className="flex justify-end">
-                    <Button onClick={saveGrades}>Lưu điểm</Button>
+                    <Button onClick={saveGrades}>{t("submit")}</Button>
                   </div>
                 )}
               </>
             ) : (
               <div className="text-center py-8 text-muted-foreground">
-                Vui lòng chọn môn học và lớp để nhập điểm
+                {t("selectCourseAndClass")}
               </div>
             )}
           </TabsContent>

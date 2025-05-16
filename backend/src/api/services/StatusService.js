@@ -3,6 +3,7 @@ const StudentRepository = require('../repositories/StudentRepository');
 const { addLogEntry } = require('../helpers/logging');
 const { z } = require('zod');
 const mapper = require('../helpers/Mapper');
+const { SUPPORTED_LOCALES } = require('../../configs/locales');
 
 const statusSchema = z.object({
   id: z.string().optional(),
@@ -17,16 +18,23 @@ class StatusService {
     return mappedStatuses;
   }
 
-  async addStatus(data) {
+  async addStatus(data, language = "vi") {
     const parsed = statusSchema.safeParse(data);
     if (!parsed.success) {
       await addLogEntry({ message: "Thêm tình trạng sinh viên không hợp lệ", level: "warn" });
       throw { status: 400, message: parsed.error.errors };
     }
 
-    const newStatus = { ...parsed.data, id: `status-${Date.now()}` };
+    const newId = await StatusRepository.getNextId();
+    const newStatus = { name: new Map(), id: newId };
+    SUPPORTED_LOCALES.forEach((locale) => {
+      newStatus.name.set(locale, parsed.data.name);
+    });
+    newStatus.color = parsed.data.color;
+    newStatus.allowedStatus = parsed.data.allowedStatus || [];
+
     await StatusRepository.create(newStatus);
-    const statuses = await StatusRepository.findAll();
+    const statuses = (await StatusRepository.findAll()).map((status) => mapper.formatStatus(status, language))
     await addLogEntry({
       message: "Thêm tình trạng sinh viên thành công",
       level: "info",
@@ -38,15 +46,25 @@ class StatusService {
     return { message: "Thêm tình trạng sinh viên thành công", statuses };
   }
 
-  async updateStatus(data) {
+  async updateStatus(data, language = "vi") {
     const parsed = statusSchema.safeParse(data);
     if (!parsed.success) {
       await addLogEntry({ message: "Cập nhật tình trạng sinh viên không hợp lệ", level: "warn" });
       throw { status: 400, message: parsed.error.errors };
     }
 
-    await StatusRepository.update(parsed.data.id, parsed.data);
-    const statuses = await StatusRepository.findAll();
+    const status = await StatusRepository.findOneByCondition({ id: parsed.data.id });
+    if (!status) {
+      await addLogEntry({ message: "Tình trạng sinh viên không tồn tại", level: "warn" });
+      throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
+    }
+
+    status.name.set(language, parsed.data.name);
+    status.color = parsed.data.color;
+    status.allowedStatus = parsed.data.allowedStatus || [];
+
+    await StatusRepository.update(parsed.data.id, status);
+    const statuses = (await StatusRepository.findAll()).map((status) => mapper.formatStatus(status, language))
     await addLogEntry({
       message: "Cập nhật tình trạng sinh viên thành công",
       level: "info",
@@ -58,7 +76,7 @@ class StatusService {
     return { message: "Cập nhật tình trạng sinh viên thành công", statuses };
   }
 
-  async deleteStatus(id) {
+  async deleteStatus(id, language = "vi") {
     if (!id) {
       await addLogEntry({ message: "MSSV không được để trống", level: "warn" });
       throw { status: 400, message: "MSSV không được để trống" };
@@ -71,7 +89,7 @@ class StatusService {
     }
 
     await StatusRepository.delete(id);
-    const statuses = await StatusRepository.findAll();
+    const statuses = (await StatusRepository.findAll()).map((status) => mapper.formatStatus(status, language))
     await addLogEntry({
       message: "Xóa tình trạng sinh viên thành công",
       level: "info",
@@ -107,6 +125,57 @@ class StatusService {
       throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
     }
     return status;
+  }
+
+  async getTranslationStatusById(statusId) {
+    if (!statusId) {
+      await addLogEntry({ message: "ID tình trạng không được để trống", level: "warn" });
+      throw { status: 400, message: "ID tình trạng không được để trống" };
+    }
+
+    // Lấy tình trạng từ cơ sở dữ liệu
+    const status = await StatusRepository.findOneByCondition({ id: statusId });
+    if (!status) {
+      await addLogEntry({ message: "Tình trạng sinh viên không tồn tại", level: "warn" });
+      throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
+    }
+
+    // Định dạng dữ liệu bản dịch
+    const translations = {
+      en: {
+        statusName: status.name.get("en"),
+      },
+      vi: {
+        statusName: status.name.get("vi"),
+      },
+    };
+
+    return translations;
+  }
+
+  async updateTranslationStatus(statusId, translations) {
+    if (!statusId) {
+      await addLogEntry({ message: "ID tình trạng không được để trống", level: "warn" });
+      throw { status: 400, message: "ID tình trạng không được để trống" };
+    }
+
+    // Lấy tình trạng từ cơ sở dữ liệu
+    const status = await StatusRepository.findOneByCondition({ id: statusId });
+    if (!status) {
+      await addLogEntry({ message: "Tình trạng sinh viên không tồn tại", level: "warn" });
+      throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
+    }
+
+    // Cập nhật bản dịch
+    SUPPORTED_LOCALES.forEach((locale) => {
+      if (translations[locale]) {
+        status.name.set(locale, translations[locale].statusName);
+      }
+    });
+
+    await StatusRepository.update(statusId, { name: status.name });
+
+    return { success: true, message: "Cập nhật bản dịch thành công" };
   }
 }
 

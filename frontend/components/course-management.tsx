@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
-import { PlusCircle, Search, Pencil, Trash2 } from "lucide-react";
+import { PlusCircle, Search, Pencil, Trash2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,13 +21,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Course } from "@/types/index";
-import { classSections, getDepartmentName } from "@/data/sample-data";
+import type { Course, Translation } from "@/types/index";
+import { getDepartmentName } from "@/data/sample-data";
 import { CourseForm } from "@/components/course-form";
 import { toast } from "react-toastify";
 import courseService from "@/services/courseService";
 import facultyService from "@/services/facultyService";
 import { Faculty } from "@/types/student";
+import { Global } from "recharts";
+import { TranslationManager } from "./translation-manager";
+import { useLocale, useTranslations } from "next-intl";
+
+const mockInitialTranslations = {
+  en: {
+    courseName: "Introduction to Computer Science",
+    description:
+      "This course provides an introduction to the fundamentals of computer science.",
+  },
+  vi: {
+    courseName: "Nhập môn Khoa học Máy tính",
+    description: "Khóa học này cung cấp kiến thức cơ bản về khoa học máy tính.",
+  },
+  ji: {
+    courseName: "コンピュータサイエンス入門",
+    description: "このコースでは、コンピュータサイエンスの基礎を紹介します。",
+  },
+};
 
 export function CourseManagement() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -35,6 +54,27 @@ export function CourseManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [translationOpen, setTranslationOpen] = useState(false);
+  const [translations, setTranslations] = useState<Translation | null>(
+    mockInitialTranslations
+  );
+  const t = useTranslations("courses");
+  const locale = useLocale();
+  // Define the translation fields
+  const translationFields = [
+    {
+      key: "courseName",
+      label: t("courseName"),
+      type: "input" as const,
+      required: true,
+    },
+    {
+      key: "description",
+      label: t("description"),
+      type: "textarea" as const,
+      required: false,
+    },
+  ];
 
   // Filter courses based on search term
   const filteredCourses = courses.filter(
@@ -49,7 +89,7 @@ export function CourseManagement() {
   ) => {
     // Check if course code already exists
     if (courses.some((c) => c.code === course.code)) {
-      toast.error("Mã khóa học đã tồn tại trong hệ thống.");
+      toast.error(t("courseCodeExists"));
       return;
     }
 
@@ -57,7 +97,7 @@ export function CourseManagement() {
     for (const prereqCode of course.prerequisites) {
       if (!courses.some((c) => c.code === prereqCode)) {
         toast.error(
-          `Môn tiên quyết ${prereqCode} không tồn tại trong hệ thống.`
+          t("prerequisiteNotFound", { prerequisite: prereqCode })
         );
         return;
       }
@@ -77,9 +117,9 @@ export function CourseManagement() {
       setCourses(data.courses);
       setIsFormOpen(false);
 
-      toast.success(`Khóa học ${newCourse.name} đã được thêm thành công.`);
+      toast.success(t("courseAddedSuccessfully", { courseName: newCourse.name }));
     } catch (error: any) {
-      toast.error(error || "Đã xảy ra lỗi khi thêm khóa học.");
+      toast.error(error || t("courseAddError"));
     }
   };
 
@@ -97,10 +137,10 @@ export function CourseManagement() {
       setIsFormOpen(false);
 
       toast.success(
-        `Khóa học ${updatedCourse.name} đã được cập nhật thành công.`
+        t("courseUpdatedSuccessfully", { courseName: updatedCourse.name })
       );
     } catch (error: any) {
-      toast.error(error || "Đã xảy ra lỗi khi cập nhật khóa học.");
+      toast.error(error || t("courseUpdateError"));
     }
   };
 
@@ -115,7 +155,7 @@ export function CourseManagement() {
     const timeDiff = (now.getTime() - createdAt.getTime()) / (1000 * 60); // in minutes
 
     if (timeDiff > 30) {
-      toast.error("Khóa học đã được tạo hơn 30 phút trước, không thể xóa.");
+      toast.error(t("courseCannotBeDeleted"));
       return;
     }
 
@@ -124,9 +164,9 @@ export function CourseManagement() {
 
       // Deactivate instead of delete
       setCourses(data.courses);
-      toast.success(data.message || "Khóa học đã bị vô hiệu hóa hoặc bị xóa.");
+      toast.success(data.message || t("courseDeactivatedOrDeleted"));
     } catch (error: any) {
-      toast.error(error || "Đã xảy ra lỗi khi xóa khóa học.");
+      toast.error(error || t("courseDeleteError"));
     }
   };
 
@@ -141,6 +181,49 @@ export function CourseManagement() {
     setEditingCourse(null);
     setIsFormOpen(true);
   };
+  async function handleUpdateTranslations(
+    updatedTranslations: Translation | null
+  ) {
+    if (!editingCourse) return;
+
+    try {
+      const data = await courseService.updateTranslationCourse(
+        editingCourse.id,
+        updatedTranslations
+      );
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course.id === editingCourse.id
+            ? {
+                ...course,
+                name: updatedTranslations?.[locale]?.courseName || course.name, // Cập nhật `name`
+                description:
+                  updatedTranslations?.[locale]?.description ||
+                  course.description, // Cập nhật `description`
+              }
+            : course
+        )
+      );
+      setEditingCourse(null);
+      setTranslations(updatedTranslations);
+      //Cập nhật trong danh sách khóa học
+
+      setTranslationOpen(false);
+      toast.success("Cập nhật thông tin dịch thuật thành công.");
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi cập nhật thông tin dịch thuật.");
+    }
+  }
+  async function handleTranslateButtonClick(course: Course) {
+    // Fetch translations for the selected course
+    try {
+      const data = await courseService.getTranslationCourseById(course.id);
+      setTranslations(data);
+      setEditingCourse(course);
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi tải thông tin dịch thuật.");
+    }
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -148,16 +231,22 @@ export function CourseManagement() {
         setCourses(await courseService.fetchCourses());
         setFaculties(await facultyService.fetchFaculties());
       } catch (error: any) {
-        toast.error(error || "Đã xảy ra lỗi khi tải danh sách khóa học.");
+        toast.error(error || t("courseFetchError"));
       }
     }
     fetchData();
-  }, []);
+  }, [t]);
+
+  useEffect(() => {
+    if (translations && editingCourse) {
+      setTranslationOpen(true);
+    }
+  }, [translations]);
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Quản lý Khóa học</CardTitle>
+        <CardTitle>{t("courseManagement")}</CardTitle>
         <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
           <DialogTrigger asChild>
             <Button
@@ -165,15 +254,15 @@ export function CourseManagement() {
               className="bg-blue-600 hover:bg-blue-700"
             >
               <PlusCircle className="mr-2 h-4 w-4" />
-              Thêm Khóa học
+              {t("addCourse")}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingCourse
-                  ? "Cập nhật Thông tin Khóa học"
-                  : "Thêm Khóa học Mới"}
+                  ? t("updateCourseTitle")
+                  : t("addNewCourseTitle")}
               </DialogTitle>
             </DialogHeader>
             <CourseForm
@@ -190,7 +279,7 @@ export function CourseManagement() {
           <div className="relative w-full md:w-1/3">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Tìm kiếm theo mã hoặc tên khóa học..."
+              placeholder={t("searchPlaceholder")}
               className="pl-8"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -202,13 +291,13 @@ export function CourseManagement() {
           <Table>
             <TableHeader className="bg-gray-100">
               <TableRow>
-                <TableHead>Mã khóa học</TableHead>
-                <TableHead>Tên khóa học</TableHead>
-                <TableHead>Số tín chỉ</TableHead>
-                <TableHead>Khoa</TableHead>
-                <TableHead>Môn tiên quyết</TableHead>
-                <TableHead>Trạng thái</TableHead>
-                <TableHead className="text-right">Thao tác</TableHead>
+                <TableHead>{t("courseCode")}</TableHead>
+                <TableHead>{t("courseName")}</TableHead>
+                <TableHead>{t("credits")}</TableHead>
+                <TableHead>{t("department")}</TableHead>
+                <TableHead>{t("prerequisites")}</TableHead>
+                <TableHead>{t("status")}</TableHead>
+                <TableHead className="text-right">{t("actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -231,7 +320,7 @@ export function CourseManagement() {
                           ))}
                         </div>
                       ) : (
-                        "Không có"
+                        t("noPrerequisites")
                       )}
                     </TableCell>
                     <TableCell>
@@ -240,11 +329,22 @@ export function CourseManagement() {
                           course.isActive ? "bg-green-500" : "bg-red-500"
                         }
                       >
-                        {course.isActive ? "Đang hoạt động" : "Đã vô hiệu hóa"}
+                        {course.isActive ? t("active") : t("inactive")}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={async () => {
+                            // Handle edit translation
+                            await handleTranslateButtonClick(course);
+                          }}
+                          className="h-8 w-8 text-gray-600 border-gray-200 hover:bg-gray-50"
+                        >
+                          <Globe className="h-4 w-4" />
+                        </Button>
                         <Button
                           variant="outline"
                           size="icon"
@@ -271,7 +371,7 @@ export function CourseManagement() {
                     colSpan={7}
                     className="text-center py-10 text-gray-500"
                   >
-                    Không tìm thấy khóa học nào
+                    {t("noCourseFound")}
                   </TableCell>
                 </TableRow>
               )}
@@ -279,6 +379,15 @@ export function CourseManagement() {
           </Table>
         </div>
       </CardContent>
+      <TranslationManager
+        open={translationOpen}
+        onOpenChange={setTranslationOpen}
+        entityType="course"
+        entityId={""}
+        fields={translationFields}
+        initialTranslations={translations}
+        onSave={handleUpdateTranslations}
+      />
     </Card>
   );
 }

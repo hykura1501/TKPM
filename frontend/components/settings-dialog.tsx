@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,13 +10,17 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Plus, X, Save, Pencil } from "lucide-react";
+import { Plus, X, Save, Pencil, Globe } from "lucide-react";
 import type { Faculty, StudentStatus, Program } from "@/types/student";
 import { toast } from "react-toastify";
 
 import programService from "@/services/programService";
 import statusService from "@/services/statusService";
 import facultyService from "@/services/facultyService";
+import { useLocale, useTranslations } from "next-intl";
+import { Translation } from "@/types";
+import { TranslationManager } from "@/components/translation-manager";
+import { mockInitialTranslationsFaculty } from "@/data/initial-data";
 
 type SettingsDialogProps = {
   faculties: Faculty[];
@@ -51,11 +55,46 @@ export function SettingsDialog({
     faculties[0]?.id || ""
   );
 
-  // useEffect(() => {
-  //   return () => {
-  //     onSave(localFaculties, localStatuses, localPrograms)
-  //   }
-  // }, [localFaculties, localStatuses, localPrograms])
+  // Translation states
+  const [translationOpen, setTranslationOpen] = useState(false);
+  const [translationEntityType, setTranslationEntityType] = useState<
+    "faculty" | "status" | "program" | null
+  >(null);
+  const [translationEntityId, setTranslationEntityId] = useState<string | null>(
+    null
+  );
+  const [translations, setTranslations] = useState<Translation | null>(mockInitialTranslationsFaculty);
+
+  const t = useTranslations("settingsDialog");
+  const locale = useLocale();
+
+  // Translation fields for each entity type
+  const facultyTranslationFields = [
+    {
+      key: "facultyName",
+      label: t("facultyName"),
+      type: "input" as const,
+      required: true,
+    },
+  ];
+
+  const statusTranslationFields = [
+    {
+      key: "statusName",
+      label: t("statusName"),
+      type: "input" as const,
+      required: true,
+    },
+  ];
+
+  const programTranslationFields = [
+    {
+      key: "programName",
+      label: t("programName"),
+      type: "input" as const,
+      required: true,
+    },
+  ];
 
   // Faculty functions
   const addFaculty = async () => {
@@ -67,12 +106,11 @@ export function SettingsDialog({
         ...localFaculties,
         { id: newId, name: newFacultyName },
       ]);
-      // Call API to update faculties
       const data = await facultyService.addFaculty({ name: newFacultyName });
       setLocalFaculties(data.faculties);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi thêm khoa");
+      toast.error(t("faculties.addError"));
     }
     setNewFacultyName("");
   };
@@ -87,16 +125,14 @@ export function SettingsDialog({
       setLocalFaculties(data.faculties);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi cập nhật khoa");
+      toast.error(t("faculties.updateError"));
     }
   };
 
   const deleteFaculty = async (id: string) => {
-    // Check if faculty is used by any program
     const isUsed = localPrograms.some((p) => p.faculty === id);
-
     if (isUsed) {
-      toast.error("Không thể xóa khoa đang được sử dụng");
+      toast.error(t("faculties.deleteInUse"));
       return;
     }
 
@@ -105,7 +141,7 @@ export function SettingsDialog({
       const data = await facultyService.deleteFaculty(id);
       setLocalFaculties(data.faculties);
     } catch (error) {
-      toast.error("Lỗi khi xóa khoa");
+      toast.error(t("faculties.deleteError"));
       console.error(error);
     }
   };
@@ -132,7 +168,7 @@ export function SettingsDialog({
       setLocalStatuses(data.statuses);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi thêm tình trạng");
+      toast.error(t("statuses.addError"));
     }
   };
 
@@ -146,18 +182,17 @@ export function SettingsDialog({
       setLocalStatuses(data.statuses);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi cập nhật tình trạng");
+      toast.error(t("statuses.updateError"));
     }
   };
 
   const deleteStatus = async (id: string) => {
     try {
-      //setLocalStatuses(localStatuses.filter((s) => s.id !== id));
       const data = await statusService.deleteStatus(id);
       setLocalStatuses(data.statuses);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi xóa tình trạng");
+      toast.error(t("statuses.deleteError"));
     }
   };
 
@@ -183,34 +218,28 @@ export function SettingsDialog({
       setLocalPrograms(data.programs);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi thêm chương trình");
+      toast.error(t("programs.addError"));
     }
   };
 
   const updateProgram = async (id: string, name: string, faculty: string) => {
     try {
-      // setLocalPrograms(
-      //   localPrograms.map((p) => (p.id === id ? { ...p, name, faculty } : p))
-      // );
       setEditingProgram(null);
       const data = await programService.updateProgram({ id, name, faculty });
       setLocalPrograms(data.programs);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi cập nhật chương trình");
+      toast.error(t("programs.updateError"));
     }
-    
   };
 
   const deleteProgram = async (id: string) => {
     try {
-      // setLocalPrograms(localPrograms.filter((p) => p.id !== id));
       const data = await programService.deleteProgram(id);
       setLocalPrograms(data.programs);
     } catch (error) {
       console.error(error);
-      toast.error("Lỗi khi xóa chương trình");
+      toast.error(t("programs.deleteError"));
     }
   };
 
@@ -219,38 +248,129 @@ export function SettingsDialog({
     onSave(localFaculties, localStatuses, localPrograms);
   };
 
+  // Translation handlers
+  const handleTranslateButtonClick = async (
+    entityType: "faculty" | "status" | "program",
+    entityId: string
+  ) => {
+    try {
+      let data: Translation | null = null;
+      if (entityType === "faculty") {
+        data = await facultyService.getTranslationFacultyById(entityId);
+      } else if (entityType === "status") {
+        data = await statusService.getTranslationStatusById(entityId);
+      } else if (entityType === "program") {
+        data = await programService.getTranslationProgramById(entityId);
+      }
+      setTranslations(data);
+      setTranslationEntityType(entityType);
+      setTranslationEntityId(entityId);
+    } catch (error: any) {
+      toast.error(error || t("translation.loadError"));
+    }
+  };
+
+  const handleUpdateTranslations = async (
+    updatedTranslations: Translation | null
+  ) => {
+    if (!translationEntityType || !translationEntityId) return;
+
+    try {
+      if (translationEntityType === "faculty") {
+        const data = await facultyService.updateTranslationFaculty(
+          translationEntityId,
+          updatedTranslations
+        );
+        setLocalFaculties((prevFaculties) =>
+          prevFaculties.map((faculty) =>
+            faculty.id === translationEntityId
+              ? {
+                  ...faculty,
+                  name:
+                    updatedTranslations?.[locale]?.facultyName || faculty.name,
+                }
+              : faculty
+          )
+        );
+      } else if (translationEntityType === "status") {
+        const data = await statusService.updateTranslationStatus(
+          translationEntityId,
+          updatedTranslations
+        );
+        setLocalStatuses((prevStatuses) =>
+          prevStatuses.map((status) =>
+            status.id === translationEntityId
+              ? {
+                  ...status,
+                  name:
+                    updatedTranslations?.[locale]?.statusName || status.name,
+                }
+              : status
+          )
+        );
+      } else if (translationEntityType === "program") {
+        const data = await programService.updateTranslationProgram(
+          translationEntityId,
+          updatedTranslations
+        );
+        setLocalPrograms((prevPrograms) =>
+          prevPrograms.map((program) =>
+            program.id === translationEntityId
+              ? {
+                  ...program,
+                  name:
+                    updatedTranslations?.[locale]?.programName || program.name,
+                }
+              : program
+          )
+        );
+      }
+      setTranslationOpen(false);
+      setTranslations(mockInitialTranslationsFaculty);
+      setTranslationEntityType(null);
+      setTranslationEntityId(null);
+      toast.success(t("translation.updateSuccess"));
+    } catch (error: any) {
+      toast.error(error || t("translation.updateError"));
+    }
+  };
+
+  useEffect(() => {
+    if (translations && translationEntityType && translationEntityId) {
+      setTranslationOpen(true);
+    }
+  }, [translations, translationEntityType, translationEntityId]);
+
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Cài đặt Hệ thống</DialogTitle>
-        <DialogDescription>
-          Quản lý khoa, tình trạng sinh viên và chương trình học.
-        </DialogDescription>
+        <DialogTitle>{t("title")}</DialogTitle>
+        <DialogDescription>{t("description")}</DialogDescription>
       </DialogHeader>
 
       <Tabs defaultValue="faculties" className="mt-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="faculties">Khoa</TabsTrigger>
-          <TabsTrigger value="statuses">Tình trạng</TabsTrigger>
-          <TabsTrigger value="programs">Chương trình</TabsTrigger>
+          <TabsTrigger value="faculties">{t("tabs.faculties")}</TabsTrigger>
+          <TabsTrigger value="statuses">{t("tabs.statuses")}</TabsTrigger>
+          <TabsTrigger value="programs">{t("tabs.programs")}</TabsTrigger>
         </TabsList>
 
         {/* Faculties Tab */}
         <TabsContent value="faculties" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Danh sách Khoa</CardTitle>
+              <CardTitle>{t("faculties.list")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Tên khoa mới"
+                  placeholder={t("faculties.newPlaceholder")}
                   value={newFacultyName}
                   onChange={(e) => setNewFacultyName(e.target.value)}
                 />
                 <Button onClick={addFaculty}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("faculties.add")}
                 </Button>
               </div>
 
@@ -293,6 +413,15 @@ export function SettingsDialog({
                           <Button
                             size="sm"
                             variant="outline"
+                            onClick={() =>
+                              handleTranslateButtonClick("faculty", faculty.id)
+                            }
+                          >
+                            <Globe className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
                             onClick={() => {
                               setEditingFaculty(faculty.id);
                               setNewFacultyName(faculty.name);
@@ -321,12 +450,12 @@ export function SettingsDialog({
         <TabsContent value="statuses" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Danh sách Tình trạng Sinh viên</CardTitle>
+              <CardTitle>{t("statuses.list")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Tên tình trạng mới"
+                  placeholder={t("statuses.newPlaceholder")}
                   value={newStatusName}
                   onChange={(e) => setNewStatusName(e.target.value)}
                   className="flex-1"
@@ -339,7 +468,7 @@ export function SettingsDialog({
                 />
                 <Button onClick={addStatus}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("statuses.add")}
                 </Button>
               </div>
 
@@ -396,6 +525,15 @@ export function SettingsDialog({
                           <Button
                             size="sm"
                             variant="outline"
+                            onClick={() =>
+                              handleTranslateButtonClick("status", status.id)
+                            }
+                          >
+                            <Globe className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
                             onClick={() => {
                               setEditingStatus(status.id);
                               setNewStatusName(status.name);
@@ -425,12 +563,12 @@ export function SettingsDialog({
         <TabsContent value="programs" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Danh sách Chương trình Học</CardTitle>
+              <CardTitle>{t("programs.list")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Tên chương trình mới"
+                  placeholder={t("programs.newPlaceholder")}
                   value={newProgramName}
                   onChange={(e) => setNewProgramName(e.target.value)}
                   className="flex-1"
@@ -448,7 +586,7 @@ export function SettingsDialog({
                 </select>
                 <Button onClick={addProgram}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("programs.add")}
                 </Button>
               </div>
 
@@ -509,10 +647,19 @@ export function SettingsDialog({
                           <div className="flex flex-col">
                             <span>{program.name}</span>
                             <span className="text-sm text-muted-foreground">
-                              {faculty?.name || "Khoa không xác định"}
+                              {faculty?.name || t("programs.unknownFaculty")}
                             </span>
                           </div>
                           <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() =>
+                                handleTranslateButtonClick("program", program.id)
+                              }
+                            >
+                              <Globe className="h-4 w-4" />
+                            </Button>
                             <Button
                               size="sm"
                               variant="outline"
@@ -545,10 +692,26 @@ export function SettingsDialog({
 
       <div className="flex justify-end mt-6">
         <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
-          <Save className="h-4 w-4 mr-2" />
-          Lưu thay đổi
+          < Save className="h-4 w-4 mr-2" />
+          {t("saveChanges")}
         </Button>
       </div>
+
+      <TranslationManager
+        open={translationOpen}
+        onOpenChange={setTranslationOpen}
+        entityType={translationEntityType || "faculty"}
+        entityId={translationEntityId || ""}
+        fields={
+          translationEntityType === "faculty"
+            ? facultyTranslationFields
+            : translationEntityType === "status"
+            ? statusTranslationFields
+            : programTranslationFields
+        }
+        initialTranslations={translations}
+        onSave={handleUpdateTranslations}
+      />
     </>
   );
 }

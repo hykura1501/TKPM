@@ -18,11 +18,18 @@ export default function SettingsPage() {
   const pathname = usePathname()
 
   const handleLanguageChange = (value: string) => {
+
+    if (value === locale) {
+      return
+    }
     // Remove the current locale from the pathname
     const pathnameWithoutLocale = pathname.replace(`/${locale}`, "")
 
     // Construct the new path with the selected locale
-    const newPath = value === "vi" ? pathnameWithoutLocale : `/${value}${pathnameWithoutLocale}`
+    const newPath = `/${value}/${pathnameWithoutLocale}`
+    
+    //Thay đổi cookie
+    document.cookie = `NEXT_LOCALE=${value}; path=/;` 
 
     router.push(newPath)
   }
@@ -58,9 +65,9 @@ export default function SettingsPage() {
               <div className="space-y-2">
                 <Label htmlFor="semester">{t("currentSemester")}</Label>
                 <select id="semester" className="w-full p-2 border rounded-md">
-                  <option value="1">Học kỳ I</option>
-                  <option value="2">Học kỳ II</option>
-                  <option value="summer">Học kỳ Hè</option>
+                  <option value="1">{t("semesterI")}</option>
+                  <option value="2">{t("semesterII")}</option>
+                  <option value="summer">{t("semesterSummer")}</option>
                 </select>
               </div>
 

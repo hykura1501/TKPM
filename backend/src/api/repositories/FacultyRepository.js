@@ -1,4 +1,5 @@
 const Faculty = require('../models/Faculty');
+const Counter = require('../models/Counter');
 
 class FacultyRepository {
   async findAll() {

@@ -1,3 +1,4 @@
+const Counter = require('../models/Counter');
 const Program = require('../models/Program');
 
 class ProgramRepository {

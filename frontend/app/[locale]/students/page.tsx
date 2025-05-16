@@ -743,19 +743,19 @@ export default function Home() {
                   <Table>
                     <TableHeader className="bg-gray-100">
                       <TableRow>
-                        <TableHead>{t("ID")}</TableHead>
-                        <TableHead>Họ tên</TableHead>
+                        <TableHead>{t("id")}</TableHead>
+                        <TableHead>{t("name")}</TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Ngày sinh
+                          {t("dateOfBirth")}
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Khoa
+                          {t("department")}
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Chương trình
+                          {t("educationSystem")}
                         </TableHead>
-                        <TableHead>Tình trạng</TableHead>
-                        <TableHead className="text-right">Thao tác</TableHead>
+                        <TableHead>{t("status")}</TableHead>
+                        <TableHead className="text-right">{t("actions")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

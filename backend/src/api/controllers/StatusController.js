@@ -60,6 +60,26 @@ class StatusController {
       res.status(500).json({ error: "Lỗi khi lấy quy tắc trạng thái" });
     }
   }
+
+  async getTranslationStatus(req, res) {
+    try {
+      const result = await StatusService.getTranslationStatusById(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi lấy bản dịch tình trạng sinh viên:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi lấy bản dịch tình trạng sinh viên" });
+    }
+  }
+
+  async updateTranslationStatus(req, res) {
+    try {
+      const result = await StatusService.updateTranslationStatus(req.params.id, req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật bản dịch tình trạng sinh viên:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật bản dịch tình trạng sinh viên" });
+    }
+  }
 }
 
 module.exports = new StatusController();

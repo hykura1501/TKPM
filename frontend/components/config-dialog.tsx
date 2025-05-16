@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -7,7 +9,8 @@ import { DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/di
 import { Plus, X, Save, Pencil, Check, ArrowRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"
+import { useTranslations } from "next-intl"
 import type { SystemConfig, PhoneFormat, StudentStatus } from "@/types/student"
 
 type ConfigDialogProps = {
@@ -17,11 +20,13 @@ type ConfigDialogProps = {
 }
 
 export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
+  const t = useTranslations("config")
+
   const [localConfig, setLocalConfig] = useState<SystemConfig>({
     allowedEmailDomains: [...(config.allowedEmailDomains ?? [])],
     phoneFormats: [...(config.phoneFormats ?? [])],
     statusTransitionRules: [...(config.statusTransitionRules ?? [])],
-  });
+  })
 
   // State cho form thêm mới
   const [newEmailDomain, setNewEmailDomain] = useState("")
@@ -50,7 +55,6 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
     })
 
     setNewEmailDomain("")
-
     setFlag("domains")
   }
 
@@ -70,14 +74,14 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       !newPhoneFormat.example ||
       !newPhoneFormat.prefix
     ) {
-      toast.error("Vui lòng nhập đầy đủ thông tin định dạng số điện thoại.");
+      toast.error(t("phone.errors.incomplete"))
       return
     }
 
     setFlag("phone")
 
     if (localConfig?.phoneFormats?.some((p: any) => p.countryCode === newPhoneFormat.countryCode)) {
-      toast.warning("Định dạng số điện thoại đã tồn tại")
+      toast.warning(t("phone.errors.exists"))
       return
     }
 
@@ -94,8 +98,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       prefix: "",
     })
 
-    //setEditingPhoneFormat(null)
-    toast.success("Thêm định dạng số điện thoại thành công!");
+    toast.success(t("phone.errors.success"))
   }
 
   const updatePhoneFormat = () => {
@@ -109,8 +112,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
     })
 
     setEditingPhoneFormat(null)
-
-    toast.success(`Cập nhật định dạng số điện thoại "${editingPhoneFormat.countryCode}" thành công!`);
+    toast.success(t("phone.errors.updateSuccess"))
   }
 
   const removePhoneFormat = (countryCode: string) => {
@@ -119,7 +121,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       phoneFormats: localConfig?.phoneFormats?.filter((p: any) => p.countryCode !== countryCode),
     })
     setFlag("phone")
-    toast.success(`Xóa định dạng số điện thoại "${countryCode}" thành công!`);
+    toast.success(t("phone.errors.removeSuccess"))
   }
 
   // Status transitions
@@ -128,48 +130,34 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
     const existingRule = localConfig?.statusTransitionRules?.find((rule: any) => rule.fromStatus === fromStatus)
 
     if (existingRule) {
-      // Nếu đã có quy tắc cho trạng thái nguồn
       if (existingRule.toStatus.includes(toStatus)) {
-        // Nếu đã có quy tắc chuyển đổi, xóa nó
         setLocalConfig({
           ...localConfig,
           statusTransitionRules: localConfig?.statusTransitionRules?.map((rule: any) =>
             rule.fromStatus === fromStatus ? { ...rule, toStatus: rule.toStatus.filter((s: any) => s !== toStatus) } : rule,
           ),
         })
-
       } else {
-        // Nếu chưa có quy tắc chuyển đổi, thêm nó
         setLocalConfig({
           ...localConfig,
           statusTransitionRules: localConfig?.statusTransitionRules?.map((rule: any) =>
             rule.fromStatus === fromStatus ? { ...rule, toStatus: [...rule.toStatus, toStatus] } : rule,
           ),
         })
-        toast.success(`Đã thêm quy tắc chuyển từ "${fromStatus}" sang "${toStatus}".`);
       }
     } else {
-      // Nếu chưa có quy tắc cho trạng thái nguồn, tạo mới
       setLocalConfig({
         ...localConfig,
         statusTransitionRules: [...(localConfig.statusTransitionRules ?? []), { fromStatus, toStatus: [toStatus] }],
       })
-
     }
   }
 
-  // Lấy tên trạng thái từ ID
-  // const getStatusName = (statusId: string) => {
-  //   return statuses.find((s: any) => s.id === statusId)?.name || statusId
-  // }
-
-  // Kiểm tra xem có thể chuyển từ trạng thái A sang B không
   const canTransition = (fromStatus: string, toStatus: string) => {
     const rule = localConfig?.statusTransitionRules?.find((r: any) => r.fromStatus === fromStatus)
     return rule ? rule.toStatus.includes(toStatus) : false
   }
 
-  // Lưu cấu hình
   const handleSave = () => {
     onSave(localConfig, flag)
   }
@@ -179,27 +167,27 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Cấu hình Hệ thống</DialogTitle>
-        <DialogDescription>Quản lý các quy tắc kiểm tra dữ liệu trong hệ thống.</DialogDescription>
+        <DialogTitle>{t("title")}</DialogTitle>
+        <DialogDescription>{t("description")}</DialogDescription>
       </DialogHeader>
 
       <Tabs defaultValue="email" className="mt-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="email">Tên miền Email</TabsTrigger>
-          <TabsTrigger value="phone">Định dạng Số điện thoại</TabsTrigger>
-          <TabsTrigger value="status">Quy tắc Chuyển đổi Trạng thái</TabsTrigger>
+          <TabsTrigger value="email">{t("tabs.email")}</TabsTrigger>
+          <TabsTrigger value="phone">{t("tabs.phone")}</TabsTrigger>
+          <TabsTrigger value="status">{t("tabs.status")}</TabsTrigger>
         </TabsList>
 
         {/* Email Domains Tab */}
         <TabsContent value="email" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Tên miền Email được phép</CardTitle>
+              <CardTitle>{t("email.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-2">
                 <Input
-                  placeholder="Nhập tên miền (vd: gmail.com)"
+                  placeholder={t("email.placeholder")}
                   value={newEmailDomain}
                   onChange={(e) => {
                     setNewEmailDomain(e.target.value)
@@ -208,7 +196,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                 />
                 <Button onClick={addEmailDomain}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm
+                  {t("email.add")}
                 </Button>
               </div>
 
@@ -238,15 +226,15 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
         <TabsContent value="phone" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Định dạng Số điện thoại theo Quốc gia</CardTitle>
+              <CardTitle>{t("phone.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {editingPhoneFormat ? (
                 <div className="space-y-4 border p-4 rounded-md">
-                  <h3 className="font-medium">Chỉnh sửa định dạng số điện thoại</h3>
+                  <h3 className="font-medium">{t("phone.editTitle")}</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium">Mã quốc gia</label>
+                      <label className="text-sm font-medium">{t("phone.countryCode")}</label>
                       <Input
                         value={editingPhoneFormat.countryCode}
                         onChange={(e) => setEditingPhoneFormat({ ...editingPhoneFormat, countryCode: e.target.value })}
@@ -255,7 +243,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Tên quốc gia</label>
+                      <label className="text-sm font-medium">{t("phone.countryName")}</label>
                       <Input
                         value={editingPhoneFormat.countryName}
                         onChange={(e) => setEditingPhoneFormat({ ...editingPhoneFormat, countryName: e.target.value })}
@@ -263,7 +251,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Tiền tố</label>
+                      <label className="text-sm font-medium">{t("phone.prefix")}</label>
                       <Input
                         value={editingPhoneFormat.prefix}
                         onChange={(e) => setEditingPhoneFormat({ ...editingPhoneFormat, prefix: e.target.value })}
@@ -271,7 +259,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Mẫu Regex</label>
+                      <label className="text-sm font-medium">{t("phone.pattern")}</label>
                       <Input
                         value={editingPhoneFormat.pattern}
                         onChange={(e) => setEditingPhoneFormat({ ...editingPhoneFormat, pattern: e.target.value })}
@@ -279,7 +267,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div className="col-span-2">
-                      <label className="text-sm font-medium">Ví dụ</label>
+                      <label className="text-sm font-medium">{t("phone.example")}</label>
                       <Input
                         value={editingPhoneFormat.example}
                         onChange={(e) => setEditingPhoneFormat({ ...editingPhoneFormat, example: e.target.value })}
@@ -289,20 +277,20 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                   </div>
                   <div className="flex justify-end gap-2">
                     <Button variant="outline" onClick={() => setEditingPhoneFormat(null)}>
-                      Hủy
+                      {t("phone.cancel")}
                     </Button>
                     <Button onClick={updatePhoneFormat}>
                       <Save className="h-4 w-4 mr-2" />
-                      Lưu
+                      {t("phone.save")}
                     </Button>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-4 border p-4 rounded-md">
-                  <h3 className="font-medium">Thêm định dạng số điện thoại mới</h3>
+                  <h3 className="font-medium">{t("phone.addTitle")}</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium">Mã quốc gia</label>
+                      <label className="text-sm font-medium">{t("phone.countryCode")}</label>
                       <Input
                         value={newPhoneFormat.countryCode}
                         onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, countryCode: e.target.value })}
@@ -310,7 +298,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Tên quốc gia</label>
+                      <label className="text-sm font-medium">{t("phone.countryName")}</label>
                       <Input
                         value={newPhoneFormat.countryName}
                         onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, countryName: e.target.value })}
@@ -318,7 +306,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Tiền tố</label>
+                      <label className="text-sm font-medium">{t("phone.prefix")}</label>
                       <Input
                         value={newPhoneFormat.prefix}
                         onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, prefix: e.target.value })}
@@ -326,7 +314,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium">Mẫu Regex</label>
+                      <label className="text-sm font-medium">{t("phone.pattern")}</label>
                       <Input
                         value={newPhoneFormat.pattern}
                         onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, pattern: e.target.value })}
@@ -334,7 +322,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                       />
                     </div>
                     <div className="col-span-2">
-                      <label className="text-sm font-medium">Ví dụ</label>
+                      <label className="text-sm font-medium">{t("phone.example")}</label>
                       <Input
                         value={newPhoneFormat.example}
                         onChange={(e) => setNewPhoneFormat({ ...newPhoneFormat, example: e.target.value })}
@@ -345,7 +333,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
                   <div className="flex justify-end">
                     <Button onClick={addPhoneFormat}>
                       <Plus className="h-4 w-4 mr-2" />
-                      Thêm
+                      {t("phone.add")}
                     </Button>
                   </div>
                 </div>
@@ -354,11 +342,11 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Mã quốc gia</TableHead>
-                    <TableHead>Tên quốc gia</TableHead>
-                    <TableHead>Tiền tố</TableHead>
-                    <TableHead>Ví dụ</TableHead>
-                    <TableHead className="text-right">Thao tác</TableHead>
+                    <TableHead>{t("phone.table.countryCode")}</TableHead>
+                    <TableHead>{t("phone.table.countryName")}</TableHead>
+                    <TableHead>{t("phone.table.prefix")}</TableHead>
+                    <TableHead>{t("phone.table.example")}</TableHead>
+                    <TableHead className="text-right">{t("phone.table.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -400,18 +388,15 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
         <TabsContent value="status" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Quy tắc Chuyển đổi Trạng thái</CardTitle>
+              <CardTitle>{t("status.title")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                Chọn các trạng thái mà sinh viên có thể chuyển đổi. Ô được đánh dấu nghĩa là có thể chuyển từ trạng thái
-                ở hàng sang trạng thái ở cột.
-              </p>
+              <p className="text-sm text-muted-foreground mb-4">{t("status.description")}</p>
 
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[200px]">Từ \ Đến</TableHead>
+                    <TableHead className="w-[200px]">{t("status.fromTo")}</TableHead>
                     {statuses.map((status) => (
                       <TableHead key={status.id} className="text-center">
                         <div className="flex flex-col items-center">
@@ -463,7 +448,7 @@ export function ConfigDialog({ config, statuses, onSave }: ConfigDialogProps) {
       <div className="flex justify-end mt-6">
         <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
           <Save className="h-4 w-4 mr-2" />
-          Lưu cấu hình
+          {t("save")}
         </Button>
       </div>
     </>

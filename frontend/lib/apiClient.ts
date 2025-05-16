@@ -9,6 +9,22 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
+// Thêm interceptor để thêm `locale` vào header
+apiClient.interceptors.request.use((config) => {
+  // lấy từ cookie
+  const locale = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("NEXT_LOCALE="))
+    ?.split("=")[1];
+
+  // const locale = typeof window !== "undefined" ? localStorage.getItem("locale") || "vi" : "vi";
+
+  // Gắn `locale` vào header `Accept-Language`
+  config.headers["Accept-Language"] = locale;
+
+  return config;
+});
+
 // Thêm interceptor để bắt lỗi
 apiClient.interceptors.response.use(
   (response: any) => {
