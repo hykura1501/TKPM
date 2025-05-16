@@ -421,7 +421,12 @@
     "academicYear": "Năm học: 2023-2024 | Học kỳ: II",
     "signature": "(Ký và ghi rõ họ tên)",
     "signatureWithSeal": "(Ký, đóng dấu và ghi rõ họ tên)",
-    "trainingOffice": "Phòng Đào tạo - Trường Đại học XYZ"
+    "trainingOffice": "Phòng Đào tạo - Trường Đại học XYZ",
+    "classificationExcellent": "Xuất sắc",
+    "classificationGood": "Giỏi",
+    "classificationFair": "Khá",
+    "classificationAverage": "Trung bình",
+    "classificationWeak": "Yếu"
   },
   "grades": {
     "title": "Quản lý Điểm",
@@ -674,5 +679,8 @@
     "selectStatus": "Chọn tình trạng",
     "cancel": "Hủy",
     "submit": "Lưu"
+  },
+  "footer": {
+    "title": "© Hệ Thống Quản Lý Khóa Học & Bảng Điểm"
   }
 }
