@@ -65,6 +65,14 @@ class StudentRepository {
       throw new Error("Lỗi khi tạo MSSV: " + error.message);
     }
   }
+
+  async findOneByCondition(condition) {
+    try {
+      return await Student.findOne(condition);
+    } catch (error) {
+      throw new Error("Lỗi khi tìm sinh viên theo điều kiện: " + error.message);
+    }
+  }
 }
 
 module.exports = new StudentRepository();

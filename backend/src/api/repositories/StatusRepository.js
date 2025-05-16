@@ -1,3 +1,4 @@
+const Counter = require('../models/Counter');
 const Status = require('../models/Status');
 
 class StatusRepository {

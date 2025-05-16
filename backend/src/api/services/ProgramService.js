@@ -36,8 +36,10 @@ class ProgramService {
     const newProgram = { name: new Map(), id: newId };
 
     SUPPORTED_LOCALES.forEach((locale) => {
-      newFaculty.name.set(locale, parsed.data.name);
+      newProgram.name.set(locale, parsed.data.name);
     });
+    
+    newProgram.faculty = parsed.data.faculty;
 
     await ProgramRepository.create(newProgram);
     const programs = (await ProgramRepository.findAll()).map((program) =>
@@ -79,9 +81,9 @@ class ProgramService {
       name: program.name,
       faculty: parsed.data.faculty,
     });
-    const programs = (await ProgramRepository.findAll().map((program) =>
+    const programs = (await ProgramRepository.findAll()).map((program) =>
       mapper.formatProgram(program, language)
-    ))
+    )
     await addLogEntry({
       message: "Cập nhật chương trình học thành công",
       level: "info",
@@ -111,9 +113,9 @@ class ProgramService {
     }
 
     await ProgramRepository.delete(id);
-    const programs = (await ProgramRepository.findAll().map((program) =>
+    const programs = (await ProgramRepository.findAll()).map((program) =>
       mapper.formatProgram(program, language)
-    ))
+    )
     await addLogEntry({
       message: "Xóa chương trình học thành công",
       level: "info",

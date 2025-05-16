@@ -94,7 +94,7 @@ class FacultyService {
     if (!id) throw { status: 400, message: "ID không được để trống" };
 
     const student = await StudentRepository.findOneByCondition({
-      facultyId: id,
+      faculty: id,
     });
     if (student) {
       await addLogEntry({

@@ -34,7 +34,7 @@ class StatusService {
     newStatus.allowedStatus = parsed.data.allowedStatus || [];
 
     await StatusRepository.create(newStatus);
-    const statuses = await (StatusRepository.findAll()).map((status) => mapper.formatStatus(status, language))
+    const statuses = (await StatusRepository.findAll()).map((status) => mapper.formatStatus(status, language))
     await addLogEntry({
       message: "Thêm tình trạng sinh viên thành công",
       level: "info",
@@ -63,7 +63,7 @@ class StatusService {
     status.color = parsed.data.color;
     status.allowedStatus = parsed.data.allowedStatus || [];
 
-    await StatusRepository.update(parsed.data.id, parsed.data);
+    await StatusRepository.update(parsed.data.id, status);
     const statuses = (await StatusRepository.findAll()).map((status) => mapper.formatStatus(status, language))
     await addLogEntry({
       message: "Cập nhật tình trạng sinh viên thành công",
