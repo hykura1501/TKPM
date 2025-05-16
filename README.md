@@ -188,26 +188,24 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
 
 Để tích hợp đa ngôn ngữ ở các nội dung tĩnh thì trong Front-end, nhóm sử dụng thư viện để tải file JSON tương ứng với ngôn ngữ.
 
-`
+- Tại file en.json:
 
-// en.json
+`
 {
   "save": "Save",
   "cancel": "Cancel",
   "login_success": "Login successful"
 }
-
 `
 
+- Tại file vn.json:
+  
 `
-
-// vi.json
 {
   "save": "Lưu",
   "cancel": "Hủy",
   "login_success": "Đăng nhập thành công"
 }
-
 `
 
 #### Các nội dung động
