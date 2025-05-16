@@ -191,6 +191,7 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
 
 Để tích hợp đa ngôn ngữ ở các nội dung này thì trong Front-end, nhóm sử dụng thư viện để tải file JSON tương ứng với ngôn ngữ.
 
+`
 // en.json
 {
   "save": "Save",
@@ -204,9 +205,20 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
   "cancel": "Hủy",
   "login_success": "Đăng nhập thành công"
 }
+`
 
 #### Các nội dung động
 
-Nội dung động là dữ liệu lấy từ backend, ví dụ: tên môn học, mô tả, tên lớp,...
+Nội dung động là dữ liệu lấy từ backend.
 
-Những nội dung này phải được lưu trong cơ sở dữ liệu theo cấu trúc hỗ trợ đa ngôn ngữ (ví dụ dạng object với mã ngôn ngữ: { vi: "Toán", en: "Math" }).
+- Ví dụ: tên môn học, mô tả, tên lớp,...
+
+Để tích hợp đa ngôn ngữ ở các nội dung này thì trong cơ sở dữ liệu nhóm đã thiết kế field như sau: 
+
+- Ví dụ dạng object với mã ngôn ngữ:
+`
+{
+  vi: "Toán",
+  en: "Math"
+}
+`
