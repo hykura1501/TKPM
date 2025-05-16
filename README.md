@@ -172,11 +172,41 @@ Nhóm đã thực hiện viết unit test cho các services:
 
 ## Tích hợp đa ngôn ngữ
 Tiếp tục chuỗi đồ án của nhóm, nhóm đã bổ sung thêm hỗ trợ đa ngôn ngữ cho hệ thống. Hiện tại, hệ thống đã có sẵn 2 ngôn ngữ là tiếng Anh và tiếng Việt.
+
 ![image](https://github.com/user-attachments/assets/6ed12e4a-5338-4baa-9d67-b9f964ca81e4)
 ![image](https://github.com/user-attachments/assets/4771f2e6-1d87-4381-be63-c1082e30bde8)
 ![image](https://github.com/user-attachments/assets/2517ff08-1009-4e8f-93b1-15888afa58dc)
 ![image](https://github.com/user-attachments/assets/0fc5c911-6a03-462c-b8d9-45c3abcb81a1)
 ![image](https://github.com/user-attachments/assets/1882e520-9fb6-479e-8e91-1ab536d986f4)
 ![image](https://github.com/user-attachments/assets/1d35dc7c-12a1-4b7c-b308-54da02a9604d)
+
 Có thể thấy rằng, toàn bộ giao diện trên hệ thống (so với hình ảnh giao diện mà nhóm cung cấp trong phần Các chức năng) đã có thể chuyển sang Anh-Việt một cách hợp lý.
 
+### Việc tích hợp đa ngôn ngữ được thực hiện như thế nào?
+
+#### Các nội dung tĩnh
+
+Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn.
+- Ví dụ: "Lưu", "Hủy", "Đăng nhập thành công", "Lỗi hệ thống",...
+
+Để tích hợp đa ngôn ngữ ở các nội dung này thì trong Front-end, nhóm sử dụng thư viện để tải file JSON tương ứng với ngôn ngữ.
+
+// en.json
+{
+  "save": "Save",
+  "cancel": "Cancel",
+  "login_success": "Login successful"
+}
+
+// vi.json
+{
+  "save": "Lưu",
+  "cancel": "Hủy",
+  "login_success": "Đăng nhập thành công"
+}
+
+#### Các nội dung động
+
+Nội dung động là dữ liệu lấy từ backend, ví dụ: tên môn học, mô tả, tên lớp,...
+
+Những nội dung này phải được lưu trong cơ sở dữ liệu theo cấu trúc hỗ trợ đa ngôn ngữ (ví dụ dạng object với mã ngôn ngữ: { vi: "Toán", en: "Math" }).
