@@ -196,6 +196,7 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
   "cancel": "Cancel",
   "login_success": "Login successful"
 }
+
 `
 
 `
@@ -206,6 +207,7 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
   "cancel": "Hủy",
   "login_success": "Đăng nhập thành công"
 }
+
 `
 
 #### Các nội dung động
