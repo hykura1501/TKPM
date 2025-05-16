@@ -184,9 +184,10 @@ Có thể thấy rằng, toàn bộ giao diện trên hệ thống (so với hì
 
 ### Việc tích hợp đa ngôn ngữ được thực hiện như thế nào?
 
-#### Các nội dung tĩnh
+#### Đối với các nội dung tĩnh
 
 Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn.
+
 - Ví dụ: "Lưu", "Hủy", "Đăng nhập thành công", "Lỗi hệ thống",...
 
 Để tích hợp đa ngôn ngữ ở các nội dung này thì trong Front-end, nhóm sử dụng thư viện để tải file JSON tương ứng với ngôn ngữ.
@@ -198,7 +199,9 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
   "cancel": "Cancel",
   "login_success": "Login successful"
 }
+`
 
+`
 // vi.json
 {
   "save": "Lưu",
@@ -216,6 +219,7 @@ Nội dung động là dữ liệu lấy từ backend.
 Để tích hợp đa ngôn ngữ ở các nội dung này thì trong cơ sở dữ liệu nhóm đã thiết kế field như sau: 
 
 - Ví dụ dạng object với mã ngôn ngữ:
+  
 `
 {
   vi: "Toán",
