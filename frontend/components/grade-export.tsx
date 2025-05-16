@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function GradeExport() {
 	const t = useTranslations("gradeExport")
+	const tStudents = useTranslations("students")
 	const common = useTranslations("common")
 
 	// State
@@ -89,11 +90,11 @@ export default function GradeExport() {
 
 	// Get classification based on GPA
 	const getClassification = (gpa: number): string => {
-		if (gpa >= 3.6) return "Xuất sắc"
-		if (gpa >= 3.2) return "Giỏi"
-		if (gpa >= 2.5) return "Khá"
-		if (gpa >= 2.0) return "Trung bình"
-		return "Yếu"
+		if (gpa >= 3.6) return t("classificationExcellent")
+		if (gpa >= 3.2) return t("classificationGood")
+		if (gpa >= 2.5) return t("classificationFair")
+		if (gpa >= 2.0) return t("classificationAverage")
+		return t("classificationWeak")
 	}
 
 	// Format date to Vietnamese format
@@ -260,7 +261,11 @@ export default function GradeExport() {
 												</tr>
 												<tr>
 													<td className="pr-4 py-1 font-semibold">{t("educationSystem")}</td>
-													<td>{selectedStudent?.studentInfo?.educationSystem || "Chính quy"}</td>
+													<td>
+													{selectedStudent?.studentInfo?.educationSystem
+														? tStudents(selectedStudent.studentInfo.educationSystem)
+														: tStudents("regular")}
+													</td>
 												</tr>
 												<tr>
 													<td className="pr-4 py-1 font-semibold">{t("exportDate")}</td>
