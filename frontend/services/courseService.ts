@@ -22,6 +22,16 @@ class CourseService {
     const response = await apiClient.delete(`${routes.courses}/${id}`);
     return response.data;
   }
+
+  async getTranslationCourseById(id: string) {
+    const response = await apiClient.get(`${routes.courses}/${id}/translation`);
+    return response.data;
+  }
+
+  async updateTranslationCourse(id: string, translation: any) {
+    const response = await apiClient.put(`${routes.courses}/${id}/translation`, translation);
+    return response.data;
+  }
 }
 
 const courseService = new CourseService();

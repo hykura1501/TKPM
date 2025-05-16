@@ -31,7 +31,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname === `/${locale}/`} className={`${pathname === `/${locale}/` ? styles.active : ""}`}>
+            <SidebarMenuButton asChild isActive={pathname === `/${locale}`} className={`${pathname === `/${locale}` ? styles.active : ""}`}>
               <Link href="/">
                 <Home className="h-4 w-4 mr-2" />
                 <span >Trang chủ</span>

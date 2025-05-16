@@ -78,3 +78,8 @@ export type Transcript = {
   gpa: number
 }
 
+export type Translation = {
+  [locale: string]: {
+    [key: string]: string; // Các khóa và giá trị bên trong có thể tùy ý
+  };
+};

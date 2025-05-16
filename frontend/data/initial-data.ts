@@ -401,3 +401,14 @@ export const initialData = {
   systemConfig,
 }
 
+export const mockInitialTranslationsFaculty = {
+  en: {
+    facultyName: "Introduction to Computer Science",
+    },
+  vi: {
+    facultyName: "Nhập môn Khoa học Máy tính",
+    },
+  ji: {
+    facultyName: "コンピュータサイエンス入門",
+    },
+};

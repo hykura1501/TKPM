@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
-import { PlusCircle, Search, Pencil, Trash2 } from "lucide-react";
+import { PlusCircle, Search, Pencil, Trash2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,13 +21,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Course } from "@/types/index";
+import type { Course, Translation } from "@/types/index";
 import { classSections, getDepartmentName } from "@/data/sample-data";
 import { CourseForm } from "@/components/course-form";
 import { toast } from "react-toastify";
 import courseService from "@/services/courseService";
 import facultyService from "@/services/facultyService";
 import { Faculty } from "@/types/student";
+import { Global } from "recharts";
+import { TranslationManager } from "./translation-manager";
+import { useLocale, useTranslations } from "next-intl";
+
+const mockInitialTranslations = {
+  en: {
+    courseName: "Introduction to Computer Science",
+    description:
+      "This course provides an introduction to the fundamentals of computer science.",
+  },
+  vi: {
+    courseName: "Nhập môn Khoa học Máy tính",
+    description: "Khóa học này cung cấp kiến thức cơ bản về khoa học máy tính.",
+  },
+  ji: {
+    courseName: "コンピュータサイエンス入門",
+    description: "このコースでは、コンピュータサイエンスの基礎を紹介します。",
+  },
+};
 
 export function CourseManagement() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -35,6 +54,27 @@ export function CourseManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [translationOpen, setTranslationOpen] = useState(false);
+  const [translations, setTranslations] = useState<Translation | null>(
+    mockInitialTranslations
+  );
+  const t = useTranslations("courses");
+  const locale = useLocale();
+  // Define the translation fields
+  const translationFields = [
+    {
+      key: "courseName",
+      label: t("courseName"),
+      type: "input" as const,
+      required: true,
+    },
+    {
+      key: "description",
+      label: t("description"),
+      type: "textarea" as const,
+      required: false,
+    },
+  ];
 
   // Filter courses based on search term
   const filteredCourses = courses.filter(
@@ -141,6 +181,49 @@ export function CourseManagement() {
     setEditingCourse(null);
     setIsFormOpen(true);
   };
+  async function handleUpdateTranslations(
+    updatedTranslations: Translation | null
+  ) {
+    if (!editingCourse) return;
+
+    try {
+      const data = await courseService.updateTranslationCourse(
+        editingCourse.id,
+        updatedTranslations
+      );
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course.id === editingCourse.id
+            ? {
+                ...course,
+                name: updatedTranslations?.[locale]?.courseName || course.name, // Cập nhật `name`
+                description:
+                  updatedTranslations?.[locale]?.description ||
+                  course.description, // Cập nhật `description`
+              }
+            : course
+        )
+      );
+      setEditingCourse(null);
+      setTranslations(updatedTranslations);
+      //Cập nhật trong danh sách khóa học
+
+      setTranslationOpen(false);
+      toast.success("Cập nhật thông tin dịch thuật thành công.");
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi cập nhật thông tin dịch thuật.");
+    }
+  }
+  async function handleTranslateButtonClick(course: Course) {
+    // Fetch translations for the selected course
+    try {
+      const data = await courseService.getTranslationCourseById(course.id);
+      setTranslations(data);
+      setEditingCourse(course);
+    } catch (error: any) {
+      toast.error(error || "Đã xảy ra lỗi khi tải thông tin dịch thuật.");
+    }
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -153,6 +236,12 @@ export function CourseManagement() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (translations && editingCourse) {
+      setTranslationOpen(true);
+    }
+  }, [translations]);
 
   return (
     <Card>
@@ -248,6 +337,17 @@ export function CourseManagement() {
                         <Button
                           variant="outline"
                           size="icon"
+                          onClick={async () => {
+                            // Handle edit translation
+                            await handleTranslateButtonClick(course);
+                          }}
+                          className="h-8 w-8 text-gray-600 border-gray-200 hover:bg-gray-50"
+                        >
+                          <Globe className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
                           onClick={() => handleEdit(course)}
                           className="h-8 w-8 text-blue-600 border-blue-200 hover:bg-blue-50"
                         >
@@ -279,6 +379,15 @@ export function CourseManagement() {
           </Table>
         </div>
       </CardContent>
+      <TranslationManager
+        open={translationOpen}
+        onOpenChange={setTranslationOpen}
+        entityType="course"
+        entityId={""}
+        fields={translationFields}
+        initialTranslations={translations}
+        onSave={handleUpdateTranslations}
+      />
     </Card>
   );
 }

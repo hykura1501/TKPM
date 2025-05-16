@@ -18,11 +18,18 @@ export default function SettingsPage() {
   const pathname = usePathname()
 
   const handleLanguageChange = (value: string) => {
+
+    if (value === locale) {
+      return
+    }
     // Remove the current locale from the pathname
     const pathnameWithoutLocale = pathname.replace(`/${locale}`, "")
 
     // Construct the new path with the selected locale
-    const newPath = value === "vi" ? pathnameWithoutLocale : `/${value}${pathnameWithoutLocale}`
+    const newPath = `/${value}/${pathnameWithoutLocale}`
+    
+    //Thay đổi cookie
+    document.cookie = `NEXT_LOCALE=${value}; path=/;` 
 
     router.push(newPath)
   }

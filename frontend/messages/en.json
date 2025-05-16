@@ -22,7 +22,8 @@
     "loading": "Loading...",
     "noData": "No data found",
     "success": "Success",
-    "error": "Error"
+    "error": "Error",
+    "translations": "Translations"
   },
   "navigation": {
     "home": "Home",
@@ -102,7 +103,11 @@
     "facultyStatistics": "Statistics",
     "ID": "ID",
     "allFaculties": "All Faculties",
-    "imExport": "Import/Export"
+    "imExport": "Import/Export",
+    "facultyName": "Faculty Name"
+  },
+  "studentSettings": {
+    "facultyName": "Faculty Name"
   },
   "registration": {
     "title": "Course Registration",
@@ -139,6 +144,19 @@
     "gpa": "Grade Point Average (GPA):",
     "noGrades": "Student has no grades",
     "selectStudentPrompt": "Please select a student to view transcript"
+  },
+  "translations": {
+    "manageTranslations": "Manage Translations",
+    "saveTranslations": "Save Translations",
+    "cancel": "Cancel",
+    "copyFrom": "Copy from",
+    "translationsCopied": "Translations copied",
+    "translationsCopiedFrom": "Translations copied from {locale}",
+    "validationError": "Validation Error",
+    "requiredFieldMissing": "Required field '{field}' is missing for {locale}",
+    "cannotCopySameLocale": "Cannot copy from the same locale",
+    "selectDifferentLocale": "Please select a different locale to copy from",
+    "editTranslations": "Edit Translations"
   },
   "settings": {
     "title": "System Settings",

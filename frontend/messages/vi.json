@@ -22,7 +22,8 @@
     "loading": "Đang tải...",
     "noData": "Không tìm thấy dữ liệu",
     "success": "Thành công",
-    "error": "Lỗi"
+    "error": "Lỗi",
+    "translations": "Bản dịch"
   },
   "navigation": {
     "home": "Trang chủ",
@@ -88,7 +89,7 @@
     "title": "Quản lý Sinh viên",
     "addStudent": "Thêm Sinh viên",
     "updateStudent": "Cập nhật Thông tin Sinh viên",
-    "studentId": "Mã SV",
+    "ID": "Mã SV",
     "name": "Họ tên",
     "email": "Email",
     "department": "Khoa",
@@ -102,7 +103,11 @@
     "facultyStatistics": "Thống kê theo khoa",
     "id": "MSSV",
     "allFaculties": "Tất cả các khoa",
-    "imExport": "Nhập/Xuất"
+    "imExport": "Nhập/Xuất",
+    "facultyName": "Tên khoa"
+  },
+  "studentSettings": {
+    "facultyName": "Tên khoa"
   },
   "registration": {
     "title": "Đăng ký Khóa học",
@@ -139,6 +144,19 @@
     "gpa": "Điểm trung bình tích lũy (GPA):",
     "noGrades": "Sinh viên chưa có điểm",
     "selectStudentPrompt": "Vui lòng chọn sinh viên để xem bảng điểm"
+  },
+  "translations": {
+    "manageTranslations": "Quản lý Bản dịch",
+    "saveTranslations": "Lưu Bản dịch",
+    "cancel": "Hủy",
+    "copyFrom": "Sao chép từ",
+    "translationsCopied": "Đã sao chép bản dịch",
+    "translationsCopiedFrom": "Đã sao chép bản dịch từ {locale}",
+    "validationError": "Lỗi Xác thực",
+    "requiredFieldMissing": "Trường bắt buộc '{field}' bị thiếu cho {locale}",
+    "cannotCopySameLocale": "Không thể sao chép từ cùng một ngôn ngữ",
+    "selectDifferentLocale": "Vui lòng chọn một ngôn ngữ khác để sao chép",
+    "editTranslations": "Chỉnh sửa Bản dịch"
   },
   "settings": {
     "title": "Cài đặt Hệ thống",
