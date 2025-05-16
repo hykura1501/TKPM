@@ -1,7 +1,6 @@
 import type React from "react"
 import "@/app/globals.css"
 import { Inter } from "next/font/google"
-import { Toaster } from "@/components/ui/toaster"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Header } from "@/components/header"
@@ -9,6 +8,8 @@ import { getTranslations } from "next-intl/server"
 import { Providers } from "@/components/providers"
 import enMessages from "../../messages/en.json"
 import viMessages from "../../messages/vi.json"
+import { ToastContainer } from "react-toastify";
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -53,7 +54,7 @@ export default async function RootLayout({
                 </footer>
               </div>
             </SidebarInset>
-            <Toaster />
+            <ToastContainer/>
           </SidebarProvider>
         </Providers>
       </body>
