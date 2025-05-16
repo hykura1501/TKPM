@@ -15,7 +15,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-import styles from "@/styles/sidebar.module.css"
+import styles from "@/styles/Sidebar.module.css"
 import { useLocale } from "next-intl"
 
 export function AppSidebar() {
