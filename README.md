@@ -169,3 +169,7 @@ Tại trang Đăng ký Khóa học, có các chức năng như:
 ## Viết unit test cho các chức năng trong hệ thống:
 Nhóm đã thực hiện viết unit test cho các services:
 ![5e9c295b7aabc9f590ba](https://github.com/user-attachments/assets/4f157daa-ba72-4176-81d4-7003292ce630)
+
+### Tích hợp đa ngôn ngữ
+Tiếp tục chuỗi đồ án của nhóm, nhóm đã bổ sung thêm hỗ trợ đa ngôn ngữ cho hệ thống. Hiện tại, hệ thống đã có sẵn 2 ngôn ngữ là tiếng Anh và tiếng Việt.
+![image](https://github.com/user-attachments/assets/6ed12e4a-5338-4baa-9d67-b9f964ca81e4)
