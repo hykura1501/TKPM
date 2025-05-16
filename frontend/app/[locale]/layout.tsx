@@ -9,6 +9,7 @@ import { Providers } from "@/components/providers"
 import enMessages from "../../messages/en.json"
 import viMessages from "../../messages/vi.json"
 import { ToastContainer } from "react-toastify";
+import { Toaster } from "@/components/ui/toaster"
 
 
 const inter = Inter({ subsets: ["latin"] })
