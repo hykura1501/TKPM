@@ -37,7 +37,9 @@ export default async function RootLayout({
   const {locale} = await params
   const messages = locale === "en" ? enMessages : viMessages
 
-  return (
+  const t = await getTranslations({ locale, namespace: "footer" });
+
+   return (
     <html lang={locale}>
       <body className={inter.className}>
         <Providers locale={locale} messages={messages}>
@@ -49,15 +51,15 @@ export default async function RootLayout({
                 <main className="flex-1 container mx-auto py-6 px-4">{children}</main>
                 <footer className="bg-gray-100 border-t py-4">
                   <div className="container mx-auto text-center text-gray-600 text-sm">
-                    © Hệ Thống Quản Lý Khóa Học & Bảng Điểm
+                    {t("title")}
                   </div>
                 </footer>
               </div>
             </SidebarInset>
-            <ToastContainer/>
+            <Toaster />
           </SidebarProvider>
         </Providers>
       </body>
     </html>
-  )
+  );
 }
