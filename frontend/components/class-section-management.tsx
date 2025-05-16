@@ -15,10 +15,12 @@ import classSectionService from "@/services/classSectionService"
 import { toast } from "react-toastify"
 import { set } from "react-hook-form"
 import courseService from "@/services/courseService"
-import { useTranslations } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
+
 
 export function ClassSectionManagement() {
   const t = useTranslations("classes")
+  const locale = useLocale() 
   const [classSections, setClassSections] = useState<ClassSection[]>([])
   const [courses, setCourses] = useState<Course[]>([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -136,6 +138,31 @@ export function ClassSectionManagement() {
     return course ? course.name : t("unknownCourse")
   }
 
+  const vietnameseDayToEnglish: Record<string, string> = {
+    "Thứ 2": "Monday",
+    "Thứ 3": "Tuesday",
+    "Thứ 4": "Wednesday",
+    "Thứ 5": "Thursday",
+    "Thứ 6": "Friday",
+    "Thứ 7": "Saturday",
+    "Chủ nhật": "Sunday",
+  }
+
+  function convertScheduleToEnglish(schedule: string) {
+    const match = schedule.match(/^(Thứ [2-7]|Chủ nhật)/)
+    if (!match) return schedule
+    const dayVi = match[0]
+    const dayEn = vietnameseDayToEnglish[dayVi] || dayVi
+    return schedule.replace(dayVi, dayEn)
+  }
+
+  function getDisplaySchedule(schedule: string) {
+    if (locale === "en") {
+      return convertScheduleToEnglish(schedule)
+    }
+    return schedule
+  }
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -200,7 +227,7 @@ export function ClassSectionManagement() {
                     <TableCell>{section.instructor}</TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span>{section.schedule}</span>
+                        <span>{getDisplaySchedule(section.schedule)}</span>
                         <span className="text-xs text-gray-500">{t("classroom")}: {section.classroom}</span>
                       </div>
                     </TableCell>
