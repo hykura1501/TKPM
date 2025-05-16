@@ -427,7 +427,12 @@
     "academicYear": "Academic Year: 2023-2024 | Semester: II",
     "signature": "(Sign and write full name)",
     "signatureWithSeal": "(Sign, seal and write full name)",
-    "trainingOffice": "Training Office - XYZ University"
+    "trainingOffice": "Training Office - XYZ University",
+    "classificationExcellent": "Excellent",
+    "classificationGood": "Good",
+    "classificationFair": "Fair",
+    "classificationAverage": "Average",
+    "classificationWeak": "Weak"
   },
   "config": {
     "title": "System Configuration",
@@ -676,6 +681,6 @@
     "submit": "Save"
   },
   "footer": {
-    "title": "Course Management & Transcript System"
+    "title": "© Course Management & Transcript System"
   }
 }
