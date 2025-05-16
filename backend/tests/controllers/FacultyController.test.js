@@ -4,23 +4,26 @@ const FacultyService = require('../../src/api/services/FacultyService');
 jest.mock('../../src/api/services/FacultyService');
 
 describe('FacultyController', () => {
-  let req, res;
+  let req;
+  let res;
 
   beforeEach(() => {
-    req = { body: {}, params: {} };
+    req = {
+      language: 'vi',
+      query: { lang: 'en' },
+      body: {},
+      params: { id: '123' },
+    };
+
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe('getListFaculties', () => {
     it('should return list successfully', async () => {
-      const fakeData = [{ id: 1, name: 'Faculty A' }];
+      const fakeData = [{ id: 1, name: 'Công nghệ thông tin' }];
       FacultyService.getListFaculties.mockResolvedValue(fakeData);
 
       await FacultyController.getListFaculties(req, res);
@@ -30,25 +33,27 @@ describe('FacultyController', () => {
     });
 
     it('should handle error', async () => {
-      FacultyService.getListFaculties.mockRejectedValue(new Error('Error fetching'));
+      FacultyService.getListFaculties.mockRejectedValue(new Error('Something went wrong'));
 
       await FacultyController.getListFaculties(req, res);
 
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: expect.any(String) });
+      expect(res.json).toHaveBeenCalledWith({ error: 'Lỗi khi lấy danh sách khoa' });
     });
   });
 
   describe('addFaculty', () => {
     it('should add successfully', async () => {
-      const fakeResult = { success: true };
-      FacultyService.addFaculty.mockResolvedValue(fakeResult);
-      req.body = { name: 'Faculty B' };
+      const newFaculty = { name: 'Khoa học máy tính' };
+      req.body = newFaculty;
+      const result = { id: 1, ...newFaculty };
+
+      FacultyService.addFaculty.mockResolvedValue(result);
 
       await FacultyController.addFaculty(req, res);
 
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(fakeResult);
+      expect(res.json).toHaveBeenCalledWith(result);
     });
 
     it('should handle error when adding', async () => {
