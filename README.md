@@ -166,10 +166,6 @@ Tại trang Đăng ký Khóa học, có các chức năng như:
 ![Screenshot 2025-04-18 224723](https://github.com/user-attachments/assets/187251f7-a37a-4043-a4ef-e05debaf8480)
 ![Screenshot 2025-04-18 224730](https://github.com/user-attachments/assets/2cc55fc0-150e-46bd-955b-4674f071a346)
 
-## Viết unit test cho các chức năng trong hệ thống:
-Nhóm đã thực hiện viết unit test cho các services:
-![5e9c295b7aabc9f590ba](https://github.com/user-attachments/assets/4f157daa-ba72-4176-81d4-7003292ce630)
-
 ## Tích hợp đa ngôn ngữ
 Tiếp tục chuỗi đồ án của nhóm, nhóm đã bổ sung thêm hỗ trợ đa ngôn ngữ cho hệ thống. Hiện tại, hệ thống đã có sẵn 2 ngôn ngữ là tiếng Anh và tiếng Việt.
 
@@ -188,11 +184,12 @@ Có thể thấy rằng, toàn bộ giao diện trên hệ thống (so với hì
 
 Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn.
 
-- Ví dụ: "Lưu", "Hủy", "Đăng nhập thành công", "Lỗi hệ thống",...
+- Ví dụ: các nút "Lưu", "Hủy", "Đăng nhập thành công", "Lỗi hệ thống",...
 
-Để tích hợp đa ngôn ngữ ở các nội dung này thì trong Front-end, nhóm sử dụng thư viện để tải file JSON tương ứng với ngôn ngữ.
+Để tích hợp đa ngôn ngữ ở các nội dung tĩnh thì trong Front-end, nhóm sử dụng thư viện để tải file JSON tương ứng với ngôn ngữ.
 
 `
+
 // en.json
 {
   "save": "Save",
@@ -202,6 +199,7 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
 `
 
 `
+
 // vi.json
 {
   "save": "Lưu",
@@ -214,9 +212,9 @@ Nội dung tĩnh Là các chuỗi được viết cố định trong mã nguồn
 
 Nội dung động là dữ liệu lấy từ backend.
 
-- Ví dụ: tên môn học, mô tả, tên lớp,...
+- Ví dụ: tên môn học, mô tả, tên lớp học,...
 
-Để tích hợp đa ngôn ngữ ở các nội dung này thì trong cơ sở dữ liệu nhóm đã thiết kế field như sau: 
+Để tích hợp đa ngôn ngữ ở các nội dung động thì trong cơ sở dữ liệu nhóm đã thiết kế field như sau: 
 
 - Ví dụ dạng object với mã ngôn ngữ:
   
@@ -226,3 +224,10 @@ Nội dung động là dữ liệu lấy từ backend.
   en: "Math"
 }
 `
+
+## Viết unit test cho các chức năng trong hệ thống:
+Sau bài tập lần 5, nhóm đã thực hiện được đầy đủ tất cả các unit test. Tuy nhiên, sau khi tích hợp đa ngôn ngữ, một vài test không còn đảm bảo thực hiện được đúng. Do đó, nhóm đã thực hiện hiệu chỉnh, bổ sung lại unit test cho các controllers và services:
+
+![image](https://github.com/user-attachments/assets/b845ad8d-635f-4d8b-a315-de7b80219958)
+
+Ảnh trên chứng minh cho việc các unit test được thực hiện một cách đầy đủ và được kiểm tra lại kỹ càng. Qua đó, đảm bảo rằng các chức năng mà nhóm thực hiện cho ra kết quả đúng như mong đợi.
