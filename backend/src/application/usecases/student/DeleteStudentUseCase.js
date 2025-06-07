@@ -1,0 +1,26 @@
+// Use case: Delete a student
+const { addLogEntry } = require('@shared/utils/logging');
+
+class DeleteStudentUseCase {
+  constructor({ studentRepository }) {
+    this.studentRepository = studentRepository;
+  }
+
+  async execute(mssv) {
+    if (!mssv) {
+      await addLogEntry({ message: 'MSSV không được để trống', level: 'warn' });
+      throw { status: 400, message: 'MSSV không được để trống' };
+    }
+    const student = await this.studentRepository.findStudentByMssv(mssv);
+    if (!student) {
+      await addLogEntry({ message: 'Sinh viên không tồn tại', level: 'warn' });
+      throw { status: 404, message: 'Sinh viên không tồn tại' };
+    }
+    await this.studentRepository.deleteStudent(mssv);
+    await addLogEntry({ message: 'Xóa sinh viên thành công', level: 'info', action: 'delete', entity: 'student', user: 'admin', details: `Deleted student: ${mssv}` });
+    return { success: true };
+  }
+}
+
+module.exports = DeleteStudentUseCase;
+
