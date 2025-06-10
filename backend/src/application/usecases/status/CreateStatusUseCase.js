@@ -1,14 +1,19 @@
 // Use case: Create a new status
 const { statusSchema } = require('@validators/statusValidator');
-const { addLogEntry } = require('@helpers/logging');
+const { addLogEntry } = require('@shared/utils/logging');
 const { SUPPORTED_LOCALES } = require('@configs/locales');
 
 class CreateStatusUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IStatusRepository')} params.statusRepository - Repository thao tác tình trạng sinh viên
+   */
   constructor({ statusRepository }) {
+    /** @type {import('@domain/repositories/IStatusRepository')} */
     this.statusRepository = statusRepository;
   }
 
-  async execute(statusData) {
+  async execute(statusData, language = 'vi') {
     // Validate schema
     const parsed = statusSchema.safeParse(statusData);
     if (!parsed.success) {
@@ -24,8 +29,9 @@ class CreateStatusUseCase {
     newStatus.color = parsed.data.color;
     newStatus.allowedStatus = parsed.data.allowedStatus || [];
     await this.statusRepository.create(newStatus);
+    const statuses = (await this.statusRepository.findAll()).map((status) => require('@shared/utils/mapper').formatStatus(status, language));
     await addLogEntry({ message: 'Thêm tình trạng sinh viên thành công', level: 'info', action: 'create', entity: 'status', user: 'admin', details: 'Add new status: ' + parsed.data.name });
-    return { success: true, status: newStatus };
+    return { message: 'Thêm tình trạng sinh viên thành công', statuses };
   }
 }
 

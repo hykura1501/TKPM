@@ -1,8 +1,13 @@
 const { SUPPORTED_LOCALES } = require('@configs/locales');
-const { addLogEntry } = require('@helpers/logging');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class UpdateTranslationFacultyUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IFacultyRepository')} params.facultyRepository - Repository thao tác khoa
+   */
   constructor({ facultyRepository }) {
+    /** @type {import('@domain/repositories/IFacultyRepository')} */
     this.facultyRepository = facultyRepository;
   }
 

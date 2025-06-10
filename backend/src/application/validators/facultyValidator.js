@@ -1,5 +1,4 @@
 const { z } = require('zod');
-const { SUPPORTED_LOCALES } = require('../../configs/locales');
 
 const facultySchema = z.object({
   id: z.string().optional(),

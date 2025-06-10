@@ -1,8 +1,13 @@
-const Mapper = require('@helpers/mapper');
-const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
+const mapper = require('@shared/utils/mapper');
 
 class GetCourseListUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ courseRepository }) {
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
   }
 
@@ -12,7 +17,7 @@ class GetCourseListUseCase {
       await addLogEntry({ message: "Không tìm thấy khóa học nào", level: "warn" });
       return [];
     }
-    return courses.map((course) => Mapper.formatCourse(course, language));
+    return courses.map((course) => mapper.formatCourse(course, language));
   }
 }
 

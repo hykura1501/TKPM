@@ -1,9 +1,16 @@
-const Mapper = require('@helpers/mapper');
-const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
+const Mapper = require('@shared/utils/mapper');
 
 class DeleteCourseUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   * @param {import('@domain/repositories/IClassSectionRepository')} params.classSectionRepository - Repository thao tác lớp học phần
+   */
   constructor({ courseRepository, classSectionRepository }) {
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
+    /** @type {import('@domain/repositories/IClassSectionRepository')} */
     this.classSectionRepository = classSectionRepository;
   }
 

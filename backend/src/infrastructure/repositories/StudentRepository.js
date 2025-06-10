@@ -1,33 +1,33 @@
 // StudentRepository implements IStudentRepository (Infrastructure Layer)
-const StudentModel = require('../../api/models/Student');
-const Counter = require('../../api/models/Counter');
-const IStudentRepository = require('../../domain/repositories/IStudentRepository');
+const IStudentRepository = require('@domain/repositories/IStudentRepository');
 
-const Student = require('../../domain/entities/Student');
+const Student = require('@domain/entities/Student');
+const Counter = require('@domain/entities/Counter');
+
 class StudentRepository extends IStudentRepository {
   async getAllStudents() {
-    const docs = await StudentModel.find({}, { _id: 0 });
+    const docs = await Student.find({}, { _id: 0 });
     return docs.map(doc => new Student(doc));
   }
 
   async createStudent(studentData) {
-    return await StudentModel.create(studentData);
+    return await Student.create(studentData);
   }
 
   async createManyStudents(studentsData) {
-    return await StudentModel.insertMany(studentsData);
+    return await Student.insertMany(studentsData);
   }
 
   async updateStudent(mssv, studentData) {
-    return await StudentModel.updateOne({ mssv }, { $set: studentData });
+    return await Student.updateOne({ mssv }, { $set: studentData });
   }
 
   async deleteStudent(mssv) {
-    return await StudentModel.deleteOne({ mssv });
+    return await Student.deleteOne({ mssv });
   }
 
   async findStudentByMssv(mssv) {
-    return await StudentModel.findOne({ mssv });
+    return await Student.findOne({ mssv });
   }
 
   async getNextMssv() {
@@ -40,7 +40,7 @@ class StudentRepository extends IStudentRepository {
   }
 
   async findOneByCondition(condition) {
-    return await StudentModel.findOne(condition);
+    return await Student.findOne(condition);
   }
 }
 

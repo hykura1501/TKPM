@@ -1,11 +1,16 @@
-const Mapper = require('@helpers/mapper');
-const { addLogEntry } = require('@helpers/logging');
+const Mapper = require('@shared/utils/mapper');
+const { addLogEntry } = require('@shared/utils/logging');
 const { SUPPORTED_LOCALES } = require('@configs/locales');
 const FacultyRepository = require('@repositories/FacultyRepository');
 const { courseSchema } = require('@validators/courseValidator');
 
 class CreateCourseUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ courseRepository }) {
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
     this.facultyRepository = new FacultyRepository();
   }
@@ -14,7 +19,7 @@ class CreateCourseUseCase {
     const parsed = courseSchema.safeParse(course);
     if (!parsed.success) {
       await addLogEntry({ message: "Khóa học không hợp lệ", level: "warn" });
-      return { success: false, error: parsed.error.errors.message };
+      return { success: false, error: parsed.error.errors };
     }
     const existingCourse = await this.courseRepository.findOneByCondition({ code: parsed.data.code });
     if (!isUpdate && existingCourse) {

@@ -5,13 +5,21 @@ class RegistrationController {
     getRegistrationByIdUseCase,
     createRegistrationUseCase,
     updateRegistrationUseCase,
-    deleteRegistrationUseCase
+    deleteRegistrationUseCase,
+    cancelRegistrationUseCase,
+    getGradeByClassIdUseCase,
+    saveGradeByClassIdUseCase,
+    getGradeByStudentIdUseCase
   }) {
     this.getRegistrationListUseCase = getRegistrationListUseCase;
     this.getRegistrationByIdUseCase = getRegistrationByIdUseCase;
     this.createRegistrationUseCase = createRegistrationUseCase;
     this.updateRegistrationUseCase = updateRegistrationUseCase;
     this.deleteRegistrationUseCase = deleteRegistrationUseCase;
+    this.cancelRegistrationUseCase = cancelRegistrationUseCase;
+    this.getGradeByClassIdUseCase = getGradeByClassIdUseCase;
+    this.saveGradeByClassIdUseCase = saveGradeByClassIdUseCase;
+    this.getGradeByStudentIdUseCase = getGradeByStudentIdUseCase;
   }
   async getListRegistrations(req, res) {
     try {
@@ -58,6 +66,39 @@ class RegistrationController {
       res.status(200).json(deleted);
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+  async cancelRegistration(req, res) {
+    try {
+      const result = await this.cancelRegistrationUseCase.execute(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi hủy đăng ký học:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi hủy đăng ký học" });
+    }
+  }
+
+  async getGradeByClassId(req, res) {
+    try {
+      const { classId } = req.params;
+      const grades = await this.getGradeByClassIdUseCase.execute(classId);
+      // Nếu muốn lấy thêm studentInfo, cần inject StudentUseCase và join ở đây
+      res.status(200).json(grades);
+    } catch (error) {
+      console.error("Lỗi khi lấy điểm theo lớp:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi lấy điểm theo lớp" });
+    }
+  }
+
+  async saveGradeByClassId(req, res) {
+    try {
+      const { classId } = req.params;
+      const { grades } = req.body;
+      const result = await this.saveGradeByClassIdUseCase.execute(classId, grades);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi lưu điểm theo lớp:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi lưu điểm theo lớp" });
     }
   }
 }

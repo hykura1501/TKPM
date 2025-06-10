@@ -1,25 +1,40 @@
 // ProgramRepository implements IProgramRepository (Infrastructure Layer)
-const ProgramModel = require('../../api/models/Program');
-const IProgramRepository = require('../../domain/repositories/IProgramRepository');
+const IProgramRepository = require('@domain/repositories/IProgramRepository');
 
-const Program = require('../../domain/entities/Program');
+const Program = require('@domain/entities/Program');
+const Counter = require('@domain/entities/Counter');
+
 class ProgramRepository extends IProgramRepository {
   async findAll() {
-    const docs = await ProgramModel.find({});
-    return docs.map(doc => new Program(doc));
+    return await Program.find({});
   }
+
   async create(data) {
-    const newProgram = new ProgramModel(data);
+    const newProgram = new Program(data);
     return await newProgram.save();
   }
+
   async update(id, data) {
-    return await ProgramModel.updateOne({ id }, { $set: data });
+    return await Program.updateOne({ id }, { $set: data });
   }
+
   async delete(id) {
-    return await ProgramModel.deleteOne({ id });
+    return await Program.deleteOne({ id });
   }
   async findOneByCondition(condition) {
-    return await ProgramModel.findOne(condition);
+    return await Program.findOne(condition);
+  }
+  async getNextId() {
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: 'program_id' },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `program-${counter.value}`;
+    } catch (error) {
+      throw new Error('Lỗi khi tạo mã chương trình: ' + error.message);
+    }
   }
 }
 module.exports = ProgramRepository;

@@ -1,18 +1,23 @@
 // ProgramController (Presentation Layer)
 class ProgramController {
-  constructor({
-    getProgramListUseCase,
-    getProgramByIdUseCase,
-    createProgramUseCase,
-    updateProgramUseCase,
-    deleteProgramUseCase
-  }) {
+  /**
+   * @param {object} deps
+   * @param {import('@usecases/program/GetProgramListUseCase')} deps.getProgramListUseCase
+   * @param {import('@usecases/program/CreateProgramUseCase')} deps.createProgramUseCase
+   * @param {import('@usecases/program/UpdateProgramUseCase')} deps.updateProgramUseCase
+   * @param {import('@usecases/program/DeleteProgramUseCase')} deps.deleteProgramUseCase
+   * @param {import('@usecases/program/GetTranslationProgramByIdUseCase')} deps.getTranslationProgramByIdUseCase
+   * @param {import('@usecases/program/UpdateTranslationProgramUseCase')} deps.updateTranslationProgramUseCase
+   */
+  constructor({ getProgramListUseCase, createProgramUseCase, updateProgramUseCase, deleteProgramUseCase, getTranslationProgramByIdUseCase, updateTranslationProgramUseCase }) {
     this.getProgramListUseCase = getProgramListUseCase;
-    this.getProgramByIdUseCase = getProgramByIdUseCase;
     this.createProgramUseCase = createProgramUseCase;
     this.updateProgramUseCase = updateProgramUseCase;
     this.deleteProgramUseCase = deleteProgramUseCase;
+    this.getTranslationProgramByIdUseCase = getTranslationProgramByIdUseCase;
+    this.updateTranslationProgramUseCase = updateTranslationProgramUseCase;
   }
+
   async getListPrograms(req, res) {
     try {
       const programs = await this.getProgramListUseCase.execute();
@@ -58,6 +63,27 @@ class ProgramController {
       res.status(200).json(deleted);
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+  async getTranslationProgramById(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await this.getTranslationProgramByIdUseCase.execute(id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi lấy bản dịch chương trình học:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi lấy bản dịch chương trình học" });
+    }
+  }
+
+  async updateTranslationProgram(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await this.updateTranslationProgramUseCase.execute(id, req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật bản dịch chương trình học:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật bản dịch chương trình học" });
     }
   }
 }

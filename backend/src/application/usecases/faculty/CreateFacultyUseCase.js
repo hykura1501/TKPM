@@ -1,12 +1,17 @@
-const Mapper = require('@helpers/Mapper');
-const { addLogEntry } = require('@helpers/logging');
+const Mapper = require('@shared/utils/mapper');
+const { addLogEntry } = require('@shared/utils/logging');
 const { SUPPORTED_LOCALES } = require('@configs/locales');
 const { z } = require('zod');
 
 const { facultySchema } = require('@validators/facultyValidator');
 
 class CreateFacultyUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IFacultyRepository')} params.facultyRepository - Repository thao tác khoa
+   */
   constructor({ facultyRepository }) {
+    /** @type {import('@domain/repositories/IFacultyRepository')} */
     this.facultyRepository = facultyRepository;
   }
 
@@ -14,7 +19,7 @@ class CreateFacultyUseCase {
     const parsed = facultySchema.safeParse(faculty);
     if (!parsed.success) {
       await addLogEntry({ message: "Khoa không hợp lệ", level: "warn" });
-      return { success: false, error: parsed.error.errors.message };
+      return { success: false, error: parsed.error.errors };
     }
     const existingFaculty = await this.facultyRepository.findOneByCondition({ code: parsed.data.code });
     if (!isUpdate && existingFaculty) {

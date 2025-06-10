@@ -1,7 +1,13 @@
 const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class GetTranslationCourseUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ courseRepository }) {
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
   }
 
@@ -15,16 +21,24 @@ class GetTranslationCourseUseCase {
       await addLogEntry({ message: "Khóa học không tồn tại", level: "warn" });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
-    const translations = {
-      en: {
-        courseName: course.name.get("en"),
-        description: course.description.get("en"),
-      },
-      vi: {
-        courseName: course.name.get("vi"),
-        description: course.description.get("vi"),
-      },
-    };
+
+    const translations = {};
+    SUPPORTED_LOCALES.forEach((locale) => {
+      translations[locale] = {
+        courseName: course.name.get(locale),
+        description: course.description.get(locale),
+      };
+    });
+    // const translations = {
+    //   en: {
+    //     courseName: course.name.get("en"),
+    //     description: course.description.get("en"),
+    //   },
+    //   vi: {
+    //     courseName: course.name.get("vi"),
+    //     description: course.description.get("vi"),
+    //   },
+    // };
     return translations;
   }
 }

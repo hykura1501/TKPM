@@ -5,13 +5,19 @@ class StudentController {
     getStudentByIdUseCase,
     createStudentUseCase,
     updateStudentUseCase,
-    deleteStudentUseCase
+    deleteStudentUseCase,
+    addStudentsFromFileUseCase,
+    addStudentFromFileUseCase,
+    getGradeByStudentIdUseCase
   }) {
     this.getStudentListUseCase = getStudentListUseCase;
     this.getStudentByIdUseCase = getStudentByIdUseCase;
     this.createStudentUseCase = createStudentUseCase;
     this.updateStudentUseCase = updateStudentUseCase;
     this.deleteStudentUseCase = deleteStudentUseCase;
+    this.addStudentsFromFileUseCase = addStudentsFromFileUseCase;
+    this.addStudentFromFileUseCase = addStudentFromFileUseCase;
+    this.getGradeByStudentIdUseCase = getGradeByStudentIdUseCase;
   }
 
   async getListStudents(req, res) {
@@ -59,6 +65,48 @@ class StudentController {
       res.status(200).json(deleted);
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+  async addStudentsFromFile(req, res) {
+    try {
+      const newStudents = await this.addStudentsFromFileUseCase.execute(req.body);
+      res.status(201).json({
+        message: "Thêm sinh viên thành công",
+        students: newStudents,
+      });
+    } catch (error) {
+      console.error("Lỗi khi thêm sinh viên từ file:", error);
+      const errorMessage = error.message && error.message.startsWith("[")
+        ? JSON.parse(error.message)
+        : { error: error.message };
+      res.status(400).json(errorMessage);
+    }
+  }
+
+  async addStudentFromFile(req, res) {
+    try {
+      const newStudent = await this.addStudentFromFileUseCase.execute(req.body);
+      res.status(201).json({
+        message: "Thêm sinh viên thành công",
+        student: newStudent,
+      });
+    } catch (error) {
+      console.error("Lỗi khi thêm sinh viên từ file:", error);
+      const errorMessage = error.message && error.message.startsWith("[")
+        ? JSON.parse(error.message)
+        : { error: error.message };
+      res.status(400).json(errorMessage);
+    }
+  }
+
+  async getGradeByStudentId(req, res) {
+    try {
+      const grades = await this.getGradeByStudentIdUseCase.execute(req.params.studentId);
+      // Nếu muốn join thêm studentInfo, classInfo, courseInfo thì inject các usecase tương ứng và join ở đây
+      res.status(200).json({ grades });
+    } catch (error) {
+      console.error("Lỗi khi lấy điểm của sinh viên:", error);
+      res.status(500).json({ error: "Lỗi khi lấy điểm của sinh viên" });
     }
   }
 }

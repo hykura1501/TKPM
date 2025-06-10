@@ -1,10 +1,11 @@
-// Domain Entity - Status
-class Status {
-  constructor({ id, name, color, allowedStatus }) {
-    this.id = id;
-    this.name = name;
-    this.color = color;
-    this.allowedStatus = allowedStatus;
-  }
-}
-module.exports = Status;
+const mongoose = require('mongoose');
+
+const StatusSchema = new mongoose.Schema({
+  id: { type: String, required: true },
+  name: { type: Map, of: String, required: true },
+  color: { type: String },
+  allowedStatus: [{ type: String, required: true }]
+});
+
+module.exports = mongoose.model('Status', StatusSchema, 'statuses');
+

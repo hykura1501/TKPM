@@ -1,8 +1,13 @@
 // Use case: Delete a class section
-const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class DeleteClassSectionUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IClassSectionRepository')} params.classSectionRepository - Repository thao tác lớp học phần
+   */
   constructor({ classSectionRepository }) {
+    /** @type {import('@domain/repositories/IClassSectionRepository')} */
     this.classSectionRepository = classSectionRepository;
   }
 
@@ -23,8 +28,9 @@ class DeleteClassSectionUseCase {
       throw { status: 400, message: 'Không thể xóa lớp học đang được sử dụng' };
     }
     await this.classSectionRepository.delete(id);
+    const classSections = await this.classSectionRepository.findAll();
     await addLogEntry({ message: 'Xóa lớp học thành công', level: 'info', action: 'delete', entity: 'classSection', user: 'admin', details: `Deleted classSection: ${id}` });
-    return { success: true };
+    return { success: true, message: "Xóa lớp học thành công", classSections };
   }
 }
 

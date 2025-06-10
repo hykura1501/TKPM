@@ -1,15 +1,22 @@
 // Use case: Create a new class section
 const { classSectionSchema } = require('@validators/classSectionValidator');
-const { addLogEntry } = require('@helpers/logging');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class CreateClassSectionUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IClassSectionRepository')} params.classSectionRepository - Repository thao tác lớp học phần
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ classSectionRepository, courseRepository }) {
+    /** @type {import('@domain/repositories/IClassSectionRepository')} */
     this.classSectionRepository = classSectionRepository;
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
   }
 
   async execute(data) {
-    // Validate schema
+    // Kiểm tra dữ liệu đầu vào
     const parsed = classSectionSchema.safeParse(data);
     if (!parsed.success) {
       await addLogEntry({ message: 'Mã lớp học không hợp lệ', level: 'warn' });
@@ -31,8 +38,9 @@ class CreateClassSectionUseCase {
     const newId = Date.now().toString();
     const newClassSection = { ...parsed.data, id: newId };
     await this.classSectionRepository.create(newClassSection);
+    const classSections = await this.classSectionRepository.findAll();
     await addLogEntry({ message: 'Thêm lớp học thành công', level: 'info', action: 'create', entity: 'classSection', user: 'admin', details: 'Add new classSection: ' + parsed.data.code });
-    return { success: true, classSection: newClassSection };
+    return { message: "Thêm lớp học thành công", classSection: classSections };
   }
 }
 

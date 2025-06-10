@@ -5,7 +5,12 @@ const FacultyRepository = require('@repositories/FacultyRepository');
 const { courseSchema } = require('@validators/courseValidator');
 
 class UpdateCourseUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ courseRepository }) {
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
     this.facultyRepository = new FacultyRepository();
   }

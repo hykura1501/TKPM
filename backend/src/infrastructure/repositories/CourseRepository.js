@@ -1,39 +1,40 @@
 // CourseRepository implements ICourseRepository (Infrastructure Layer)
-const CourseModel = require('../../api/models/Course');
-const Counter = require('../../api/models/Counter');
-const ICourseRepository = require('../../domain/repositories/ICourseRepository');
+const Counter = require("@domain/entities/Counter");
+const Course = require("@domain/entities/Course");
+const ICourseRepository = require("@domain/repositories/ICourseRepository");
 
-const Course = require('../../domain/entities/Course');
 class CourseRepository extends ICourseRepository {
   async findAll() {
-    const docs = await CourseModel.find({});
-    return docs.map(doc => new Course(doc));
+    return await Course.find({});
   }
 
   async create(data) {
-    const newCourse = new CourseModel(data);
+    const newCourse = new Course(data);
     return await newCourse.save();
   }
 
   async update(id, data) {
-    return await CourseModel.updateOne({ id }, { $set: data });
+    return await Course.updateOne({ id }, { $set: data });
   }
 
   async delete(id) {
-    return await CourseModel.deleteOne({ id });
+    return await Course.deleteOne({ id });
   }
 
   async findOneByCondition(condition) {
-    return await CourseModel.findOne(condition);
+    return await Course.findOne(condition);
   }
-
   async getNextId() {
-    const counter = await Counter.findOneAndUpdate(
-      { name: 'classSection_id' },
-      { $inc: { value: 1 } },
-      { new: true, upsert: true }
-    );
-    return `course-${counter.value}`;
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: "classSection_id" },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `course-${counter.value}`;
+    } catch (error) {
+      throw new Error("Lỗi khi tạo mã khóa học: " + error.message);
+    }
   }
 }
 

@@ -1,20 +1,20 @@
 // CounterRepository implements ICounterRepository (Infrastructure Layer)
-const CounterModel = require('../../api/models/Counter');
-const ICounterRepository = require('../../domain/repositories/ICounterRepository');
+const Counter = require('@domain/entities/Counter');
+const ICounterRepository = require('@domain/repositories/ICounterRepository');
 
 class CounterRepository extends ICounterRepository {
   async findOneByName(name) {
-    return await CounterModel.findOne({ name });
+    return await Counter.findOne({ name });
   }
   async updateValue(name, value) {
-    return await CounterModel.updateOne({ name }, { $set: { value } });
+    return await Counter.updateOne({ name }, { $set: { value } });
   }
   async increment(name) {
-    return await CounterModel.findOneAndUpdate(
+    return await Counter.findOneAndUpdate(
       { name },
       { $inc: { value: 1 } },
       { new: true, upsert: true }
     );
   }
 }
-module.exports = new CounterRepository();
+module.exports = CounterRepository;

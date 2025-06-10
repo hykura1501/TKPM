@@ -2,14 +2,16 @@
 class SettingController {
   constructor({
     getSettingListUseCase,
-    createSettingUseCase,
-    updateSettingUseCase,
-    deleteSettingUseCase
+    getDomainsUseCase,
+    updatePhoneFormatsUseCase,
+    getStatusRulesUseCase,
+    getAllSettingsUseCase
   }) {
     this.getSettingListUseCase = getSettingListUseCase;
-    this.createSettingUseCase = createSettingUseCase;
-    this.updateSettingUseCase = updateSettingUseCase;
-    this.deleteSettingUseCase = deleteSettingUseCase;
+    this.getDomainsUseCase = getDomainsUseCase;
+    this.updatePhoneFormatsUseCase = updatePhoneFormatsUseCase;
+    this.getStatusRulesUseCase = getStatusRulesUseCase;
+    this.getAllSettingsUseCase = getAllSettingsUseCase;
   }
   async getListSettings(req, res) {
     try {
@@ -20,30 +22,43 @@ class SettingController {
     }
   }
 
-  async createSetting(req, res) {
+  async getDomains(req, res) {
     try {
-      const newSetting = await this.createSettingUseCase.execute(req.body);
-      res.status(201).json(newSetting);
+      const result = await this.getDomainsUseCase.execute();
+      res.status(200).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error("Lỗi khi lấy danh sách domain:", error);
+      res.status(500).json({ error: "Lỗi khi lấy danh sách domain" });
     }
   }
 
-  async updateSetting(req, res) {
+  async updatePhoneFormats(req, res) {
     try {
-      const updated = await this.updateSettingUseCase.execute(req.params.id, req.body);
-      res.status(200).json(updated);
+      const result = await this.updatePhoneFormatsUseCase.execute(req.body.phoneFormats);
+      res.status(200).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error("Lỗi khi cập nhật phone formats:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật phone formats" });
     }
   }
 
-  async deleteSetting(req, res) {
+  async getStatusRules(req, res) {
     try {
-      const deleted = await this.deleteSettingUseCase.execute(req.params.id);
-      res.status(200).json(deleted);
+      const rules = await this.getStatusRulesUseCase.execute();
+      res.status(200).json(rules);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error("Lỗi khi lấy danh sách setting:", error);
+      res.status(500).json({ error: "Lỗi khi lấy danh sách setting" });
+    }
+  }
+  
+  async getAllSettings(req, res) {
+    try {
+      const settings = await this.getAllSettingsUseCase.execute();
+      res.status(200).json(settings);
+    } catch (error) {
+      console.error("Lỗi khi lấy tất cả cài đặt:", error);
+      res.status(500).json({ error: "Lỗi khi lấy tất cả cài đặt" });
     }
   }
 }

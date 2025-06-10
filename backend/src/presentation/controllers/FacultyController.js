@@ -5,21 +5,26 @@ class FacultyController {
     getFacultyByIdUseCase,
     createFacultyUseCase,
     updateFacultyUseCase,
-    deleteFacultyUseCase
+    deleteFacultyUseCase,
+    getTranslationFacultyUseCase,
+    updateTranslationFacultyUseCase
   }) {
     this.getFacultyListUseCase = getFacultyListUseCase;
     this.getFacultyByIdUseCase = getFacultyByIdUseCase;
     this.createFacultyUseCase = createFacultyUseCase;
     this.updateFacultyUseCase = updateFacultyUseCase;
     this.deleteFacultyUseCase = deleteFacultyUseCase;
+    this.getTranslationFacultyUseCase = getTranslationFacultyUseCase;
+    this.updateTranslationFacultyUseCase = updateTranslationFacultyUseCase;
   }
 
   async getListFaculties(req, res) {
     try {
-      const faculties = await this.getFacultyListUseCase.execute();
+      const faculties = await this.getFacultyListUseCase.execute(req.language, req.query.lang);
       res.status(200).json(faculties);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      console.error("Lỗi khi lấy danh sách khoa:", error);
+      res.status(500).json({ error: "Lỗi khi lấy danh sách khoa" });
     }
   }
 
@@ -37,28 +42,50 @@ class FacultyController {
 
   async createFaculty(req, res) {
     try {
-      const newFaculty = await this.createFacultyUseCase.execute(req.body);
-      res.status(201).json(newFaculty);
+      const result = await this.createFacultyUseCase.execute(req.body, req.language);
+      res.status(201).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error("Lỗi khi thêm khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi thêm khoa" });
     }
   }
 
   async updateFaculty(req, res) {
     try {
-      const updated = await this.updateFacultyUseCase.execute(req.params.id, req.body);
-      res.status(200).json(updated);
+      const result = await this.updateFacultyUseCase.execute(req.body, req.language);
+      res.status(200).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error("Lỗi khi cập nhật khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật khoa" });
     }
   }
 
   async deleteFaculty(req, res) {
     try {
-      const deleted = await this.deleteFacultyUseCase.execute(req.params.id);
-      res.status(200).json(deleted);
+      const result = await this.deleteFacultyUseCase.execute(req.params.id, req.language);
+      res.status(200).json(result);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.error("Lỗi khi xóa khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi xóa khoa" });
+    }
+  }
+  async getTranslationFaculty(req, res) {
+    try {
+      const result = await this.getTranslationFacultyUseCase.execute(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách khoa:", error);
+      res.status(500).json({ error: "Lỗi khi lấy danh sách khoa" });
+    }
+  }
+
+  async updateTranslationFaculty(req, res) {
+    try {
+      const result = await this.updateTranslationFacultyUseCase.execute(req.params.id, req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật khoa:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật khoa" });
     }
   }
 }

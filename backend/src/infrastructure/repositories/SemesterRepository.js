@@ -1,25 +1,27 @@
 // SemesterRepository implements ISemesterRepository (Infrastructure Layer)
-const SemesterModel = require('../../api/models/Semester');
-const ISemesterRepository = require('../../domain/repositories/ISemesterRepository');
+const ISemesterRepository = require("../../domain/repositories/ISemesterRepository");
 
-const Semester = require('../../domain/entities/Semester');
+const Semester = require("../../domain/entities/Semester");
 class SemesterRepository extends ISemesterRepository {
   async findAll() {
-    const docs = await SemesterModel.find({});
-    return docs.map(doc => new Semester(doc));
+    return await Semester.find({});
   }
+
   async create(data) {
-    const newSemester = new SemesterModel(data);
+    const newSemester = new Semester(data);
     return await newSemester.save();
   }
+
   async update(id, data) {
-    return await SemesterModel.updateOne({ id }, { $set: data });
+    return await Semester.updateOne({ id }, { $set: data });
   }
+
   async delete(id) {
-    return await SemesterModel.deleteOne({ id });
+    return await Semester.deleteOne({ id });
   }
+
   async findOneByCondition(condition) {
-    return await SemesterModel.findOne(condition);
+    return await Semester.findOne(condition);
   }
 }
 module.exports = SemesterRepository;

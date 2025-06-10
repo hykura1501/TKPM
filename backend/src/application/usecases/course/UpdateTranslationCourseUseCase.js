@@ -1,7 +1,13 @@
 const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class UpdateTranslationCourseUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ courseRepository }) {
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
   }
 

@@ -1,7 +1,13 @@
-const { addLogEntry } = require('@helpers/logging');
+const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class GetTranslationFacultyUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IFacultyRepository')} params.facultyRepository - Repository thao tác khoa
+   */
   constructor({ facultyRepository }) {
+    /** @type {import('@domain/repositories/IFacultyRepository')} */
     this.facultyRepository = facultyRepository;
   }
 
@@ -15,16 +21,24 @@ class GetTranslationFacultyUseCase {
       await addLogEntry({ message: "Khoa không tồn tại", level: "warn" });
       throw { status: 404, message: "Khoa không tồn tại" };
     }
-    const translations = {
-      en: {
-        facultyName: faculty.name.get("en"),
-        description: faculty.description.get("en"),
-      },
-      vi: {
-        facultyName: faculty.name.get("vi"),
-        description: faculty.description.get("vi"),
-      },
-    };
+    // const translations = {
+    //   en: {
+    //     facultyName: faculty.name.get("en"),
+    //     description: faculty.description.get("en"),
+    //   },
+    //   vi: {
+    //     facultyName: faculty.name.get("vi"),
+    //     description: faculty.description.get("vi"),
+    //   },
+    // };
+
+    const translations = {};
+    SUPPORTED_LOCALES.forEach((locale) => {
+      translations[locale] = {
+        facultyName: faculty.name?.get?.(locale) || (faculty.name?.[locale] ?? null),
+        description: faculty.description?.get?.(locale) || (faculty.description?.[locale] ?? null),
+      };
+    });
     return translations;
   }
 }

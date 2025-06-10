@@ -1,7 +1,12 @@
-// Domain Entity - Semester
-class Semester {
-  constructor({ name }) {
-    this.name = name;
+const mongoose = require("mongoose");
+
+const SemesterSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    }
   }
-}
-module.exports = Semester;
+);
+
+module.exports = mongoose.model("Semester", SemesterSchema);

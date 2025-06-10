@@ -3,11 +3,24 @@ const { studentSchema } = require('../../validators/studentValidator');
 const { addLogEntry } = require('@shared/utils/logging');
 
 class UpdateStudentUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IStudentRepository')} params.studentRepository - Repository thao tác sinh viên
+   * @param {import('@domain/repositories/ISettingRepository')} [params.settingRepository] - Repository thao tác cài đặt
+   * @param {import('@domain/repositories/IFacultyRepository')} [params.facultyRepository] - Repository thao tác khoa
+   * @param {import('@domain/repositories/IProgramRepository')} [params.programRepository] - Repository thao tác chương trình học
+   * @param {import('@domain/repositories/IStatusRepository')} [params.statusRepository] - Repository thao tác tình trạng sinh viên
+   */
   constructor({ studentRepository, settingRepository, facultyRepository, programRepository, statusRepository }) {
+    /** @type {import('@domain/repositories/IStudentRepository')} */
     this.studentRepository = studentRepository;
+    /** @type {import('@domain/repositories/ISettingRepository')} */
     this.settingRepository = settingRepository;
+    /** @type {import('@domain/repositories/IFacultyRepository')} */
     this.facultyRepository = facultyRepository;
+    /** @type {import('@domain/repositories/IProgramRepository')} */
     this.programRepository = programRepository;
+    /** @type {import('@domain/repositories/IStatusRepository')} */
     this.statusRepository = statusRepository;
   }
 

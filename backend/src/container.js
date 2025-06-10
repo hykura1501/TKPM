@@ -20,6 +20,9 @@ const GetStudentByIdUseCase = require('./application/usecases/student/GetStudent
 const CreateStudentUseCase = require('./application/usecases/student/CreateStudentUseCase');
 const UpdateStudentUseCase = require('./application/usecases/student/UpdateStudentUseCase');
 const DeleteStudentUseCase = require('./application/usecases/student/DeleteStudentUseCase');
+const AddStudentsFromFileUseCase = require('./application/usecases/student/AddStudentsFromFileUseCase');
+const AddStudentFromFileUseCase = require('./application/usecases/student/AddStudentFromFileUseCase');
+const GetGradeByStudentIdUseCase = require('./application/usecases/registration/GetGradeByStudentIdUseCase');
 const GetFacultyListUseCase = require('./application/usecases/faculty/GetFacultyListUseCase');
 const GetFacultyByIdUseCase = require('./application/usecases/faculty/GetFacultyByIdUseCase');
 const CreateFacultyUseCase = require('./application/usecases/faculty/CreateFacultyUseCase');
@@ -39,12 +42,6 @@ const UpdateStatusUseCase = require('./application/usecases/status/UpdateStatusU
 const DeleteStatusUseCase = require('./application/usecases/status/DeleteStatusUseCase');
 
 const GetLogListUseCase = require('./application/usecases/log/GetLogListUseCase');
-
-const GetSettingListUseCase = require('./application/usecases/setting/GetSettingListUseCase');
-const CreateSettingUseCase = require('./application/usecases/setting/CreateSettingUseCase');
-const UpdateSettingUseCase = require('./application/usecases/setting/UpdateSettingUseCase');
-const DeleteSettingUseCase = require('./application/usecases/setting/DeleteSettingUseCase');
-const GetCounterListUseCase = require('./application/usecases/setting/GetCounterListUseCase');
 
 const GetClassSectionListUseCase = require('./application/usecases/classSection/GetClassSectionListUseCase');
 const CreateClassSectionUseCase = require('./application/usecases/classSection/CreateClassSectionUseCase');
@@ -82,6 +79,8 @@ const ClassSectionController = require('./presentation/controllers/ClassSectionC
 const RegistrationController = require('./presentation/controllers/RegistrationController');
 const SemesterController = require('./presentation/controllers/SemesterController');
 const CourseController = require('./presentation/controllers/CourseController');
+const GetSettingListUseCase = require('./application/usecases/setting/GetDomainsUseCase');
+const UpdateSettingUseCase = require('./application/usecases/setting/UpdateDomainsUseCase');
 // ... import các controller khác nếu cần
 
 const container = createContainer();
@@ -95,6 +94,9 @@ container.register({
   createStudentUseCase: asClass(CreateStudentUseCase).scoped(),
   updateStudentUseCase: asClass(UpdateStudentUseCase).scoped(),
   deleteStudentUseCase: asClass(DeleteStudentUseCase).scoped(),
+  addStudentsFromFileUseCase: asClass(AddStudentsFromFileUseCase).scoped(),
+  addStudentFromFileUseCase: asClass(AddStudentFromFileUseCase).scoped(),
+  getGradeByStudentIdUseCase: asClass(GetGradeByStudentIdUseCase).scoped(),
   // Controller
   studentController: asClass(StudentController).scoped(),
   
@@ -115,6 +117,8 @@ container.register({
   createProgramUseCase: asClass(CreateProgramUseCase).scoped(),
   updateProgramUseCase: asClass(UpdateProgramUseCase).scoped(),
   deleteProgramUseCase: asClass(DeleteProgramUseCase).scoped(),
+  getTranslationProgramByIdUseCase: asClass(require('./application/usecases/program/GetTranslationProgramByIdUseCase')).scoped(),
+  updateTranslationProgramUseCase: asClass(require('./application/usecases/program/UpdateTranslationProgramUseCase')).scoped(),
   programController: asClass(ProgramController).scoped(),
 
   // Status
@@ -123,6 +127,8 @@ container.register({
   createStatusUseCase: asClass(CreateStatusUseCase).scoped(),
   updateStatusUseCase: asClass(UpdateStatusUseCase).scoped(),
   deleteStatusUseCase: asClass(DeleteStatusUseCase).scoped(),
+  updateStatusRulesUseCase: asClass(require('./application/usecases/status/UpdateStatusRulesUseCase')).scoped(),
+  getStatusRulesUseCase: asClass(require('./application/usecases/status/GetStatusRulesUseCase')).scoped(),
   statusController: asClass(StatusController).scoped(),
 
   // Log
@@ -133,14 +139,23 @@ container.register({
   // Setting
   settingRepository: asClass(SettingRepository).singleton(),
   getSettingListUseCase: asClass(GetSettingListUseCase).scoped(),
-  createSettingUseCase: asClass(CreateSettingUseCase).scoped(),
   updateSettingUseCase: asClass(UpdateSettingUseCase).scoped(),
-  deleteSettingUseCase: asClass(DeleteSettingUseCase).scoped(),
+  updateDomainsUseCase: asClass(require('./application/usecases/setting/UpdateDomainsUseCase')).scoped(),
+  getDomainsUseCase: asClass(require('./application/usecases/setting/GetDomainsUseCase')).scoped(),
+  updatePhoneFormatsUseCase: asClass(require('./application/usecases/setting/UpdatePhoneFormatsUseCase')).scoped(),
+  getAllSettingsUseCase: asClass(require('./application/usecases/setting/GetAllSettingsUseCase')).scoped(),
+  getStatusRulesUseCase: asClass(require('./application/usecases/setting/GetStatusRulesUseCase')).scoped(),
   settingController: asClass(SettingController).scoped(),
 
   // ClassSection
   classSectionRepository: asClass(ClassSectionRepository).singleton(),
   getClassSectionListUseCase: asClass(GetClassSectionListUseCase).scoped(),
+  createClassSectionUseCase: asClass(CreateClassSectionUseCase).scoped(),
+  updateClassSectionUseCase: asClass(UpdateClassSectionUseCase).scoped(),
+  deleteClassSectionUseCase: asClass(DeleteClassSectionUseCase).scoped(),
+  getClassSectionByCourseIdUseCase: asClass(require('./application/usecases/classSection/GetClassSectionByCourseIdUseCase')).scoped(),
+  getClassSectionByIdUseCase: asClass(require('./application/usecases/classSection/GetClassSectionByIdUseCase')).scoped(),
+  classSectionExistsUseCase: asClass(require('./application/usecases/classSection/ClassSectionExistsUseCase')).scoped(),
   classSectionController: asClass(ClassSectionController).scoped(),
 
   // Registration
@@ -150,6 +165,10 @@ container.register({
   createRegistrationUseCase: asClass(CreateRegistrationUseCase).scoped(),
   updateRegistrationUseCase: asClass(UpdateRegistrationUseCase).scoped(),
   deleteRegistrationUseCase: asClass(DeleteRegistrationUseCase).scoped(),
+  cancelRegistrationUseCase: asClass(require('./application/usecases/registration/CancelRegistrationUseCase')).scoped(),
+  getGradeByClassIdUseCase: asClass(require('./application/usecases/registration/GetGradeByClassIdUseCase')).scoped(),
+  saveGradeByClassIdUseCase: asClass(require('./application/usecases/registration/SaveGradeByClassIdUseCase')).scoped(),
+  getGradeByStudentIdUseCase: asClass(require('./application/usecases/registration/GetGradeByStudentIdUseCase')).scoped(),
   registrationController: asClass(RegistrationController).scoped(),
 
   // Semester

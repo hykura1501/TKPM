@@ -1,25 +1,41 @@
 // StatusRepository implements IStatusRepository (Infrastructure Layer)
-const StatusModel = require('../../api/models/Status');
-const IStatusRepository = require('../../domain/repositories/IStatusRepository');
+const IStatusRepository = require("../../domain/repositories/IStatusRepository");
 
-const Status = require('../../domain/entities/Status');
+const Status = require("../../domain/entities/Status");
+const Counter = require("@domain/entities/Counter");
+
 class StatusRepository extends IStatusRepository {
   async findAll() {
-    const docs = await StatusModel.find({});
-    return docs.map(doc => new Status(doc));
+    return await Status.find({});
   }
+
   async create(data) {
-    const newStatus = new StatusModel(data);
+    const newStatus = new Status(data);
     return await newStatus.save();
   }
+
   async update(id, data) {
-    return await StatusModel.updateOne({ id }, { $set: data });
+    return await Status.updateOne({ id }, { $set: data });
   }
+
   async delete(id) {
-    return await StatusModel.deleteOne({ id });
+    return await Status.deleteOne({ id });
   }
+
   async findOneByCondition(condition) {
-    return await StatusModel.findOne(condition);
+    return await Status.findOne(condition);
+  }
+  async getNextId() {
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: "status_id" },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `status-${counter.value}`;
+    } catch (error) {
+      throw new Error("Lỗi khi tạo mã trạng thái: " + error.message);
+    }
   }
 }
 module.exports = StatusRepository;

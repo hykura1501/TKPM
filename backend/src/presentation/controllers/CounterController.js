@@ -1,5 +1,5 @@
 // CounterController (Presentation Layer)
-const GetCounterListUseCase = require('../../application/usecases/GetCounterListUseCase');
+const GetCounterListUseCase = require('@usecases/GetCounterListUseCase');
 const counterRepository = require('../../infrastructure/repositories/CounterRepository');
 
 const getCounterListUseCase = new GetCounterListUseCase(counterRepository);

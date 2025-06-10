@@ -2,7 +2,12 @@ const { addLogEntry } = require('@shared/utils/logging');
 const Mapper = require('@shared/utils/mapper');
 
 class GetFacultyByIdUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IFacultyRepository')} params.facultyRepository - Repository thao tác khoa
+   */
   constructor({ facultyRepository }) {
+    /** @type {import('@domain/repositories/IFacultyRepository')} */
     this.facultyRepository = facultyRepository;
   }
 

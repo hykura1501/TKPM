@@ -1,10 +1,15 @@
 // Use case: Update a status
 const { statusSchema } = require('@validators/statusValidator');
-const { addLogEntry } = require('@helpers/logging');
 const { SUPPORTED_LOCALES } = require('@configs/locales');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class UpdateStatusUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IStatusRepository')} params.statusRepository - Repository thao tác tình trạng sinh viên
+   */
   constructor({ statusRepository }) {
+    /** @type {import('@domain/repositories/IStatusRepository')} */
     this.statusRepository = statusRepository;
   }
 
@@ -26,8 +31,9 @@ class UpdateStatusUseCase {
     status.color = parsed.data.color;
     status.allowedStatus = parsed.data.allowedStatus || [];
     await this.statusRepository.update(id, status);
+    const statuses = (await this.statusRepository.findAll()).map((status) => require('@shared/utils/mapper').formatStatus(status, language));
     await addLogEntry({ message: 'Cập nhật tình trạng sinh viên thành công', level: 'info', action: 'update', entity: 'status', user: 'admin', details: 'Updated status: ' + parsed.data.name });
-    return { success: true };
+    return { message: 'Cập nhật tình trạng sinh viên thành công', statuses };
   }
 }
 

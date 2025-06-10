@@ -45,6 +45,7 @@
     "@controllers": "src/presentation/controllers",
     "@repositories": "src/infrastructure/repositories",
     "@shared": "src/shared",
-    "@configs": "src/configs"
+    "@configs": "src/configs",
+    "@domain": "src/domain"
   }
 }

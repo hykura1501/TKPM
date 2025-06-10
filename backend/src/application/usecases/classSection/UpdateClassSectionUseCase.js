@@ -1,10 +1,17 @@
 // Use case: Update a class section
 const { classSectionSchema } = require('@validators/classSectionValidator');
-const { addLogEntry } = require('@helpers/logging');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class UpdateClassSectionUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IClassSectionRepository')} params.classSectionRepository - Repository thao tác lớp học phần
+   * @param {import('@domain/repositories/ICourseRepository')} params.courseRepository - Repository thao tác khóa học
+   */
   constructor({ classSectionRepository, courseRepository }) {
+    /** @type {import('@domain/repositories/IClassSectionRepository')} */
     this.classSectionRepository = classSectionRepository;
+    /** @type {import('@domain/repositories/ICourseRepository')} */
     this.courseRepository = courseRepository;
   }
 
@@ -29,8 +36,9 @@ class UpdateClassSectionUseCase {
     }
     // Cập nhật lớp học
     await this.classSectionRepository.update(parsed.data.id, parsed.data);
+    const classSections = await this.classSectionRepository.findAll();
     await addLogEntry({ message: 'Cập nhật lớp học thành công', level: 'info', action: 'update', entity: 'classSection', user: 'admin', details: 'Updated classSection: ' + parsed.data.code });
-    return { success: true };
+    return { success: true, message: "Cập nhật lớp học thành công", classSections };
   }
 }
 

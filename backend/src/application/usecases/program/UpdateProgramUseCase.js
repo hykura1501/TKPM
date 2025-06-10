@@ -1,9 +1,15 @@
 // Use case: Update a program
+const { addLogEntry } = require('@shared/utils/logging');
+const mapper = require('@shared/utils/mapper');
 const { programSchema } = require('@validators/programValidator');
-const { addLogEntry } = require('@helpers/logging');
 
 class UpdateProgramUseCase {
+  /**
+   * @param {object} params
+   * @param {import('@domain/repositories/IProgramRepository')} params.programRepository - Repository thao tác chương trình học
+   */
   constructor({ programRepository }) {
+    /** @type {import('@domain/repositories/IProgramRepository')} */
     this.programRepository = programRepository;
   }
 
@@ -26,8 +32,11 @@ class UpdateProgramUseCase {
       name: program.name,
       faculty: parsed.data.faculty,
     });
+    const programs = (await this.programRepository.findAll()).map((program) =>
+      mapper.formatProgram(program, language)
+    );
     await addLogEntry({ message: 'Cập nhật chương trình học thành công', level: 'info', action: 'update', entity: 'program', user: 'admin', details: 'Updated program: ' + parsed.data.name });
-    return { success: true };
+    return { message: "Cập nhật chương trình học thành công", programs };
   }
 }
 
