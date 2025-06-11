@@ -1,6 +1,6 @@
 import type React from "react"
 import "@/app/globals.css"
-import { Inter } from "next/font/google"
+import { Geist, Geist_Mono, Inter } from "next/font/google"
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Header } from "@/components/header"
@@ -9,6 +9,18 @@ import { Providers } from "@/components/providers"
 import enMessages from "../../messages/en.json"
 import viMessages from "../../messages/vi.json"
 import { ToastContainer } from "react-toastify";
+
+
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 
 const inter = Inter({ subsets: ["latin"] })
@@ -24,6 +36,26 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    icons: {
+      icon: [
+        {
+          url: "/favicon.ico",
+          sizes: "16x16",
+          type: "image/x-icon",
+        },
+        {
+          url: "/favicon.svg",
+          type: "image/svg+xml",
+        },
+      ],
+      apple: [
+        {
+          url: "/apple-touch-icon.png",
+          sizes: "180x180",
+          type: "image/png",
+        },
+      ],
+    },
   }
 }
 
@@ -41,7 +73,7 @@ export default async function RootLayout({
 
    return (
     <html lang={locale}>
-      <body className={inter.className}>
+      <body className={geistSans.variable}>
         <Providers locale={locale} messages={messages}>
           <SidebarProvider>
             <AppSidebar />

@@ -64,14 +64,15 @@ import StatusService from "@/services/statusService";
 import { toast } from "react-toastify";
 import { ConfigDialog } from "@/components/config-dialog";
 import settingService from "@/services/settingServices";
-import { useTranslations } from "next-intl"
-
+import { useTranslations } from "next-intl";
+import { PageLoader } from "@/components/ui/page-loader";
 
 export default function Home() {
-  const t = useTranslations("students")
+  const t = useTranslations("students");
 
   // State for students and related data
   const [students, setStudents] = useState<Student[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [statuses, setStatuses] = useState<StudentStatus[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -99,17 +100,19 @@ export default function Home() {
       console.error("Failed to add student", error);
     }
   }
-  const [statusRules, setStatusRules] = useState<Record<string, string[]>>  ({}); 
+  const [statusRules, setStatusRules] = useState<Record<string, string[]>>({});
   // Load initial data
   useEffect(() => {
     async function loadData() {
+      setIsLoading(true);
       const studentsData = await StudentService.fetchStudents();
       const facultiesData = await FacultyService.fetchFaculties();
       const statusesData = await StatusService.fetchStatuses();
       const programsData = await ProgramService.fetchPrograms();
       const settings = await settingService.fetchSettings();
       const statusTransitionRules = await settingService.getFormatRules();
-
+      // setTimeout(() => setIsLoading(false), 1000);
+      setIsLoading(false);
       setStudents(studentsData);
       setFaculties(facultiesData);
       setStatuses(statusesData);
@@ -117,7 +120,6 @@ export default function Home() {
       setSystemConfig(settings);
       setStatusRules(statusTransitionRules);
     }
-
     loadData();
   }, []);
 
@@ -214,8 +216,6 @@ export default function Home() {
     setEditingStudent(null);
     setIsFormOpen(true);
   };
-
-  // Định nghĩa schema cho sinh viên
   const studentSchema = z.object({
     mssv: z.string().optional(),
     fullName: z.string().min(3, "Họ tên không hợp lệ"),
@@ -230,8 +230,8 @@ export default function Home() {
       .object({
         streetAddress: z.string(),
         ward: z.string(),
-        district: z.string(),
-        province: z.string(),
+        district: z.string().optional(),
+        province: z.string().optional(),
         country: z.string(),
       })
       .optional(),
@@ -239,8 +239,8 @@ export default function Home() {
       .object({
         streetAddress: z.string(),
         ward: z.string(),
-        district: z.string(),
-        province: z.string(),
+        district: z.string().optional(),
+        province: z.string().optional(),
         country: z.string(),
       })
       .optional(),
@@ -248,8 +248,8 @@ export default function Home() {
       .object({
         streetAddress: z.string(),
         ward: z.string(),
-        district: z.string(),
-        province: z.string(),
+        district: z.string().optional(),
+        province: z.string().optional(),
         country: z.string(),
       })
       .optional(),
@@ -276,7 +276,7 @@ export default function Home() {
           issueDate: z.string(),
           issuePlace: z.string(),
           expiryDate: z.string(),
-          issuingCountry: z.string(),
+          issuingCountry: z.string().optional(),
           notes: z.string().optional(),
         }),
       ])
@@ -287,6 +287,7 @@ export default function Home() {
     status: z.string(),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
+    _id: z.string().optional(),
   });
 
   const handleImportExport = async (
@@ -378,7 +379,9 @@ export default function Home() {
           });
         }
         if (errorCount > 0) {
-          toast.error("Import không thành công! Vui lòng kiểm tra lại dữ liệu!");
+          toast.error(
+            "Import không thành công! Vui lòng kiểm tra lại dữ liệu!"
+          );
           // Ghi log
           pushLop({
             timestamp: new Date().toISOString(),
@@ -508,26 +511,32 @@ export default function Home() {
     //toast.success("Cập nhật cấu hình hệ thống thành công!")
     try {
       if (flag === "status") {
-        const res = await StatusService.updateStatusRules(newConfig.statusTransitionRules);
+        const res = await StatusService.updateStatusRules(
+          newConfig.statusTransitionRules
+        );
         setStatusRules(await settingService.getFormatRules());
-        toast.success(res.message)
-        setSystemConfig(newConfig)
-        setIsConfigOpen(false)
+        toast.success(res.message);
+        setSystemConfig(newConfig);
+        setIsConfigOpen(false);
       } else if (flag === "domains") {
-        const res = await settingService.updateDomains(newConfig.allowedEmailDomains);
-        toast.success(res.message)
-        setSystemConfig(newConfig)
-        setIsConfigOpen(false)
+        const res = await settingService.updateDomains(
+          newConfig.allowedEmailDomains
+        );
+        toast.success(res.message);
+        setSystemConfig(newConfig);
+        setIsConfigOpen(false);
       } else if (flag === "phone") {
-        const res = await settingService.updatePhoneFormats(newConfig.phoneFormats);
-        toast.success(res.message)
-        setSystemConfig(newConfig)
-        setIsConfigOpen(false)
+        const res = await settingService.updatePhoneFormats(
+          newConfig.phoneFormats
+        );
+        toast.success(res.message);
+        setSystemConfig(newConfig);
+        setIsConfigOpen(false);
       }
     } catch (error) {
       console.log("Failed to update status rules", error);
     }
-  }
+  };
 
   // Update settings (faculties, statuses, programs)
   const updateSettings = (
@@ -571,41 +580,42 @@ export default function Home() {
 
   const [isConfigOpen, setIsConfigOpen] = useState(false);
 
+  const [systemConfig, setSystemConfig] = useState<SystemConfig>({});
 
-  const [systemConfig, setSystemConfig] = useState<SystemConfig>({
-
-  });
+  if (isLoading) {
+    return <PageLoader message={t("loadingStudents")} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
-          <div className="flex gap-2 py-4 text-white items-center">
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
-              onClick={() => setIsConfigOpen(true)}
-            >
-              <Sliders className="h-4 w-4 mr-2" />
-              {t("config")}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
-              onClick={() => handleOpenLogs()}
-            >
-              {t("logs")}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
-              onClick={() => setIsSettingsOpen(true)}
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              {t("settings")}
-            </Button>
-          </div>
+      <div className="flex gap-2 py-4 text-white items-center">
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
+          onClick={() => setIsConfigOpen(true)}
+        >
+          <Sliders className="h-4 w-4 mr-2" />
+          {t("config")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
+          onClick={() => handleOpenLogs()}
+        >
+          {t("logs")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-white bg-blue-600 hover:text-white hover:bg-blue-700 border-white"
+          onClick={() => setIsSettingsOpen(true)}
+        >
+          <Settings className="h-4 w-4 mr-2" />
+          {t("settings")}
+        </Button>
+      </div>
 
       <main className="mx-auto ">
         {/* Stats Cards */}
@@ -713,7 +723,7 @@ export default function Home() {
                     <div className="relative w-full">
                       <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder= {t("searchPlaceholder")}
+                        placeholder={t("searchPlaceholder")}
                         className="pl-8"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -755,7 +765,9 @@ export default function Home() {
                           {t("educationSystem")}
                         </TableHead>
                         <TableHead>{t("status")}</TableHead>
-                        <TableHead className="text-right">{t("actions")}</TableHead>
+                        <TableHead className="text-right">
+                          {t("actions")}
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -848,9 +860,6 @@ export default function Home() {
                         <div className="text-2xl font-bold">
                           {stats.byFaculty[faculty.id] || 0}
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          sinh viên
-                        </p>
                       </CardContent>
                     </Card>
                   ))}
@@ -863,15 +872,16 @@ export default function Home() {
 
       <Dialog open={isConfigOpen} onOpenChange={setIsConfigOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <ConfigDialog config={systemConfig} statuses={statuses} onSave={updateSystemConfig}/>
+          <ConfigDialog
+            config={systemConfig}
+            statuses={statuses}
+            onSave={updateSystemConfig}
+          />
         </DialogContent>
       </Dialog>
 
       {/* Settings Dialog */}
-      <Dialog
-        open={isSettingsOpen}
-        onOpenChange={setIsSettingsOpen}
-      >
+      <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <SettingsDialog
             faculties={faculties}

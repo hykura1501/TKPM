@@ -1,0 +1,52 @@
+// RegistrationRepository implements IRegistrationRepository (Infrastructure Layer)
+const IRegistrationRepository = require("@domain/repositories/IRegistrationRepository");
+
+const Registration = require("@domain/entities/Registration");
+const Counter = require("@domain/entities/Counter");
+
+class RegistrationRepository extends IRegistrationRepository {
+  async findAll() {
+    return await Registration.find({});
+  }
+
+  async findAllByCondition(condition) {
+    return await Registration.find(condition);
+  }
+
+  async create(data) {
+    const newRegistration = new Registration(data);
+    return await newRegistration.save();
+  }
+
+  async update(id, data) {
+    return await Registration.updateOne({ id }, { $set: data });
+  }
+
+  async updateGrade(id, classId, grade) {
+    return await Registration.updateOne(
+      { studentId: id, classSectionId: classId },
+      { grade: grade }
+    );
+  }
+
+  async delete(id) {
+    return await Registration.deleteOne({ id });
+  }
+
+  async findOneByCondition(condition) {
+    return await Registration.findOne(condition);
+  }
+  async getNextId() {
+    try {
+      const counter = await Counter.findOneAndUpdate(
+        { name: "registration_id" },
+        { $inc: { value: 1 } },
+        { new: true, upsert: true }
+      );
+      return `registration-${counter.value}`;
+    } catch (error) {
+      throw new Error("Lỗi khi tạo mã đăng ký: " + error.message);
+    }
+  }
+}
+module.exports = RegistrationRepository;

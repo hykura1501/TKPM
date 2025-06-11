@@ -1,7 +1,34 @@
 {
   "app": {
-    "title": "Hệ Thống Quản Lý Khóa Học & Bảng Điểm",
-    "description": "Hệ thống quản lý khóa học và bảng điểm sinh viên"
+    "title": "Hệ Thống Quản Lý Sinh Viên",
+    "description": "Hệ thống quản lý khóa học và bảng điểm sinh viên",
+    "subtitle": "Hệ Thống Quản Lý Giáo Dục",
+    "search": {
+      "placeholder": "Tìm kiếm sinh viên, khóa học..."
+    },
+    "notifications": {
+      "title": "Thông báo"
+    },
+    "profile": {
+      "title": "Hồ sơ"
+    },
+    "settings": {
+      "title": "Cài đặt"
+    },
+    "auth": {
+      "logout": "Đăng xuất"
+    },
+
+    "navigation": {
+      "title": "Hệ Thống",
+      "home": "Trang chủ",
+      "courses": "Quản lý Khóa học",
+      "classes": "Quản lý Lớp học",
+      "students": "Quản lý Sinh viên",
+      "registration": "Đăng ký Khóa học",
+      "transcripts": "Bảng điểm",
+      "settings": "Cài đặt"
+    }
   },
   "common": {
     "save": "Lưu",
@@ -130,7 +157,7 @@
     "cannotChangeCapacity": "Không thể thay đổi sĩ số tối đa vì lớp học đã có sinh viên đăng ký",
     "academicYear": "Năm học"
   },
- "students": {
+  "students": {
     "title": "Quản lý Sinh viên",
     "addStudent": "Thêm Sinh viên",
     "updateStudent": "Cập nhật Thông tin Sinh viên",
@@ -213,7 +240,8 @@
     "createdAt": "Ngày tạo",
     "updatedAt": "Ngày cập nhật",
     "createdBy": "Người tạo",
-    "updatedBy": "Người cập nhật"
+    "updatedBy": "Người cập nhật",
+    "loadingStudents": "Đang tải dữ liệu..."
   },
   "registration": {
     "title": "Đăng ký Khóa học",

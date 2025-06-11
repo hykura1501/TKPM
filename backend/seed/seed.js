@@ -1,18 +1,18 @@
 const mongoose = require('mongoose');
 
 // Import các models
-const Teacher = require('../src/api/models/Teacher');
-const Student = require('../src/api/models/Student');
-const Notification = require('../src/api/models/Notification');
-const Subject = require('../src/api/models/Student');
-const Course = require('../src/api/models/Course');
-const Payment = require('../src/api/models/Payment');
-const Lesson = require('../src/api/models/Lesson');
-const Note = require('../src/api/models/Note');
-const Test = require('../src/api/models/Test');
-const Review = require('../src/api/models/Review');
-const ForumPost = require('../src/api/models/ForumPost');
-const Message = require('../src/api/models/Message');
+const Teacher = require('../src/infrastructure/repositories/TeacherRepository');
+const Student = require('../src/infrastructure/repositories/StudentRepository');
+const Notification = require('../src/infrastructure/repositories/NotificationRepository');
+const Subject = require('../src/infrastructure/repositories/SubjectRepository');
+const Course = require('../src/infrastructure/repositories/CourseRepository');
+const Payment = require('../src/infrastructure/repositories/PaymentRepository');
+const Lesson = require('../src/infrastructure/repositories/LessonRepository');
+const Note = require('../src/infrastructure/repositories/NoteRepository');
+const Test = require('../src/infrastructure/repositories/TestRepository');
+const Review = require('../src/infrastructure/repositories/ReviewRepository');
+const ForumPost = require('../src/infrastructure/repositories/ForumPostRepository');
+const Message = require('../src/infrastructure/repositories/MessageRepository');
 
 const seedData = async () => {
   try {

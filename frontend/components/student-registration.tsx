@@ -23,31 +23,31 @@ import classSectionService from "@/services/classSectionService";
 import { set } from "react-hook-form";
 import courseService from "@/services/courseService";
 import { useTranslations } from "next-intl"
-import { useToast } from "@/components/ui/use-toast"
+import { PageLoader } from "./ui/page-loader";
 
 export function StudentRegistration() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [searchTerm, setSearchTerm] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
   const [courses, setCourses] = useState<Course[]>([])
   const [classSections, setClassSections] = useState<ClassSection[]>([])
-  const { toast } = useToast()
   const t = useTranslations("registration")
   const common = useTranslations("common")
   
   useEffect(() => {
     async function fetchData() {
       try {
+        setIsLoading(true)
         setCourses(await courseService.fetchCourses())
         setClassSections(await classSectionService.fetchClassSections())
         setStudents(await studentService.fetchStudents())
         setRegistrations(await registrationService.fetchRegistrations())
+        setIsLoading(false)
       } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: t("errorLoadingData")
-        })
+        toast.error(error.message || t("errorLoadingData"))
+        console.error("Error loading data:", error)
       }
     }
     fetchData()
@@ -73,29 +73,20 @@ export function StudentRegistration() {
       // Validate student
       const student = getStudentById(data.mssv, students)
       if (!student) {
-        toast({
-          variant: "destructive",
-          title: t("studentNotFound")
-        })
+        toast.error(t("studentNotFound"))
         return
       }
 
       // Validate class
       const classSection = getClassSectionById(data.classSectionId, classSections)
       if (!classSection) {
-        toast({
-          variant: "destructive",
-          title: t("classNotFound")
-        })
+        toast.error(t("classNotFound"))
         return
       }
 
       // Check if class is full
       if (classSection.currentEnrollment >= classSection.maxCapacity) {
-        toast({
-          variant: "destructive",
-          title: t("classFull")
-        })
+        toast.error(t("classFull"))
         return
       }
 
@@ -104,10 +95,7 @@ export function StudentRegistration() {
         (reg) => reg.studentId === data.mssv && reg.classSectionId === data.classSectionId && reg.status === "active"
       )
       if (existingRegistration) {
-        toast({
-          variant: "destructive",
-          title: t("alreadyRegistered")
-        })
+        toast.error(t("alreadyRegistered"))
         return
       }
 
@@ -129,10 +117,7 @@ export function StudentRegistration() {
         const missingPrerequisites = course.prerequisites.filter((prereq) => !completedCourses.includes(prereq))
 
         if (missingPrerequisites.length > 0) {
-          toast({
-            variant: "destructive",
-            title: `${t("missingPrerequisites")} ${missingPrerequisites.join(", ")}.`
-          })
+          toast.error(t("registrationError"))
           return
         }
       }
@@ -156,20 +141,12 @@ export function StudentRegistration() {
         )
 
         setIsFormOpen(false)
-        toast({
-          title: t("registrationSuccess")
-        })
+        toast.success(t("registrationSuccess"))
       } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: error || t("registrationError")
-        })
+        toast.error(t("registrationError"))
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: t("errorLoadingData")
-      })
+      toast.error(error.message || t("errorLoadingData"))
     }
   }
 
@@ -185,10 +162,7 @@ export function StudentRegistration() {
       const daysDiff = Math.floor((now.getTime() - registeredAt.getTime()) / (1000 * 60 * 60 * 24))
 
       if (daysDiff > 14) {
-        toast({
-          variant: "destructive",
-          title: t("cannotCancelAfter14Days")
-        })
+        toast.error(t("cannotCancelAfter14Days"))
         return
       }
 
@@ -196,20 +170,12 @@ export function StudentRegistration() {
         const response = await registrationService.cancelRegistration(id)
         setRegistrations(response.registrations)
 
-        toast({
-          title: t("cancelSuccess")
-        })
+        toast.success(t("cancelSuccess"))
       } catch (error: any) {
-        toast({
-          variant: "destructive",
-          title: t("cancelError")
-        })
+        toast.error(t("cancelError"))
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: t("errorLoadingData")
-      })
+      toast.error(error.message || t("errorLoadingData"))
     }
   }
 
@@ -235,6 +201,10 @@ export function StudentRegistration() {
       sectionCode: section.code,
       courseName: course ? course.name : "Unknown Course",
     }
+  }
+
+  if (isLoading) {
+    return <PageLoader />
   }
 
   return (

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "baseUrl": "./src",
+    "paths": {
+      "@usecases/*": ["application/usecases/*"],
+      "@dtos/*": ["application/dtos/*"],
+      "@validators/*": ["application/validators/*"],
+      "@configs/*": ["configs/*"],
+      "@domain/*": ["domain/*"],
+      "@infrastructure/*": ["infrastructure/*"],
+      "@presentation/*": ["presentation/*"],
+      "@shared/*": ["shared/*"],
+      "@repositories/*": ["infrastructure/repositories/*"],
+    },
+    "allowJs": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "tests", "seed"]
+}
