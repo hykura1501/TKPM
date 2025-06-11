@@ -24,9 +24,28 @@ class UpdateStudentUseCase {
     this.statusRepository = statusRepository;
   }
 
-  async execute(mssv, studentData) {
+  
+  async getAllSetting() {
+    const settings = await this.settingRepository.findOneByCondition({ _id: "67e69a34c85ca96947abaae3" });
+    if (!settings) {
+      throw new Error("Không tìm thấy cài đặt");
+    }
+    const statuses = await this.statusRepository.findAll();
+    const statusRules = statuses.map(item => ({
+      fromStatus: item.id,
+      toStatus: item.allowedStatus,
+    }));
+    return {
+      statusTransitionRules: statusRules,
+      allowedEmailDomains: settings.allowDomains,
+      phoneFormats: settings.allowPhones,
+    };
+  }
+
+  async execute(studentData) {
     // Lấy setting cho validate động
-    const setting = this.settingRepository ? await this.settingRepository.findOneByCondition({}) : {};
+    const { mssv } = studentData;
+    const setting = await this.getAllSetting();
     const allowedDomains = setting?.allowedEmailDomains || [];
     const phoneFormats = setting?.phoneFormats || [];
     // Validate schema + email domain + phone

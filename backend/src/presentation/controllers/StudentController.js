@@ -1,5 +1,17 @@
 // StudentController (Presentation Layer)
 class StudentController {
+  /**
+   * 
+   * @param {object} deps
+   * @param {import('@usecases/student/GetStudentListUseCase')} deps.getStudentListUseCase
+   * @param {import('@usecases/student/GetStudentByIdUseCase')} deps.getStudentByIdUseCase
+   * @param {import('@usecases/student/CreateStudentUseCase')} deps.createStudentUseCase
+   * @param {import('@usecases/student/UpdateStudentUseCase')} deps.updateStudentUseCase
+   * @param {import('@usecases/student/DeleteStudentUseCase')} deps.deleteStudentUseCase
+   * @param {import('@usecases/student/AddStudentsFromFileUseCase')} deps.addStudentsFromFileUseCase
+   * @param {import('@usecases/student/AddStudentFromFileUseCase')} deps.addStudentFromFileUseCase
+   * @param {import('@usecases/student/GetGradeByStudentIdUseCase')} deps.getGradeByStudentIdUseCase
+   */
   constructor({
     getStudentListUseCase,
     getStudentByIdUseCase,
@@ -25,6 +37,7 @@ class StudentController {
       const students = await this.getStudentListUseCase.execute();
       res.status(200).json(students);
     } catch (error) {
+      console.error("Lỗi khi lấy danh sách sinh viên:", error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -37,6 +50,7 @@ class StudentController {
       }
       res.status(200).json(student);
     } catch (error) {
+      console.error("Lỗi khi lấy thông tin sinh viên:", error);
       res.status(500).json({ error: error.message });
     }
   }
@@ -46,15 +60,17 @@ class StudentController {
       const newStudent = await this.createStudentUseCase.execute(req.body);
       res.status(201).json(newStudent);
     } catch (error) {
+      console.error("Lỗi khi tạo sinh viên:", error);
       res.status(400).json({ error: error.message });
     }
   }
 
   async updateStudent(req, res) {
     try {
-      const updated = await this.updateStudentUseCase.execute(req.params.mssv, req.body);
+      const updated = await this.updateStudentUseCase.execute(req.body);
       res.status(200).json(updated);
     } catch (error) {
+      console.error("Lỗi khi cập nhật thông tin sinh viên:", error);
       res.status(400).json({ error: error.message });
     }
   }
@@ -64,6 +80,7 @@ class StudentController {
       const deleted = await this.deleteStudentUseCase.execute(req.params.mssv);
       res.status(200).json(deleted);
     } catch (error) {
+      console.error("Lỗi khi xóa sinh viên:", error);
       res.status(400).json({ error: error.message });
     }
   }

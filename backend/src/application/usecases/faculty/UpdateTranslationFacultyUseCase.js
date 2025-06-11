@@ -21,15 +21,15 @@ class UpdateTranslationFacultyUseCase {
       await addLogEntry({ message: "Khoa không tồn tại", level: "warn" });
       throw { status: 404, message: "Khoa không tồn tại" };
     }
+    // Cập nhật bản dịch
     SUPPORTED_LOCALES.forEach((locale) => {
       if (translations[locale]) {
         faculty.name.set(locale, translations[locale].facultyName);
-        faculty.description.set(locale, translations[locale].description);
       }
     });
+
     await this.facultyRepository.update(facultyId, {
       name: faculty.name,
-      description: faculty.description,
     });
     return { success: true, message: "Cập nhật bản dịch thành công" };
   }

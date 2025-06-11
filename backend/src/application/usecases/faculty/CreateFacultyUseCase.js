@@ -15,45 +15,21 @@ class CreateFacultyUseCase {
     this.facultyRepository = facultyRepository;
   }
 
-  async validateFaculty(faculty, isUpdate = false) {
-    const parsed = facultySchema.safeParse(faculty);
-    if (!parsed.success) {
-      await addLogEntry({ message: "Khoa không hợp lệ", level: "warn" });
-      return { success: false, error: parsed.error.errors };
-    }
-    const existingFaculty = await this.facultyRepository.findOneByCondition({ code: parsed.data.code });
-    if (!isUpdate && existingFaculty) {
-      await addLogEntry({ message: "Mã khoa đã tồn tại", level: "warn" });
-      return { success: false, error: "Mã khoa đã tồn tại" };
-    }
-    let existingFacultyName = null;
-    for (const locale of SUPPORTED_LOCALES) {
-      existingFacultyName = await this.facultyRepository.findOneByCondition({ [`name.${locale}`]: parsed.data.name });
-      if (existingFacultyName) break;
-    }
-    if (!isUpdate && existingFacultyName) {
-      await addLogEntry({ message: "Tên khoa đã tồn tại", level: "warn" });
-      return { success: false, error: "Tên khoa đã tồn tại" };
-    }
-    return { success: true, data: parsed.data };
-  }
 
   async execute(data, language = 'vi') {
-    const validationResult = await this.validateFaculty(data);
-    if (!validationResult.success) {
+    const parsed = facultySchema.safeParse(data);
+    if (!parsed.success) {
       await addLogEntry({ message: "Thêm khoa không hợp lệ", level: "warn" });
-      throw { status: 400, message: validationResult.error };
+      throw { status: 400, message: parsed.error.errors };
     }
-    const faculty = validationResult.data;
-    const newFaculty = {
-      ...faculty,
-      name: new Map(),
-      description: new Map(),
-    };
+    const faculty = parsed.data;
+    const newId = await this.facultyRepository.getNextId();
+
+    const newFaculty = { name: new Map(), id: newId };
+
     SUPPORTED_LOCALES.forEach((locale) => {
-      newFaculty.name.set(locale, data.name);
-      newFaculty.description.set(locale, data.description || "");
-    });
+      newFaculty.name.set(locale, parsed.data.name);
+    })
     await this.facultyRepository.create(newFaculty);
     const faculties = (await this.facultyRepository.findAll()).map((faculty) => Mapper.formatFaculty(faculty, language));
     await addLogEntry({ message: "Thêm khoa thành công", level: "info", action: "create", entity: "faculty", user: "admin", details: "Add new faculty: " + faculty.name });

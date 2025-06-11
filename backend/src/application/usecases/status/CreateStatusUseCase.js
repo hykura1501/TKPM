@@ -21,7 +21,7 @@ class CreateStatusUseCase {
       throw { status: 400, message: parsed.error.errors };
     }
     // Sinh id mới
-    const newId = Date.now().toString();
+    const newId = await this.statusRepository.getNextId();
     const newStatus = { name: new Map(), id: newId };
     SUPPORTED_LOCALES.forEach((locale) => {
       newStatus.name.set(locale, parsed.data.name);

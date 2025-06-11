@@ -13,13 +13,14 @@ class UpdateProgramUseCase {
     this.programRepository = programRepository;
   }
 
-  async execute(id, programData, language = 'vi') {
+  async execute(programData, language = 'vi') {
     // Validate schema
-    const parsed = programSchema.safeParse({ ...programData, id });
+    const parsed = programSchema.safeParse({ ...programData });
     if (!parsed.success) {
       await addLogEntry({ message: 'Cập nhật chương trình học không hợp lệ', level: 'warn' });
       throw { status: 400, message: parsed.error.errors };
     }
+    const { id } = parsed.data;
     // Kiểm tra tồn tại chương trình
     const program = await this.programRepository.findOneByCondition({ id });
     if (!program) {

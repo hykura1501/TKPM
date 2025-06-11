@@ -44,7 +44,7 @@ class SettingController {
 
   async getStatusRules(req, res) {
     try {
-      const rules = await this.getStatusRulesUseCase.execute();
+      const rules = await this.getStatusRulesUseCase.execute(req.language);
       res.status(200).json(rules);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách setting:", error);
@@ -59,6 +59,16 @@ class SettingController {
     } catch (error) {
       console.error("Lỗi khi lấy tất cả cài đặt:", error);
       res.status(500).json({ error: "Lỗi khi lấy tất cả cài đặt" });
+    }
+  }
+
+  async updateDomains(req, res) {
+    try {
+      const result = await this.getDomainsUseCase.execute(req.body.domains);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật domains:", error);
+      res.status(error.status || 500).json({ error: error.message || "Lỗi khi cập nhật domains" });
     }
   }
 }

@@ -39,7 +39,7 @@ import registrationService from "@/services/registrationService"
 import { ClassSection, Course, Registration } from "@/types"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 
 interface Grade {
   id: string
@@ -55,7 +55,6 @@ interface Grade {
 export default function GradeManagement() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { toast } = useToast()
   const t = useTranslations("grades")
   const common = useTranslations("common")
 
@@ -173,10 +172,7 @@ export default function GradeManagement() {
     if (!currentGrade) return
     const newScore = parseFloat(currentGrade.grade.toString())
     if (isNaN(newScore) || newScore < 0 || newScore > 10) {
-      toast({
-        variant: "destructive",
-        title: t("invalidGrade")
-      })
+      toast.error(t("invalidGrade"))
       return
     }
     try {
@@ -197,14 +193,9 @@ export default function GradeManagement() {
       setFilteredGrades(grades.map((g) => (g.id === currentGrade.id ? updatedGrade : g)))
       setIsEditDialogOpen(false)
 
-      toast({
-        title: t("gradeUpdated")
-      })
+      toast.success(t("gradeUpdated"))
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: t("errorUpdatingGrade")
-      })
+      toast.error(t("errorUpdatingGrade"))
     }
   }
 
@@ -217,10 +208,7 @@ export default function GradeManagement() {
 
   const handleGradeChange = async (gradeId: string, newGrade: number) => {
     if (newGrade < 0 || newGrade > 10) {
-      toast({
-        variant: "destructive",
-        title: t("invalidGrade")
-      })
+      toast.error(t("invalidGrade"))
       return
     }
 
@@ -241,14 +229,9 @@ export default function GradeManagement() {
       setGrades(grades.map((g) => (g.id === gradeId ? updatedGrade : g)))
       setFilteredGrades(grades.map((g) => (g.id === gradeId ? updatedGrade : g)))
 
-      toast({
-        title: t("gradeUpdated")
-      })
+      toast(t("gradeUpdated"))
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: t("errorUpdatingGrade")
-      })
+      toast.error(t("errorUpdatingGrade"))
     }
   }
 

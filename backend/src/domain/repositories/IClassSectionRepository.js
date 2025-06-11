@@ -25,6 +25,14 @@ class IClassSectionRepository {
    * @returns {Promise<any>}
    */
   async findOneByCondition(condition) { throw new Error('Not implemented'); }
+
+  /**
+   * @returns {Promise<string>}
+   */
+  async getNextId() {
+    throw new Error('Not implemented');
+  }
+  
 }
 
 module.exports = IClassSectionRepository;

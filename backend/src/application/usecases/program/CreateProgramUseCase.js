@@ -25,7 +25,7 @@ class CreateProgramUseCase {
       throw { status: 400, message: parsed.error.errors };
     }
     // Sinh id mới
-    const newId = Date.now().toString();
+    const newId = await this.programRepository.getNextId();
     const newProgram = { name: new Map(), id: newId };
     SUPPORTED_LOCALES.forEach((locale) => {
       newProgram.name.set(locale, parsed.data.name);
@@ -43,7 +43,7 @@ class CreateProgramUseCase {
       user: "admin",
       details: "Add new program: " + parsed.data.name,
     });
-    return { message: "Thêm chương trình học thành công", program: programs };
+    return { message: "Thêm chương trình học thành công", programs: programs };
   }
 }
 

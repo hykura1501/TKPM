@@ -4,7 +4,7 @@ const container = require('../../container');
 const statusController = container.resolve('statusController');
 
 router.get('/', (...args) => statusController.getListStatuses(...args));
-router.post('/', (...args) => statusController.addStatus(...args));
+router.post('/', (...args) => statusController.createStatus(...args));
 router.put('/', (...args) => statusController.updateStatus(...args));
 router.delete('/:id', (...args) => statusController.deleteStatus(...args));
 router.patch('/rules', (...args) => statusController.updateStatusRules(...args));

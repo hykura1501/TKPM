@@ -129,11 +129,16 @@ container.register({
   deleteStatusUseCase: asClass(DeleteStatusUseCase).scoped(),
   updateStatusRulesUseCase: asClass(require('./application/usecases/status/UpdateStatusRulesUseCase')).scoped(),
   getStatusRulesUseCase: asClass(require('./application/usecases/status/GetStatusRulesUseCase')).scoped(),
+  statusExistsUseCase: asClass(require('./application/usecases/status/StatusExistsUseCase')).scoped(),
+  findStatusByIdUseCase: asClass(require('./application/usecases/status/FindStatusByIdUseCase')).scoped(),
+  getTranslationStatusByIdUseCase: asClass(require('./application/usecases/status/GetTranslationStatusByIdUseCase')).scoped(),
+  updateTranslationStatusUseCase: asClass(require('./application/usecases/status/UpdateTranslationStatusUseCase')).scoped(),
   statusController: asClass(StatusController).scoped(),
 
   // Log
   logRepository: asClass(LogRepository).singleton(),
   getLogListUseCase: asClass(GetLogListUseCase).scoped(),
+  addLogUseCase: asClass(require('./application/usecases/log/AddLogUseCase')).scoped(),
   logController: asClass(LogController).scoped(),
 
   // Setting

@@ -20,52 +20,44 @@ class ProgramController {
 
   async getListPrograms(req, res) {
     try {
-      const programs = await this.getProgramListUseCase.execute();
+      const programs = await this.getProgramListUseCase.execute(req.language);
       res.status(200).json(programs);
     } catch (error) {
+      console.error("Error fetching program list:", error);
       res.status(500).json({ error: error.message });
     }
   }
-
-  async getProgramById(req, res) {
-    try {
-      const program = await this.getProgramByIdUseCase.execute(req.params.id);
-      if (!program) {
-        return res.status(404).json({ error: 'Program not found' });
-      }
-      res.status(200).json(program);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
-
   async createProgram(req, res) {
     try {
-      const newProgram = await this.createProgramUseCase.execute(req.body);
+      const newProgram = await this.createProgramUseCase.execute(req.body, req.language);
       res.status(201).json(newProgram);
     } catch (error) {
+      console.error("Error creating program:", error);
       res.status(400).json({ error: error.message });
     }
   }
 
   async updateProgram(req, res) {
     try {
-      const updated = await this.updateProgramUseCase.execute(req.params.id, req.body);
+      const updated = await this.updateProgramUseCase.execute(req.body, req.language);
       res.status(200).json(updated);
     } catch (error) {
+      console.error("Error updating program:", error);
       res.status(400).json({ error: error.message });
     }
   }
 
   async deleteProgram(req, res) {
     try {
-      const deleted = await this.deleteProgramUseCase.execute(req.params.id);
+      const deleted = await this.deleteProgramUseCase.execute(req.params.id, req.language);
       res.status(200).json(deleted);
     } catch (error) {
+      console.error("Error deleting program:", error);
       res.status(400).json({ error: error.message });
     }
   }
-  async getTranslationProgramById(req, res) {
+  
+  async getTranslationProgram(req, res) {
     try {
       const { id } = req.params;
       const result = await this.getTranslationProgramByIdUseCase.execute(id);

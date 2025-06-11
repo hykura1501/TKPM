@@ -4,7 +4,7 @@ const container = require('../../container');
 const registrationController = container.resolve('registrationController');
 
 router.get('/', (...args) => registrationController.getListRegistrations(...args));
-router.post('/', (...args) => registrationController.addRegistration(...args));
+router.post('/', (...args) => registrationController.createRegistration(...args));
 router.put('/', (...args) => registrationController.updateRegistration(...args));
 router.delete('/:id', (...args) => registrationController.deleteRegistration(...args));
 router.patch('/:id/cancel', (...args) => registrationController.cancelRegistration(...args));

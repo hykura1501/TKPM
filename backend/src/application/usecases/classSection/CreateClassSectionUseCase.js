@@ -35,7 +35,7 @@ class CreateClassSectionUseCase {
       throw { status: 400, message: 'Khóa học không tồn tại' };
     }
     // Sinh id mới
-    const newId = Date.now().toString();
+    const newId = await this.classSectionRepository.getNextId();
     const newClassSection = { ...parsed.data, id: newId };
     await this.classSectionRepository.create(newClassSection);
     const classSections = await this.classSectionRepository.findAll();

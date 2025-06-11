@@ -9,8 +9,9 @@ class ClassSectionController {
    * @param {import('@usecases/classSection/CreateClassSectionUseCase')} deps.createClassSectionUseCase
    * @param {import('@usecases/classSection/UpdateClassSectionUseCase')} deps.updateClassSectionUseCase
    * @param {import('@usecases/classSection/DeleteClassSectionUseCase')} deps.deleteClassSectionUseCase
+   * @param {import('@usecases/classSection/GetClassSectionByCourseIdUseCase')} deps.getClassSectionByCourseIdUseCase
    */
-  constructor({ getClassSectionListUseCase, createClassSectionUseCase, updateClassSectionUseCase, deleteClassSectionUseCase }) {
+  constructor({ getClassSectionListUseCase, createClassSectionUseCase, updateClassSectionUseCase, deleteClassSectionUseCase, getClassSectionByCourseIdUseCase }) {
     /** @type {import('@usecases/classSection/GetClassSectionListUseCase')} */
     this.getClassSectionListUseCase = getClassSectionListUseCase;
     /** @type {import('@usecases/classSection/CreateClassSectionUseCase')} */
@@ -19,6 +20,8 @@ class ClassSectionController {
     this.updateClassSectionUseCase = updateClassSectionUseCase;
     /** @type {import('@usecases/classSection/DeleteClassSectionUseCase')} */
     this.deleteClassSectionUseCase = deleteClassSectionUseCase;
+    /** @type {import('@usecases/classSection/GetClassSectionByCourseIdUseCase')} */
+    this.getClassSectionByCourseIdUseCase = getClassSectionByCourseIdUseCase;
   }
 
   async getListClassSections(req, res) {
@@ -70,16 +73,6 @@ class ClassSectionController {
     }
   }
 
-  async getClassSectionById(req, res) {
-    try {
-      const { id } = req.params;
-      const result = await this.getClassSectionByIdUseCase.execute(id);
-      res.status(200).json(result);
-    } catch (error) {
-      console.error("Lỗi khi lấy lớp học theo id:", error);
-      res.status(error.status || 500).json({ error: error.message || "Lỗi khi lấy lớp học theo id" });
-    }
-  }
 }
 
 module.exports = ClassSectionController;
