@@ -1,7 +1,34 @@
 {
   "app": {
-    "title": "Course Management & Transcript System",
-    "description": "Course management and student transcript system"
+    "title": "Student Management System",
+    "description": "A comprehensive system for managing student information, courses, classes, and transcripts.",
+    "subtitle": "Education Management System",
+    "search": {
+      "placeholder": "Search students, courses..."
+    },
+    "notifications": {
+      "title": "Notifications"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "auth": {
+      "logout": "Log out"
+    },
+
+    "navigation": {
+      "title": "Course Management & Transcript System",
+      "home": "Home",
+      "courses": "Course Management",
+      "classes": "Class Management",
+      "students": "Student Management",
+      "registration": "Course Registration",
+      "transcripts": "Transcripts",
+      "settings": "Settings"
+    }
   },
   "common": {
     "save": "Save",
@@ -213,7 +240,8 @@
     "createdAt": "Created At",
     "updatedAt": "Updated At",
     "createdBy": "Created By",
-    "updatedBy": "Updated By"
+    "updatedBy": "Updated By",
+    "loadingStudents": "Loading data..."
   },
   "registration": {
     "title": "Course Registration",

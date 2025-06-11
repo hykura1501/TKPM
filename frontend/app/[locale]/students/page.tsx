@@ -65,6 +65,7 @@ import { toast } from "react-toastify";
 import { ConfigDialog } from "@/components/config-dialog";
 import settingService from "@/services/settingServices";
 import { useTranslations } from "next-intl"
+import { PageLoader } from "@/components/ui/page-loader";
 
 
 export default function Home() {
@@ -72,6 +73,7 @@ export default function Home() {
 
   // State for students and related data
   const [students, setStudents] = useState<Student[]>([]);
+  const [isLoading, setIsLoading] = useState(true)
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [statuses, setStatuses] = useState<StudentStatus[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -103,13 +105,15 @@ export default function Home() {
   // Load initial data
   useEffect(() => {
     async function loadData() {
+      setIsLoading(true)
       const studentsData = await StudentService.fetchStudents();
       const facultiesData = await FacultyService.fetchFaculties();
       const statusesData = await StatusService.fetchStatuses();
       const programsData = await ProgramService.fetchPrograms();
       const settings = await settingService.fetchSettings();
       const statusTransitionRules = await settingService.getFormatRules();
-
+      // setTimeout(() => setIsLoading(false), 1000);
+      setIsLoading(false)
       setStudents(studentsData);
       setFaculties(facultiesData);
       setStatuses(statusesData);
@@ -117,7 +121,6 @@ export default function Home() {
       setSystemConfig(settings);
       setStatusRules(statusTransitionRules);
     }
-
     loadData();
   }, []);
 
@@ -575,6 +578,10 @@ export default function Home() {
   const [systemConfig, setSystemConfig] = useState<SystemConfig>({
 
   });
+
+  if (isLoading) {
+    return <PageLoader message={t("loadingStudents")} />
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

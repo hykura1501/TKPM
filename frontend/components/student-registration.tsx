@@ -23,10 +23,12 @@ import classSectionService from "@/services/classSectionService";
 import { set } from "react-hook-form";
 import courseService from "@/services/courseService";
 import { useTranslations } from "next-intl"
+import { PageLoader } from "./ui/page-loader";
 
 export function StudentRegistration() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [searchTerm, setSearchTerm] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
   const [courses, setCourses] = useState<Course[]>([])
@@ -37,10 +39,12 @@ export function StudentRegistration() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setIsLoading(true)
         setCourses(await courseService.fetchCourses())
         setClassSections(await classSectionService.fetchClassSections())
         setStudents(await studentService.fetchStudents())
         setRegistrations(await registrationService.fetchRegistrations())
+        setIsLoading(false)
       } catch (error: any) {
         toast.error(error.message || t("errorLoadingData"))
         console.error("Error loading data:", error)
@@ -197,6 +201,10 @@ export function StudentRegistration() {
       sectionCode: section.code,
       courseName: course ? course.name : "Unknown Course",
     }
+  }
+
+  if (isLoading) {
+    return <PageLoader />
   }
 
   return (

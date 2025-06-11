@@ -16,11 +16,13 @@ import { toast } from "react-toastify"
 import { set } from "react-hook-form"
 import courseService from "@/services/courseService"
 import { useTranslations, useLocale } from "next-intl"
+import { PageLoader } from "./ui/page-loader"
 
 
 export function ClassSectionManagement() {
   const t = useTranslations("classes")
   const locale = useLocale() 
+  const [isLoading, setIsLoading] = useState(true)
   const [classSections, setClassSections] = useState<ClassSection[]>([])
   const [courses, setCourses] = useState<Course[]>([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -30,8 +32,10 @@ export function ClassSectionManagement() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setIsLoading(true)
         setClassSections(await classSectionService.fetchClassSections())
         setCourses(await courseService.fetchCourses())
+        setIsLoading(false)
       } catch (error: any) {
         console.error("Error fetching class sections:", error)
         toast.error(error || t("errorLoadingData"))
@@ -161,6 +165,10 @@ export function ClassSectionManagement() {
       return convertScheduleToEnglish(schedule)
     }
     return schedule
+  }
+
+    if (isLoading) {
+    return <PageLoader />
   }
 
   return (

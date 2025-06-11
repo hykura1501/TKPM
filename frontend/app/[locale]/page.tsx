@@ -29,8 +29,8 @@ export default async function Home({
             <CardDescription>{t("coursesDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link href={`/${locale === "vi" ? "" : locale}/courses`}>{t("accessButton")}</Link>
+            <Button asChild className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700">
+              <Link href={locale === "vi" ? "/courses" : `/${locale}/courses`}>{t("accessButton")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -44,8 +44,8 @@ export default async function Home({
             <CardDescription>{t("classesDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link href={`/${locale === "vi" ? "" : locale}/classes`}>{t("accessButton")}</Link>
+            <Button asChild className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700">
+              <Link href={locale === "vi" ? "/classes" : `/${locale}/classes`}>{t("accessButton")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -59,8 +59,8 @@ export default async function Home({
             <CardDescription>{t("studentsDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link href={`/${locale === "vi" ? "" : locale}/students`}>{t("accessButton")}</Link>
+            <Button asChild className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700">
+              <Link href={locale === "vi" ? "/students" : `/${locale}/students`}>{t("accessButton")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -74,8 +74,8 @@ export default async function Home({
             <CardDescription>{t("registrationDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link href={`/${locale === "vi" ? "" : locale}/registration`}>{t("accessButton")}</Link>
+            <Button asChild className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700">
+              <Link href={locale === "vi" ? "/registration" : `/${locale}/registration`}>{t("accessButton")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -89,8 +89,8 @@ export default async function Home({
             <CardDescription>{t("transcriptsDescription")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full">
-              <Link href={`/${locale === "vi" ? "" : locale}/transcripts`}>{t("accessButton")}</Link>
+            <Button asChild className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/25 hover:from-blue-600 hover:to-indigo-700">
+              <Link href={locale === "vi" ? "/transcripts" : `/${locale}/transcripts`}>{t("accessButton")}</Link>
             </Button>
           </CardContent>
         </Card>

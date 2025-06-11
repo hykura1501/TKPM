@@ -31,6 +31,7 @@ import { Faculty } from "@/types/student";
 import { Global } from "recharts";
 import { TranslationManager } from "./translation-manager";
 import { useLocale, useTranslations } from "next-intl";
+import { PageLoader } from "./ui/page-loader";
 
 const mockInitialTranslations = {
   en: {
@@ -49,6 +50,7 @@ const mockInitialTranslations = {
 };
 
 export function CourseManagement() {
+  const [isLoading, setIsLoading] = useState(true)
   const [courses, setCourses] = useState<Course[]>([]);
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -228,8 +230,10 @@ export function CourseManagement() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setIsLoading(true);
         setCourses(await courseService.fetchCourses());
         setFaculties(await facultyService.fetchFaculties());
+        setIsLoading(false);
       } catch (error: any) {
         toast.error(error || t("courseFetchError"));
       }
@@ -242,6 +246,10 @@ export function CourseManagement() {
       setTranslationOpen(true);
     }
   }, [translations]);
+
+    if (isLoading) {
+    return <PageLoader />
+  }
 
   return (
     <Card>
