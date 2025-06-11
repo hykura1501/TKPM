@@ -102,7 +102,7 @@ class StudentController {
 
   async addStudentFromFile(req, res) {
     try {
-      const newStudent = await this.addStudentFromFileUseCase.execute(req.body);
+      const newStudent = await this.addStudentFromFileUseCase.execute(req.body, req.query.language || "vi");
       res.status(201).json({
         message: "Thêm sinh viên thành công",
         student: newStudent,

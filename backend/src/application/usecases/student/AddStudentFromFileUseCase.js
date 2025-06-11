@@ -35,13 +35,14 @@ class AddStudentFromFileUseCase {
       phoneFormats: settings.allowPhones,
     };
   }
-  async execute(studentData) {
+  async execute(studentData, language = 'vi') {
     const setting = await this.getAllSetting();
     const allowedDomains = setting?.allowedEmailDomains || [];
     const phoneFormats = setting?.phoneFormats || [];
-    const status = await this.statusRepository.findOneByCondition({ name: studentData.status });
-    const faculty = await this.facultyRepository.findOneByCondition({ name: studentData.faculty });
-    const program = await this.programRepository.findOneByCondition({ name: studentData.program });
+    const status = await this.statusRepository.findOneByCondition({ [`name.${language}`]: studentData.status });
+    const faculty = await this.facultyRepository.findOneByCondition({ [`name.${language}`]: studentData.faculty });
+    const program = await this.programRepository.findOneByCondition({ [`name.${language}`]: studentData.program });
+    
     if (!status || !faculty || !program) {
       throw new Error('Dữ liệu không hợp lệ');
     }
