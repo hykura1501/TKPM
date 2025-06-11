@@ -1,5 +1,6 @@
 // Use case: Add a single student from file
 const { addLogEntry } = require('@shared/utils/logging');
+const { studentSchema } = require('@validators/studentValidator');
 
 class AddStudentFromFileUseCase {
   /**
@@ -17,9 +18,25 @@ class AddStudentFromFileUseCase {
     this.programRepository = programRepository;
     this.statusRepository = statusRepository;
   }
-
+  
+  async getAllSetting() {
+    const settings = await this.settingRepository.findOneByCondition({ _id: "67e69a34c85ca96947abaae3" });
+    if (!settings) {
+      throw new Error("Không tìm thấy cài đặt");
+    }
+    const statuses = await this.statusRepository.findAll();
+    const statusRules = statuses.map(item => ({
+      fromStatus: item.id,
+      toStatus: item.allowedStatus,
+    }));
+    return {
+      statusTransitionRules: statusRules,
+      allowedEmailDomains: settings.allowDomains,
+      phoneFormats: settings.allowPhones,
+    };
+  }
   async execute(studentData) {
-    const setting = this.settingRepository ? await this.settingRepository.findOneByCondition({}) : {};
+    const setting = await this.getAllSetting();
     const allowedDomains = setting?.allowedEmailDomains || [];
     const phoneFormats = setting?.phoneFormats || [];
     const status = await this.statusRepository.findOneByCondition({ name: studentData.status });
@@ -30,8 +47,7 @@ class AddStudentFromFileUseCase {
     }
     studentData.status = status.id;
     studentData.faculty = faculty.id;
-    studentData.program = program.id;
-    const studentSchema = require('../../validators/studentValidator').studentSchema;
+    studentData.program = program.id;;
     const dynamicSchema = studentSchema.extend({
       email: studentSchema.shape.email.refine(
         (email) => allowedDomains.length === 0 || allowedDomains.includes(email.split('@')[1]),

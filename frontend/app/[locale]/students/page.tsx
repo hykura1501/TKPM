@@ -855,9 +855,6 @@ export default function Home() {
                         <div className="text-2xl font-bold">
                           {stats.byFaculty[faculty.id] || 0}
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          sinh viên
-                        </p>
                       </CardContent>
                     </Card>
                   ))}

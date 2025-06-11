@@ -118,9 +118,8 @@ class StudentController {
 
   async getGradeByStudentId(req, res) {
     try {
-      const grades = await this.getGradeByStudentIdUseCase.execute(req.params.studentId);
-      // Nếu muốn join thêm studentInfo, classInfo, courseInfo thì inject các usecase tương ứng và join ở đây
-      res.status(200).json({ grades });
+      const grades = await this.getGradeByStudentIdUseCase.execute(req.params.studentId, req.query.language || "vi");
+      res.status(200).json(grades);
     } catch (error) {
       console.error("Lỗi khi lấy điểm của sinh viên:", error);
       res.status(500).json({ error: "Lỗi khi lấy điểm của sinh viên" });

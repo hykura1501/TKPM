@@ -22,7 +22,7 @@ const UpdateStudentUseCase = require('./application/usecases/student/UpdateStude
 const DeleteStudentUseCase = require('./application/usecases/student/DeleteStudentUseCase');
 const AddStudentsFromFileUseCase = require('./application/usecases/student/AddStudentsFromFileUseCase');
 const AddStudentFromFileUseCase = require('./application/usecases/student/AddStudentFromFileUseCase');
-const GetGradeByStudentIdUseCase = require('./application/usecases/registration/GetGradeByStudentIdUseCase');
+const GetGradeByStudentIdUseCase = require('./application/usecases/student/GetGradeByStudentIdUseCase');
 const GetFacultyListUseCase = require('./application/usecases/faculty/GetFacultyListUseCase');
 const GetFacultyByIdUseCase = require('./application/usecases/faculty/GetFacultyByIdUseCase');
 const CreateFacultyUseCase = require('./application/usecases/faculty/CreateFacultyUseCase');
@@ -79,9 +79,7 @@ const ClassSectionController = require('./presentation/controllers/ClassSectionC
 const RegistrationController = require('./presentation/controllers/RegistrationController');
 const SemesterController = require('./presentation/controllers/SemesterController');
 const CourseController = require('./presentation/controllers/CourseController');
-const GetSettingListUseCase = require('./application/usecases/setting/GetDomainsUseCase');
-const UpdateSettingUseCase = require('./application/usecases/setting/UpdateDomainsUseCase');
-// ... import các controller khác nếu cần
+
 
 const container = createContainer();
 
@@ -143,13 +141,10 @@ container.register({
 
   // Setting
   settingRepository: asClass(SettingRepository).singleton(),
-  getSettingListUseCase: asClass(GetSettingListUseCase).scoped(),
-  updateSettingUseCase: asClass(UpdateSettingUseCase).scoped(),
   updateDomainsUseCase: asClass(require('./application/usecases/setting/UpdateDomainsUseCase')).scoped(),
   getDomainsUseCase: asClass(require('./application/usecases/setting/GetDomainsUseCase')).scoped(),
   updatePhoneFormatsUseCase: asClass(require('./application/usecases/setting/UpdatePhoneFormatsUseCase')).scoped(),
   getAllSettingsUseCase: asClass(require('./application/usecases/setting/GetAllSettingsUseCase')).scoped(),
-  getStatusRulesUseCase: asClass(require('./application/usecases/setting/GetStatusRulesUseCase')).scoped(),
   settingController: asClass(SettingController).scoped(),
 
   // ClassSection
@@ -173,7 +168,7 @@ container.register({
   cancelRegistrationUseCase: asClass(require('./application/usecases/registration/CancelRegistrationUseCase')).scoped(),
   getGradeByClassIdUseCase: asClass(require('./application/usecases/registration/GetGradeByClassIdUseCase')).scoped(),
   saveGradeByClassIdUseCase: asClass(require('./application/usecases/registration/SaveGradeByClassIdUseCase')).scoped(),
-  getGradeByStudentIdUseCase: asClass(require('./application/usecases/registration/GetGradeByStudentIdUseCase')).scoped(),
+  getGradeByStudentIdUseCase: asClass(require('./application/usecases/student/GetGradeByStudentIdUseCase')).scoped(),
   registrationController: asClass(RegistrationController).scoped(),
 
   // Semester

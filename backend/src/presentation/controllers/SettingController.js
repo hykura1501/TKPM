@@ -1,25 +1,17 @@
 // SettingController (Presentation Layer)
 class SettingController {
   constructor({
-    getSettingListUseCase,
     getDomainsUseCase,
     updatePhoneFormatsUseCase,
     getStatusRulesUseCase,
-    getAllSettingsUseCase
+    getAllSettingsUseCase,
+    updateDomainsUseCase,
   }) {
-    this.getSettingListUseCase = getSettingListUseCase;
     this.getDomainsUseCase = getDomainsUseCase;
+    this.updateDomainsUseCase = updateDomainsUseCase;
     this.updatePhoneFormatsUseCase = updatePhoneFormatsUseCase;
     this.getStatusRulesUseCase = getStatusRulesUseCase;
     this.getAllSettingsUseCase = getAllSettingsUseCase;
-  }
-  async getListSettings(req, res) {
-    try {
-      const settings = await this.getSettingListUseCase.execute();
-      res.status(200).json(settings);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
   }
 
   async getDomains(req, res) {
@@ -64,7 +56,7 @@ class SettingController {
 
   async updateDomains(req, res) {
     try {
-      const result = await this.getDomainsUseCase.execute(req.body.domains);
+      const result = await this.updateDomainsUseCase.execute(req.body.domains);
       res.status(200).json(result);
     } catch (error) {
       console.error("Lỗi khi cập nhật domains:", error);

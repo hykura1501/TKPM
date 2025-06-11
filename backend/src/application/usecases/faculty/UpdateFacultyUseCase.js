@@ -50,11 +50,8 @@ class UpdateFacultyUseCase {
       throw { status: 404, message: "Khoa không tồn tại" };
     }
     existingFaculty.name.set(language, data.name);
-    existingFaculty.description.set(language, data.description);
     validationResult.data.name = new Map();
-    validationResult.data.description = new Map();
     validationResult.data.name = existingFaculty.name;
-    validationResult.data.description = existingFaculty.description;
     await this.facultyRepository.update(validationResult.data.id, validationResult.data);
     await this.facultyRepository.update(validationResult.data.id, {
       name: existingFaculty.name,
