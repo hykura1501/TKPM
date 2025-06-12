@@ -31,12 +31,13 @@ const allowedOrigins = process.env.FRONTEND_URL.split(',');
 app.use(cors({
   origin: function (origin, callback) {
     // Cho phép request không có origin (ví dụ: mobile app, curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
+    // if (!origin) return callback(null, true);
+    // if (allowedOrigins.includes(origin)) {
+    //   return callback(null, true);
+    // } else {
+    //   return callback(new Error("Not allowed by CORS"));
+    // }
+    callback(null, true);
   },
   credentials: true
 }));
