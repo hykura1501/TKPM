@@ -26,10 +26,19 @@ app.use(express.urlencoded({
 }));
 app.use(cookieParser()); 
 
-// Cấu hình CORS
+const allowedOrigins = process.env.FRONTEND_URL.split(',');
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // Địa chỉ của ứng dụng font-end
-  credentials: true // Cho phép gửi cookie
+  origin: function (origin, callback) {
+    // Cho phép request không có origin (ví dụ: mobile app, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
