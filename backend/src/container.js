@@ -24,6 +24,7 @@ const AddStudentsFromFileUseCase = require('./application/usecases/student/AddSt
 const AddStudentFromFileUseCase = require('./application/usecases/student/AddStudentFromFileUseCase');
 const GetGradeByStudentIdUseCase = require('./application/usecases/student/GetGradeByStudentIdUseCase');
 const ExportStudentListUseCase = require('./application/usecases/student/ExportStudentListUseCase');
+const ImportStudentsFromFileUseCase = require('./application/usecases/student/ImportStudentsFromFileUseCase');
 
 const GetFacultyListUseCase = require('./application/usecases/faculty/GetFacultyListUseCase');
 const GetFacultyByIdUseCase = require('./application/usecases/faculty/GetFacultyByIdUseCase');
@@ -98,6 +99,7 @@ container.register({
   addStudentFromFileUseCase: asClass(AddStudentFromFileUseCase).scoped(),
   getGradeByStudentIdUseCase: asClass(GetGradeByStudentIdUseCase).scoped(),
   exportStudentListUseCase: asClass(ExportStudentListUseCase).scoped(),
+  importStudentsFromFileUseCase: asClass(ImportStudentsFromFileUseCase).scoped(),
   // Controller
   studentController: asClass(StudentController).scoped(),
   

@@ -5,6 +5,7 @@ const { Parser: Json2csvParser } = require('json2csv');
 const ExcelJS = require('exceljs');
 const js2xmlparser = require('js2xmlparser');
 const mapper = require('@shared/utils/mapper');
+const { addLogEntry } = require('@shared/utils/logging');
 
 class ExportStudentListUseCase {
     /**
@@ -103,14 +104,46 @@ class ExportStudentListUseCase {
       case 'xml':
         fileName = 'students.xml';
         contentType = 'application/xml';
-        fileContent = js2xmlparser.parse('students', students);
+        //Mapping id sang tên
+        const xmlExportData = students.map(s => {
+          const data = { ...(s._doc || s) };
+          delete data._id;
+          delete data.__v;
+          return data;
+        });
+        xmlExportData.forEach(s => {
+          s.faculty = mapper.formatFaculty(facultyMap[s.faculty], locale)?.name || s.faculty;
+          s.program = mapper.formatProgram(programMap[s.program], locale)?.name || s.program;
+          s.status = mapper.formatStatus(statusMap[s.status], locale)?.name || s.status;
+        });
+        fileContent = js2xmlparser.parse('students', xmlExportData);
         break;
       case 'json':
       default:
         fileName = 'students.json';
         contentType = 'application/json';
-        fileContent = JSON.stringify(students, null, 2);
+        const jsonExportData = students.map(s => {
+          const data = { ...(s._doc || s) };
+          delete data._id;
+          delete data.__v;
+          return data;
+        });
+        // Mapping id sang tên
+        jsonExportData.forEach(s => {
+          s.faculty = mapper.formatFaculty(facultyMap[s.faculty], locale)?.name || s.faculty;
+          s.program = mapper.formatProgram(programMap[s.program], locale)?.name || s.program;
+          s.status = mapper.formatStatus(statusMap[s.status], locale)?.name || s.status;
+        });
+
+        fileContent = JSON.stringify(jsonExportData, null, 2);
     }
+    await addLogEntry({
+      message: `Export student list to ${format}`,
+      level: 'info',
+      action: 'export',
+      entity: 'student',
+      user: 'admin',
+    });
     return { fileContent, fileName, contentType, isExcel: format === 'excel' };
   }
 }

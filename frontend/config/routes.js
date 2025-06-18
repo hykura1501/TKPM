@@ -10,6 +10,7 @@ const routes = {
     classSections: '/class-sections',
     courses: '/courses',
     semesters: '/semesters',
+    studentsExport: '/students/export',
 };
 
 export default routes;

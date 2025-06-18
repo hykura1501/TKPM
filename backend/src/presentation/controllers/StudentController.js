@@ -16,6 +16,7 @@ class StudentController {
    * @param {import('@usecases/student/AddStudentFromFileUseCase')} deps.addStudentFromFileUseCase
    * @param {import('@usecases/student/GetGradeByStudentIdUseCase')} deps.getGradeByStudentIdUseCase
    * @param {import('@usecases/student/ExportStudentListUseCase')} deps.exportStudentListUseCase
+   * @param {import('@usecases/student/ImportStudentsFromFileUseCase')} deps.importStudentsFromFileUseCase
    */
   constructor({
     getStudentListUseCase,
@@ -26,7 +27,8 @@ class StudentController {
     addStudentsFromFileUseCase,
     addStudentFromFileUseCase,
     getGradeByStudentIdUseCase,
-    exportStudentListUseCase
+    exportStudentListUseCase,
+    importStudentsFromFileUseCase
   }) {
     this.getStudentListUseCase = getStudentListUseCase;
     this.getStudentByIdUseCase = getStudentByIdUseCase;
@@ -37,6 +39,7 @@ class StudentController {
     this.addStudentFromFileUseCase = addStudentFromFileUseCase;
     this.getGradeByStudentIdUseCase = getGradeByStudentIdUseCase;
     this.exportStudentListUseCase = exportStudentListUseCase;
+    this.importStudentsFromFileUseCase = importStudentsFromFileUseCase;
   }
 
   async getListStudents(req, res) {
@@ -136,16 +139,43 @@ class StudentController {
   async exportStudentList(req, res) {
     try {
       const format = req.query.format || 'json';
+      if (!['csv', 'excel', 'xml', 'json'].includes(format)) {
+        return res.status(400).json({ error: "Định dạng file không hợp lệ. Chỉ hỗ trợ csv, excel, xml hoặc json." });
+      }
       const { fileContent, fileName, contentType, isExcel } = await this.exportStudentListUseCase.execute({ format, locale: req.language });
       res.setHeader('Content-Type', contentType);
       res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+      res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition'); // <-- expose header cho FE lấy tên file
       if (isExcel) {
         await fileContent.xlsx.write(res);
         return res.end();
       }
       res.send(fileContent);
     } catch (err) {
+      console.error("Lỗi khi xuất danh sách sinh viên:", err);
       res.status(500).json({ message: err.message });
+    }
+  }
+
+  async importStudentsFromFile(req, res) {
+    try {
+      const format = req.query.format || 'json';
+      if (!req.file) {
+        return res.status(400).json({ error: "Vui lòng tải lên file" });
+      }
+      if (!['json', 'xml'].includes(format)) {
+        return res.status(400).json({ error: "Định dạng file không hợp lệ. Chỉ hỗ trợ json hoặc xml." });
+      }
+      const fileContent = req.file.buffer.toString();
+      const result = await this.importStudentsFromFileUseCase.execute({ fileContent, fileType: format });
+      res.status(200).json({
+        message: "Import sinh viên hoàn tất",
+        imported: result.imported,
+        errors: result.errors
+      });
+    } catch (error) {
+      console.error("Lỗi khi import sinh viên từ file:", error);
+      res.status(400).json({ error: error.message });
     }
   }
 }
