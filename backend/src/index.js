@@ -17,7 +17,7 @@ const httpServer = http.createServer(app);
 const port = process.env.PORT || 3000;
 
 const route = require('./presentation/routes'); 
-const { getLanguage } = require('./api/middlewares/language');
+const { getLanguage } = require('./presentation/middlewares/language'); // Import middleware lấy ngôn ngữ
 
 
 app.use(express.json());
