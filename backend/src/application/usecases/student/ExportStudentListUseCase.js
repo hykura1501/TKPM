@@ -21,14 +21,14 @@ class ExportStudentListUseCase {
     this.programRepository = programRepository;
     this.statusRepository = statusRepository;
   }
-
+  
   // Helper: Phẳng hóa dữ liệu student, map id sang tên
   flattenStudent(student, { facultyMap, programMap, statusMap, locale }) {
     return {
       mssv: student.mssv,
       fullName: student.fullName,
       dateOfBirth: student.dateOfBirth,
-      gender: student.gender,
+      gender: this.mapperGenderName(student.gender),
       faculty: mapper.formatFaculty(facultyMap[student.faculty], locale)?.name || student.faculty,
       course: student.course,
       program: mapper.formatProgram(programMap[student.program], locale)?.name || student.program,
@@ -62,6 +62,15 @@ class ExportStudentListUseCase {
       createdAt: student.createdAt,
       updatedAt: student.updatedAt
     };
+  }
+  mapperGenderName(gender, locale) {
+    const genders = {
+      vi: { male: 'Nam', female: 'Nữ', other: 'Khác' },
+      en: { male: 'Male', female: 'Female', other: 'Other' }
+    };
+    if (!gender) return '';
+    const lang = genders[locale] || genders['vi'];
+    return lang[gender] || gender;
   }
 
   /**
@@ -115,6 +124,7 @@ class ExportStudentListUseCase {
           s.faculty = mapper.formatFaculty(facultyMap[s.faculty], locale)?.name || s.faculty;
           s.program = mapper.formatProgram(programMap[s.program], locale)?.name || s.program;
           s.status = mapper.formatStatus(statusMap[s.status], locale)?.name || s.status;
+          s.gender = this.mapperGenderName(s.gender, locale);
         });
         fileContent = js2xmlparser.parse('students', xmlExportData);
         break;
@@ -133,6 +143,7 @@ class ExportStudentListUseCase {
           s.faculty = mapper.formatFaculty(facultyMap[s.faculty], locale)?.name || s.faculty;
           s.program = mapper.formatProgram(programMap[s.program], locale)?.name || s.program;
           s.status = mapper.formatStatus(statusMap[s.status], locale)?.name || s.status;
+          s.gender = this.mapperGenderName(s.gender, locale);
         });
 
         fileContent = JSON.stringify(jsonExportData, null, 2);
