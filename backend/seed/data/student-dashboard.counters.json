@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "67e419a69e139af160ff36a3"
+  },
+  "name": "student_mssv",
+  "__v": 0,
+  "value": 130
+},
+{
+  "_id": {
+    "$oid": "67fa84e47a7746a5df416987"
+  },
+  "name": "classSection_id",
+  "__v": 0,
+  "value": 24
+},
+{
+  "_id": {
+    "$oid": "67fa91ad7a7746a5df4169aa"
+  },
+  "name": "Section",
+  "__v": 0,
+  "value": 18
+},
+{
+  "_id": {
+    "$oid": "67fcd1453996f8ef4b4bb454"
+  },
+  "name": "registration_id",
+  "__v": 0,
+  "value": 9
+},
+{
+  "_id": {
+    "$oid": "6826234fdaf37e8c2ec695cf"
+  },
+  "name": "Faculty_id",
+  "__v": 0,
+  "value": 12
+},
+{
+  "_id": {
+    "$oid": "6826ec2edaf37e8c2ec69c23"
+  },
+  "name": "program_id",
+  "__v": 0,
+  "value": 21
+},
+{
+  "_id": {
+    "$oid": "6826ee8cdaf37e8c2ec69c34"
+  },
+  "name": "status_id",
+  "__v": 0,
+  "value": 8
+}]

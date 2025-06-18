@@ -1,0 +1,79 @@
+[{
+  "_id": {
+    "$oid": "68245bd95a3a41792093ee73"
+  },
+  "id": "program-1",
+  "name": {
+    "vi": "Cử nhân Luật",
+    "en": "Bachelor of Law"
+  },
+  "faculty": "faculty-1"
+},
+{
+  "_id": {
+    "$oid": "68245bd95a3a41792093ee74"
+  },
+  "id": "program-2",
+  "name": {
+    "vi": "Thạc sĩ Luật",
+    "en": "Master of Law"
+  },
+  "faculty": "faculty-1"
+},
+{
+  "_id": {
+    "$oid": "68245bd95a3a41792093ee75"
+  },
+  "id": "program-4",
+  "name": {
+    "vi": "Thạc sĩ Tiếng Anh thương mại",
+    "en": "Master of Business English"
+  },
+  "faculty": "faculty-2"
+},
+{
+  "_id": {
+    "$oid": "68245bd95a3a41792093ee76"
+  },
+  "id": "program-5",
+  "name": {
+    "vi": "Cử nhân Tiếng Nhật",
+    "en": "Bachelor of Japanese Language"
+  },
+  "faculty": "faculty-3"
+},
+{
+  "_id": {
+    "$oid": "68245bd95a3a41792093ee77"
+  },
+  "id": "program-6",
+  "name": {
+    "vi": "Cử nhân Tiếng Pháp",
+    "en": "Bachelor of French Language"
+  },
+  "faculty": "faculty-4"
+},
+{
+  "_id": {
+    "$oid": "6826ef29ea6c777f0f25d2c1"
+  },
+  "id": "program-9",
+  "name": {
+    "en": "Information Technology",
+    "vi": "Cử nhân CNTT"
+  },
+  "faculty": "Faculty-6",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684947d969a7db3f9f8bd4b6"
+  },
+  "id": "program-21",
+  "name": {
+    "en": "Cử nhân CNTT Việt Pháp",
+    "vi": "Cử nhân CNTT Việt Pháp"
+  },
+  "faculty": "Faculty-6",
+  "__v": 0
+}]

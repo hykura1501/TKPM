@@ -1,0 +1,61 @@
+[{
+  "_id": {
+    "$oid": "68245c895a3a41792093ee7e"
+  },
+  "id": "status-1",
+  "name": {
+    "vi": "Đang học",
+    "en": "Studying"
+  },
+  "color": "#29ae55",
+  "allowedStatus": [
+    "status-4",
+    "status-3",
+    "status-5"
+  ]
+},
+{
+  "_id": {
+    "$oid": "68245c895a3a41792093ee7f"
+  },
+  "id": "status-3",
+  "name": {
+    "vi": "Đã thôi học",
+    "en": "Dropped out"
+  },
+  "color": "#e00000",
+  "allowedStatus": [
+    "status-5",
+    "status-4"
+  ]
+},
+{
+  "_id": {
+    "$oid": "68245c895a3a41792093ee80"
+  },
+  "id": "status-4",
+  "name": {
+    "vi": "Bảo lưu",
+    "en": "Academic leave"
+  },
+  "color": "#f59e0b",
+  "allowedStatus": [
+    "status-5"
+  ]
+},
+{
+  "_id": {
+    "$oid": "68245c895a3a41792093ee81"
+  },
+  "id": "status-5",
+  "name": {
+    "vi": "Đã tốt nghiệp",
+    "en": "Graduated"
+  },
+  "color": "#33417a",
+  "allowedStatus": [
+    "status-3",
+    "status-4",
+    "status-1"
+  ]
+}]

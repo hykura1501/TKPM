@@ -1,0 +1,73 @@
+[{
+  "_id": {
+    "$oid": "682457e45a3a41792093ee6a"
+  },
+  "id": "faculty-1",
+  "name": {
+    "vi": "Khoa Luật",
+    "en": "Law"
+  }
+},
+{
+  "_id": {
+    "$oid": "682457e45a3a41792093ee6b"
+  },
+  "id": "faculty-2",
+  "name": {
+    "vi": "Khoa Tiếng Anh thương mại",
+    "en": "Business English"
+  }
+},
+{
+  "_id": {
+    "$oid": "682457e45a3a41792093ee6c"
+  },
+  "id": "faculty-3",
+  "name": {
+    "vi": "Khoa Tiếng Nhật",
+    "en": "Japanese Language"
+  }
+},
+{
+  "_id": {
+    "$oid": "682457e45a3a41792093ee6d"
+  },
+  "id": "faculty-4",
+  "name": {
+    "vi": "Khoa Tiếng Pháp",
+    "en": "French Language"
+  }
+},
+{
+  "_id": {
+    "$oid": "682691f883bbf9a5e21ae3a8"
+  },
+  "id": "Faculty-5",
+  "name": {
+    "en": "Biology Science",
+    "vi": "Khoa Sinh"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6826ec1b892a9de3e9ad0596"
+  },
+  "id": "Faculty-6",
+  "name": {
+    "en": "Information Technology",
+    "vi": "Khoa Công nghệ Thông tin"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684947bd69a7db3f9f8bd4b1"
+  },
+  "id": "Faculty-10",
+  "name": {
+    "en": "Khoa Tiếng Trung",
+    "vi": "Khoa Tiếng Trung"
+  },
+  "__v": 0
+}]

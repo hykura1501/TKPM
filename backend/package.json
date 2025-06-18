@@ -9,6 +9,7 @@
     "test:clear": "jest --clearCache",
     "start": "node --watch src/index.js",
     "dev": "nodemon src/index.js",
+    "seed": "node ./seed/index.js",
     "debug": "nodemon ./backend/server.js"
   },
   "keywords": [],

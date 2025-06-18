@@ -1,0 +1,318 @@
+[{
+  "_id": {
+    "$oid": "67fa713fd3ba42fa69eb7e5a"
+  },
+  "id": "section-1",
+  "code": "CNTT001-01",
+  "courseId": "course-1",
+  "academicYear": "2024-2025",
+  "semester": "Summer",
+  "instructor": "Nguyễn Văn An",
+  "maxCapacity": 40,
+  "currentEnrollment": 40,
+  "schedule": "Thứ 2, 7:30 - 9:35",
+  "classroom": "A102",
+  "createdAt": "2023-08-01T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-06-11T08:57:29.695Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fa713fd3ba42fa69eb7e5b"
+  },
+  "id": "section-2",
+  "code": "CNTT001-02",
+  "courseId": "course-1",
+  "academicYear": "2023-2024",
+  "semester": "2",
+  "instructor": "Trần Thị Bình",
+  "maxCapacity": 40,
+  "currentEnrollment": 40,
+  "schedule": "Thứ 3, 7:30 - 9:30",
+  "classroom": "A102",
+  "createdAt": "2023-08-01T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-06-11T08:54:49.251Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fa713fd3ba42fa69eb7e5c"
+  },
+  "id": "section-3",
+  "code": "CNTT002-01",
+  "courseId": "course-2",
+  "academicYear": "2023-2024",
+  "semester": "1",
+  "instructor": "Lê Văn Cường",
+  "maxCapacity": 35,
+  "currentEnrollment": 33,
+  "schedule": "Thứ 4, 9:30 - 11:30",
+  "classroom": "B201",
+  "createdAt": "2023-08-02T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:40.540Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fa713fd3ba42fa69eb7e5d"
+  },
+  "id": "section-4",
+  "code": "KT001-01",
+  "courseId": "course-4",
+  "academicYear": "2023-2024",
+  "semester": "1",
+  "instructor": "Phạm Thị Dung",
+  "maxCapacity": 50,
+  "currentEnrollment": 46,
+  "schedule": "Thứ 5, 13:30 - 15:30",
+  "classroom": "C301",
+  "createdAt": "2023-08-03T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-06-11T08:54:04.715Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68021b78222e74392db12e88"
+  },
+  "id": "section-6",
+  "code": "CNTT004-01",
+  "courseId": "course-11",
+  "academicYear": "2025-2026",
+  "semester": "2",
+  "instructor": "Trần Thị B",
+  "maxCapacity": 40,
+  "currentEnrollment": 2,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A102",
+  "createdAt": {
+    "$date": "2025-04-18T09:29:28.306Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T10:24:52.529Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6802376e40c4810496527bc5"
+  },
+  "id": "section-7",
+  "code": "CNTT05-01",
+  "courseId": "course-12",
+  "academicYear": "2025-2026",
+  "semester": "Summer",
+  "instructor": "Phan Hồng Phúc",
+  "maxCapacity": 40,
+  "currentEnrollment": 1,
+  "schedule": "Thứ 3, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T11:28:46.393Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:20:04.384Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680237b1d340d909ebc2e846"
+  },
+  "id": "section-8",
+  "code": "CNTT05-02",
+  "courseId": "course-12",
+  "academicYear": "2025-2026",
+  "semester": "2",
+  "instructor": "Lê Minh Quân",
+  "maxCapacity": 40,
+  "currentEnrollment": 0,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T11:29:53.957Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T11:29:53.957Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6802380cf3b1ae898ac077e6"
+  },
+  "id": "section-9",
+  "code": "CNTT004-02",
+  "courseId": "course-11",
+  "academicYear": "2025-2026",
+  "semester": "1",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 40,
+  "currentEnrollment": 0,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A102",
+  "createdAt": {
+    "$date": "2025-04-18T11:31:24.680Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T11:31:24.680Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680238c4f3b1ae898ac077ef"
+  },
+  "id": "section-10",
+  "code": "KT001-02",
+  "courseId": "course-4",
+  "academicYear": "2025-2026",
+  "semester": "1",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 40,
+  "currentEnrollment": 0,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T11:34:28.404Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T11:34:28.404Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680239c5052a918a200d0829"
+  },
+  "id": "section-11",
+  "code": "KT001-03",
+  "courseId": "course-4",
+  "academicYear": "2025-2026",
+  "semester": "2",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 40,
+  "currentEnrollment": 0,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T11:38:45.180Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:39:22.149Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68023b08052a918a200d0832"
+  },
+  "id": "section-12",
+  "code": "NN001-01",
+  "courseId": "course-5",
+  "academicYear": "2025-2026",
+  "semester": "1",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 40,
+  "currentEnrollment": 1,
+  "schedule": "Thứ 3, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T11:44:08.244Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:23:30.420Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680258890236bcf21ef3685f"
+  },
+  "id": "section-14",
+  "code": "CT001",
+  "courseId": "course-13",
+  "academicYear": "2025-2026",
+  "semester": "1",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 30,
+  "currentEnrollment": 1,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T13:50:01.138Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T14:00:10.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6802643d2fc6b3921b98de46"
+  },
+  "id": "section-16",
+  "code": "CT001-02",
+  "courseId": "course-13",
+  "academicYear": "2025-2026",
+  "semester": "2",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 40,
+  "currentEnrollment": 1,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-04-18T14:39:57.253Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:49:47.309Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849194bed459bd692cf0c9d"
+  },
+  "id": "section-17",
+  "code": "KHDL002",
+  "courseId": "course-1",
+  "academicYear": "2025-2026",
+  "semester": "1",
+  "instructor": "Nguyễn Văn A",
+  "maxCapacity": 40,
+  "currentEnrollment": 0,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A102",
+  "createdAt": {
+    "$date": "2025-06-11T05:51:07.880Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:51:07.880Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68494ccc69a7db3f9f8bda19"
+  },
+  "id": "section-18",
+  "code": "CNTT076-01",
+  "courseId": "course-24",
+  "academicYear": "2025-2026",
+  "semester": "1",
+  "instructor": "Trần Thị Bình",
+  "maxCapacity": 40,
+  "currentEnrollment": 1,
+  "schedule": "Thứ 2, 7:30 - 9:30",
+  "classroom": "A101",
+  "createdAt": {
+    "$date": "2025-06-11T09:30:52.951Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:31:25.716Z"
+  },
+  "__v": 0
+}]

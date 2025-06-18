@@ -1,0 +1,359 @@
+[{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee60"
+  },
+  "id": "course-5",
+  "code": "NN001",
+  "name": {
+    "vi": "Tiếng Anh cơ bản",
+    "en": "Basic English"
+  },
+  "credits": 2,
+  "faculty": "faculty-1",
+  "description": {
+    "vi": "Khóa học tiếng Anh cơ bản cho sinh viên năm nhất",
+    "en": "Basic English course for first-year students."
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": "2023-01-05T00:00:00+00:00",
+  "updatedAt": {
+    "$date": "2025-06-17T09:19:55.697Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee5d"
+  },
+  "id": "course-2",
+  "code": "CNTT002",
+  "name": {
+    "vi": "Cấu trúc dữ liệu và Giải thuật1",
+    "en": "Data Structures and Algorithms"
+  },
+  "credits": 4,
+  "faculty": "faculty-2",
+  "description": {
+    "vi": "Khóa học về cấu trúc dữ liệu và các thuật toán cơ bản.",
+    "en": "Covers basic data structures and algorithms."
+  },
+  "prerequisites": [
+    "CNTT001"
+  ],
+  "isActive": true,
+  "createdAt": "2023-01-02T00:00:00+00:00",
+  "updatedAt": {
+    "$date": "2025-05-15T14:18:31.078Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee5e"
+  },
+  "id": "course-3",
+  "code": "CNTT003",
+  "name": {
+    "vi": "Cơ sở dữ liệu",
+    "en": "Database Systems"
+  },
+  "credits": 4,
+  "faculty": "faculty-1",
+  "description": {
+    "vi": "Khóa học về thiết kế và quản lý cơ sở dữ liệu.",
+    "en": "Covers design and management of database systems."
+  },
+  "prerequisites": [
+    "CNTT001"
+  ],
+  "isActive": true,
+  "createdAt": "2023-01-03T00:00:00+00:00",
+  "updatedAt": "2023-01-03T00:00:00+00:00"
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee64"
+  },
+  "id": "course-13",
+  "code": "CT001",
+  "name": {
+    "vi": "Lịch sử đảng",
+    "en": "History of the Communist Party"
+  },
+  "credits": 2,
+  "faculty": "faculty-1",
+  "description": {
+    "vi": "Học thêm về lịch sử nước ta.",
+    "en": "Learn more about the history of our country and the Party."
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": "2025-04-18T13:45:06.449000+00:00",
+  "updatedAt": "2025-04-18T13:45:14.921000+00:00"
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee61"
+  },
+  "id": "course-8",
+  "code": "KHDL001",
+  "name": {
+    "vi": "Nhập môn dữ liệu lớn",
+    "en": "Introduction to Big Data"
+  },
+  "credits": 3,
+  "faculty": "faculty-2",
+  "description": {
+    "vi": "Nhập môn dữ liệu lớn",
+    "en": "Introduction to Big Data concepts and tools."
+  },
+  "prerequisites": [],
+  "isActive": false,
+  "createdAt": "2025-04-12T16:58:48.375000+00:00",
+  "updatedAt": "2025-04-13T07:52:35.458000+00:00"
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee62"
+  },
+  "id": "course-11",
+  "code": "CNTT004",
+  "name": {
+    "vi": "Toán học tổ hợp",
+    "en": "Combinatorics"
+  },
+  "credits": 4,
+  "faculty": "faculty-2",
+  "description": {
+    "vi": "Hỗ trợ cải thiện kiến thức căn bản các thuật toán.",
+    "en": "Helps improve foundational knowledge of algorithms."
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": "2025-04-18T08:42:02.780000+00:00",
+  "updatedAt": "2025-04-18T08:42:02.780000+00:00"
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee63"
+  },
+  "id": "course-12",
+  "code": "CNTT05",
+  "name": {
+    "vi": "Phương pháp Lập trình hướng đối tượng",
+    "en": "Object-Oriented Programming"
+  },
+  "credits": 4,
+  "faculty": "faculty-2",
+  "description": {
+    "vi": "Có thêm kiến thực về lập trình hướng đối tượng.",
+    "en": "Gain deeper knowledge about object-oriented programming."
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": "2025-04-18T11:19:31.661000+00:00",
+  "updatedAt": "2025-04-18T11:19:31.661000+00:00"
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee5c"
+  },
+  "id": "course-1",
+  "code": "CNTT001",
+  "name": {
+    "vi": "Nhập môn lập trình",
+    "en": "Introduction to Programming "
+  },
+  "credits": 4,
+  "faculty": "faculty-1",
+  "description": {
+    "vi": "Một khóa học giới thiệu để lập trình cho sinh viên năm thứ nhất.",
+    "en": "This is an introductory course to programming for first-year students."
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": "2023-01-01T00:00:00+00:00",
+  "updatedAt": {
+    "$date": "2025-06-11T09:41:16.377Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "682453cf5a3a41792093ee5f"
+  },
+  "id": "course-4",
+  "code": "KT001",
+  "name": {
+    "vi": "Kinh tế vĩ mô",
+    "en": "Macroeconomics"
+  },
+  "credits": 3,
+  "faculty": "faculty-2",
+  "description": {
+    "vi": "Khóa học cơ bản về kinh tế vĩ mô.",
+    "en": "An introductory course in macroeconomics."
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": "2023-01-04T00:00:00+00:00",
+  "updatedAt": "2023-01-04T00:00:00+00:00"
+},
+{
+  "_id": {
+    "$oid": "6825ebeef2d606aaa7c68229"
+  },
+  "id": "course-19",
+  "code": "KHDL004",
+  "name": {
+    "en": "Trực quan hóa dữ liệu",
+    "vi": "Trực quan hóa dữ liệu"
+  },
+  "credits": 3,
+  "faculty": "faculty-3",
+  "description": {
+    "en": "Khoa học dữ liệu",
+    "vi": "Khoa học dữ liệu"
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-15T13:28:14.395Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-15T13:28:14.395Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6825ec9e9d62cccf27a9e33c"
+  },
+  "id": "course-20",
+  "code": "KHDL002",
+  "name": {
+    "en": "Trực quan hóa dữ liệu 2",
+    "vi": "Trực quan hóa dữ liệu 2"
+  },
+  "credits": 3,
+  "faculty": "faculty-4",
+  "description": {
+    "en": "Trực quan hóa dữ liệu",
+    "vi": "Trực quan hóa dữ liệu"
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-15T13:31:10.858Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-15T13:31:10.858Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6825f5b59d62cccf27a9e346"
+  },
+  "id": "course-21",
+  "code": "CNTT005",
+  "name": {
+    "en": "Software design",
+    "vi": "Thiết kế phần mềm"
+  },
+  "credits": 3,
+  "faculty": "faculty-1",
+  "description": {
+    "en": "Software design\n",
+    "vi": "Thiết kế phần mềm"
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-15T14:09:57.795Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-16T08:24:20.628Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6826f5d45c801cde99c1613d"
+  },
+  "id": "course-22",
+  "code": "SH001",
+  "name": {
+    "en": "Introduce to Biology",
+    "vi": "Nhập môn Sinh học"
+  },
+  "credits": 3,
+  "faculty": "faculty-1",
+  "description": {
+    "en": "Getting to know Biology",
+    "vi": "Làm quen với môn Sinh học"
+  },
+  "prerequisites": [],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-16T08:22:44.383Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-16T08:23:59.266Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6826f8095c801cde99c16198"
+  },
+  "id": "course-23",
+  "code": "SH002",
+  "name": {
+    "en": "Molecular biology",
+    "vi": "Sinh học phân tử"
+  },
+  "credits": 3,
+  "faculty": "Faculty-5",
+  "description": {
+    "en": "No description",
+    "vi": "Mô tả cho môn sinh học phân tử"
+  },
+  "prerequisites": [
+    "SH001"
+  ],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-05-16T08:32:09.363Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:53:19.327Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68494c8e69a7db3f9f8bd93e"
+  },
+  "id": "course-24",
+  "code": "CNTT076",
+  "name": {
+    "en": "Nhập môn học máy",
+    "vi": "Nhập môn học máy"
+  },
+  "credits": 4,
+  "faculty": "Faculty-6",
+  "description": {
+    "en": "Học máy cơ bản.",
+    "vi": "Học máy cơ bản."
+  },
+  "prerequisites": [
+    "CNTT001"
+  ],
+  "isActive": true,
+  "createdAt": {
+    "$date": "2025-06-11T09:29:50.081Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:29:50.081Z"
+  },
+  "__v": 0
+}]

@@ -1,5 +1,5 @@
-const Mapper = require('@helpers/Mapper');
-const { addLogEntry } = require('@helpers/logging');
+const Mapper = require('@shared/utils/mapper');
+const { addLogEntry } = require('@shared/utils/logging');
 const { SUPPORTED_LOCALES } = require('@configs/locales');
 const FacultyRepository = require('@repositories/FacultyRepository');
 const { courseSchema } = require('@validators/courseValidator');
@@ -35,11 +35,6 @@ class UpdateCourseUseCase {
       await addLogEntry({ message: "Tên khóa học đã tồn tại", level: "warn" });
       return { success: false, error: "Tên khóa học đã tồn tại" };
     }
-    const existingFaculty = await this.facultyRepository.findOneByCondition({ id: parsed.data.faculty });
-    if (!existingFaculty) {
-      await addLogEntry({ message: "Khoa phụ trách không tồn tại", level: "warn" });
-      return { success: false, error: "Khoa phụ trách không tồn tại" };
-    }
     return { success: true, data: parsed.data };
   }
 
@@ -49,6 +44,13 @@ class UpdateCourseUseCase {
       await addLogEntry({ message: "Cập nhật khóa học không hợp lệ", level: "warn" });
       throw { status: 400, message: validationResult.error };
     }
+    // Kiểm tra faculty tồn tại
+    const existingFaculty = await this.facultyRepository.findOneByCondition({ id: data.faculty });
+    if (!existingFaculty) {
+      await addLogEntry({ message: "Khoa phụ trách không tồn tại", level: "warn" });
+      throw { status: 404, message: "Khoa phụ trách không tồn tại" };
+    }
+    // Kiểm tra course tồn tại
     const existingCourse = await this.courseRepository.findOneByCondition({ id: validationResult.data.id });
     if (!existingCourse) {
       await addLogEntry({ message: "Khóa học không tồn tại", level: "warn" });

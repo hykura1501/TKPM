@@ -1,0 +1,729 @@
+[{
+  "_id": {
+    "$oid": "67fa71b4d3ba42fa69eb7e60"
+  },
+  "id": "reg-1",
+  "studentId": "SV001",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 1,
+  "registeredAt": "2023-08-15T00:00:00Z",
+  "cancelledAt": null,
+  "createdAt": "2023-08-15T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.270Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fa71b4d3ba42fa69eb7e61"
+  },
+  "id": "reg-2",
+  "studentId": "SV006",
+  "classSectionId": "section-3",
+  "status": "active",
+  "grade": 8,
+  "registeredAt": "2023-08-15T00:00:00Z",
+  "cancelledAt": null,
+  "createdAt": "2023-08-15T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-04-18T13:46:24.876Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fa71b4d3ba42fa69eb7e62"
+  },
+  "id": "reg-3",
+  "studentId": "SV002",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 5,
+  "registeredAt": "2023-08-16T00:00:00Z",
+  "cancelledAt": null,
+  "createdAt": "2023-08-16T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.361Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fa71b4d3ba42fa69eb7e63"
+  },
+  "id": "reg-4",
+  "studentId": "SV003",
+  "classSectionId": "SV004",
+  "status": "active",
+  "grade": null,
+  "registeredAt": "2023-08-17T00:00:00Z",
+  "cancelledAt": null,
+  "createdAt": "2023-08-17T00:00:00Z",
+  "updatedAt": "2023-08-17T00:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "67fa71b4d3ba42fa69eb7e64"
+  },
+  "id": "reg-5",
+  "studentId": "SV005",
+  "classSectionId": "section-2",
+  "status": "cancelled",
+  "grade": 3,
+  "registeredAt": "2023-08-18T00:00:00Z",
+  "cancelledAt": "2023-08-20T00:00:00Z",
+  "createdAt": "2023-08-18T00:00:00Z",
+  "updatedAt": {
+    "$date": "2025-04-18T13:07:30.497Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fcb7090e7c5e06679ad4ec"
+  },
+  "id": "registration-1744615177271",
+  "studentId": "SV008",
+  "classSectionId": "section-4",
+  "status": "cancelled",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T07:19:37.279Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T07:19:37.288Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-14T08:30:48.513Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fcb7940e7c5e06679ad4f0"
+  },
+  "id": "registration-1744615316859",
+  "studentId": "SV009",
+  "classSectionId": "section-2",
+  "status": "cancelled",
+  "grade": 4,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T07:21:56.860Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T07:21:56.860Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T13:07:30.576Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fcc97fb849c8eda6308f00"
+  },
+  "id": "registration-1744619903858",
+  "studentId": "SV002",
+  "classSectionId": "section-2",
+  "status": "cancelled",
+  "grade": 8,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T08:38:23.861Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T08:38:23.865Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T13:07:30.640Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fcca9ee2fedd003ffa94b8"
+  },
+  "id": "registration-1744620190320",
+  "studentId": "SV004",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 2,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T08:43:10.324Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T08:43:10.327Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.436Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fccabfe2fedd003ffa94c3"
+  },
+  "id": "registration-1744620223093",
+  "studentId": "SV003",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 3,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T08:43:43.094Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T08:43:43.094Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.508Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fccb65e2fedd003ffa94d4"
+  },
+  "id": "registration-1744620389319",
+  "studentId": "SV008",
+  "classSectionId": "section-1",
+  "status": "cancelled",
+  "grade": 4,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T08:46:29.319Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T08:46:29.320Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.599Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fccb86e2fedd003ffa94e2"
+  },
+  "id": "registration-1744620422034",
+  "studentId": "SV007",
+  "classSectionId": "section-1",
+  "status": "cancelled",
+  "grade": 5,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T08:47:02.034Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T08:47:02.034Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.668Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fccbb6e2fedd003ffa94f0"
+  },
+  "id": "registration-1744620470676",
+  "studentId": "SV087",
+  "classSectionId": "section-1",
+  "status": "cancelled",
+  "grade": 6,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T08:47:50.676Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T08:47:50.676Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.824Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67fcd144bda630562de35c15"
+  },
+  "id": "registration-1",
+  "studentId": "SV009",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 5,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-14T09:11:32.523Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-14T09:11:32.526Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.903Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680211361e8053eff7a21997"
+  },
+  "id": "registration-2",
+  "studentId": "SV010",
+  "classSectionId": "section-4",
+  "status": "cancelled",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T08:45:42.032Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T08:45:42.034Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:55:51.979Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680221afc5c0b156550722a2"
+  },
+  "id": "registration-3",
+  "studentId": "SV001",
+  "classSectionId": "section-6",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T09:55:59.887Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T09:55:59.889Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:55:59.889Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68022874c5c0b156550723af"
+  },
+  "id": "registration-4",
+  "studentId": "SV009",
+  "classSectionId": "section-6",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T10:24:52.445Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T10:24:52.445Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T10:24:52.445Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68025aead6d5d1911c6e2c76"
+  },
+  "id": "registration-5",
+  "studentId": "SV002",
+  "classSectionId": "section-14",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T14:00:10.339Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T14:00:10.340Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T14:00:10.340Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6802673a77e7167cdc0c82aa"
+  },
+  "id": "registration-6",
+  "studentId": "SV006",
+  "classSectionId": "section-12",
+  "status": "cancelled",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T14:52:42.154Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T14:52:42.159Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T14:53:12.453Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680268dc412c68ea65b58aa3"
+  },
+  "id": "registration-7",
+  "studentId": "SV009",
+  "classSectionId": "section-12",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T14:59:40.847Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T14:59:40.857Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T14:59:40.857Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68026a068a2fea5043ca7e41"
+  },
+  "id": "registration-8",
+  "studentId": "SV087",
+  "classSectionId": "section-16",
+  "status": "active",
+  "grade": 7.5,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-04-18T15:04:38.456Z"
+  },
+  "createdAt": {
+    "$date": "2025-04-18T15:04:38.460Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:57:42.437Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6826f8f95c801cde99c161f4"
+  },
+  "id": "registration-9",
+  "studentId": "SV125",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 10,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-05-16T08:36:09.084Z"
+  },
+  "createdAt": {
+    "$date": "2025-05-16T08:36:09.084Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:28.969Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684912cc73cd97bc6ca1b280"
+  },
+  "id": "1749619404782",
+  "studentId": "SV125",
+  "classSectionId": "section-12",
+  "status": "cancelled",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T05:23:24.792Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T05:23:24.805Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:23:30.273Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849167873cd97bc6ca1b2ba"
+  },
+  "id": "1749620344613",
+  "studentId": "SV001",
+  "classSectionId": "section-11",
+  "status": "cancelled",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T05:39:04.616Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T05:39:04.624Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T05:39:22.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684943ed69a7db3f9f8bd00b"
+  },
+  "id": "1749631981694",
+  "studentId": "SV097",
+  "classSectionId": "section-1",
+  "status": "cancelled",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:53:01.694Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:53:01.695Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:29.034Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849442c69a7db3f9f8bd079"
+  },
+  "id": "1749632044648",
+  "studentId": "SV100",
+  "classSectionId": "section-4",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:54:04.648Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:54:04.649Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T08:54:04.649Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849444369a7db3f9f8bd0dc"
+  },
+  "id": "1749632067917",
+  "studentId": "SV125",
+  "classSectionId": "section-2",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:54:27.917Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:54:27.917Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T08:54:27.917Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849444a69a7db3f9f8bd0e5"
+  },
+  "id": "1749632074726",
+  "studentId": "SV125",
+  "classSectionId": "section-3",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:54:34.726Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:54:34.726Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T08:54:34.726Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849445969a7db3f9f8bd0ee"
+  },
+  "id": "1749632089184",
+  "studentId": "SV119",
+  "classSectionId": "section-2",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:54:49.184Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:54:49.184Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T08:54:49.184Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684944de69a7db3f9f8bd2ce"
+  },
+  "id": "1749632222921",
+  "studentId": "SV101",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 5,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:57:02.921Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:57:02.922Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:29.096Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684944f969a7db3f9f8bd2d9"
+  },
+  "id": "1749632249596",
+  "studentId": "SV102",
+  "classSectionId": "section-1",
+  "status": "active",
+  "grade": 10,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:57:29.596Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:57:29.597Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:29.160Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6849451d69a7db3f9f8bd34c"
+  },
+  "id": "1749632285729",
+  "studentId": "SV102",
+  "classSectionId": "section-3",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T08:58:05.729Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T08:58:05.729Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T08:58:05.729Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684949b469a7db3f9f8bd66e"
+  },
+  "id": "1749633460421",
+  "studentId": "SV101",
+  "classSectionId": "section-3",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T09:17:40.422Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T09:17:40.422Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:40.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "684949b469a7db3f9f8bd670"
+  },
+  "id": "1749633460474",
+  "studentId": "SV101",
+  "classSectionId": "section-3",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T09:17:40.474Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T09:17:40.475Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:17:40.475Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68494a4469a7db3f9f8bd741"
+  },
+  "id": "1749633604303",
+  "studentId": "SV003",
+  "classSectionId": "section-7",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T09:20:04.303Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T09:20:04.303Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:20:04.303Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68494ced69a7db3f9f8bda80"
+  },
+  "id": "1749634285645",
+  "studentId": "SV002",
+  "classSectionId": "section-18",
+  "status": "active",
+  "grade": null,
+  "cancelledAt": null,
+  "registeredAt": {
+    "$date": "2025-06-11T09:31:25.645Z"
+  },
+  "createdAt": {
+    "$date": "2025-06-11T09:31:25.645Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:31:25.645Z"
+  },
+  "__v": 0
+}]

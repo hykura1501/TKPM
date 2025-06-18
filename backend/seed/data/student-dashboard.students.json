@@ -1,0 +1,1897 @@
+[{
+  "_id": {
+    "$oid": "67d7ae3eeb64ab356740f1f6"
+  },
+  "mssv": "SV005",
+  "fullName": "Hoàng Văn Đức",
+  "dateOfBirth": "2000-11-30",
+  "gender": "female",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "303 Đường Võ Văn Tần",
+    "ward": "Phường 5",
+    "district": "Quận 3",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "303 Đường Võ Văn Tần",
+    "ward": "Phường 5",
+    "district": "Quận 3",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "987654321",
+    "issueDate": "2018-12-01",
+    "issuePlace": "CA TP. Hồ Chí Minh",
+    "expiryDate": "2028-12-01"
+  },
+  "nationality": "Việt Nam",
+  "email": "hoangvane@hcmus.edu.vn",
+  "phone": "0976543210",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2023-01-05T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T06:15:18.623Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67d7ae3eeb64ab356740f1f4"
+  },
+  "mssv": "SV003",
+  "fullName": "Lê Văn Cường",
+  "dateOfBirth": "1999-08-10",
+  "gender": "male",
+  "faculty": "faculty-3",
+  "course": "2019",
+  "program": "program-5",
+  "permanentAddress": {
+    "streetAddress": "101 Đường Hai Bà Trưng",
+    "ward": "Phường Tân Định",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "101 Đường Hai Bà Trưng",
+    "ward": "Phường Tân Định",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "Passport",
+    "number": "P1234567",
+    "issueDate": "2018-10-01",
+    "issuePlace": "Cục Quản lý Xuất nhập cảnh",
+    "expiryDate": "2028-10-01"
+  },
+  "nationality": "Việt Nam",
+  "email": "levanc@example.com",
+  "phone": "0912345678",
+  "status": "status-5",
+  "createdAt": {
+    "$date": "2023-01-03T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-26T04:09:23.423Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67d7ae3eeb64ab356740f1f2"
+  },
+  "mssv": "SV001",
+  "fullName": "Nguyễn Văn Anh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "temporaryAddress": {
+    "streetAddress": "456 Đường Lê Lợi",
+    "ward": "Phường Bến Thành",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-4",
+  "createdAt": {
+    "$date": "2023-01-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T10:27:10.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67d7ae3eeb64ab356740f1f5"
+  },
+  "mssv": "SV004",
+  "fullName": "Phạm Thị Dung",
+  "dateOfBirth": "2002-03-25",
+  "gender": "female",
+  "faculty": "faculty-4",
+  "course": "2022",
+  "program": "program-6",
+  "permanentAddress": {
+    "streetAddress": "202 Đường Nguyễn Thị Minh Khai",
+    "ward": "Phường Đa Kao",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "202 Đường Nguyễn Thị Minh Khai",
+    "ward": "Phường Đa Kao",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079202012345",
+    "issueDate": "2020-04-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-04-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "phamthid@example.com",
+  "phone": "0987654321",
+  "status": "status-1",
+  "createdAt": "2023-01-04T00:00:00.000Z",
+  "updatedAt": "2023-01-04T00:00:00.000Z"
+},
+{
+  "_id": {
+    "$oid": "67d7ae3eeb64ab356740f1f3"
+  },
+  "mssv": "SV002",
+  "fullName": "Trần Thị Bích",
+  "dateOfBirth": "2001-05-20",
+  "gender": "other",
+  "faculty": "faculty-2",
+  "course": "2021",
+  "program": "program-4",
+  "permanentAddress": {
+    "streetAddress": "789 Đường Lý Tự Trọng",
+    "ward": "Phường Bến Thành",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "789 Đường Lý Tự Trọng",
+    "ward": "Phường Bến Thành",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "123456789",
+    "issueDate": "2019-05-15",
+    "issuePlace": "CA TP. Hồ Chí Minh",
+    "expiryDate": "2029-05-15"
+  },
+  "nationality": "Việt Nam",
+  "email": "tranthib@example.com",
+  "phone": "0909876543",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2023-01-02T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-25T10:24:37.677Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67dadfc06c815de08f62eeff"
+  },
+  "mssv": "SV006",
+  "fullName": "Phan Hồng Phúc",
+  "dateOfBirth": "2004-09-26",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "HCM",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "HCM",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "aaaaaaaaaaaa",
+    "issueDate": "0021-08-08",
+    "issuePlace": "Bình định",
+    "expiryDate": "2036-05-14"
+  },
+  "nationality": "Việt Nam",
+  "email": "php2692004@gmail.com",
+  "phone": "0363353610",
+  "status": "status-1"
+},
+{
+  "_id": {
+    "$oid": "67dadfc06c815de08f62ef00"
+  },
+  "mssv": "SV007",
+  "fullName": "Phan Hồng Phúc",
+  "dateOfBirth": "2004-09-26",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "HCM",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "HCM",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "aaaaaaaaaaaa",
+    "issueDate": "0021-08-08",
+    "issuePlace": "Bình định",
+    "expiryDate": "2036-05-14"
+  },
+  "nationality": "Việt Nam",
+  "email": "php2692004@gmail.com",
+  "phone": "0363353610",
+  "status": "status-1"
+},
+{
+  "_id": {
+    "$oid": "67dd1c2d897fa9a3d74751cd"
+  },
+  "fullName": "Nguyễn Hoàng Kim",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "temporaryAddress": {
+    "streetAddress": "456 Đường Lê Lợi",
+    "ward": "Phường Bến Thành",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@example.com",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": "2024-03-20T10:00:00.000Z",
+  "updatedAt": "2024-03-20T10:00:00.000Z",
+  "mssv": "SV008"
+},
+{
+  "_id": {
+    "$oid": "67dd1c2d897fa9a3d74751cf"
+  },
+  "fullName": "Nguyễn Hoàng Dũng",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "temporaryAddress": {
+    "streetAddress": "456 Đường Lê Lợi",
+    "ward": "Phường Bến Thành",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@example.com",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": "2024-03-20T10:00:00.000Z",
+  "updatedAt": "2024-03-20T10:00:00.000Z",
+  "mssv": "SV009"
+},
+{
+  "_id": {
+    "$oid": "67dd1c2d897fa9a3d74751d1"
+  },
+  "fullName": "Nguyễn Minh Quân",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "temporaryAddress": {
+    "streetAddress": "456 Đường Lê Lợi",
+    "ward": "Phường Bến Thành",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@example.com",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": "2024-03-20T10:00:00.000Z",
+  "updatedAt": "2024-03-20T10:00:00.000Z",
+  "mssv": "SV010"
+},
+{
+  "_id": {
+    "$oid": "67e56738f0daac0874dc97e4"
+  },
+  "mssv": "SV087",
+  "fullName": "Nguyễn Hoàng Kim Anh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56739f0daac0874dc97ea"
+  },
+  "mssv": "SV088",
+  "fullName": "Nguyễn Hoàng Phúc",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56739f0daac0874dc97f0"
+  },
+  "mssv": "SV089",
+  "fullName": "Nguyễn Minh Thịnh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56cb5f0daac0874dc9894"
+  },
+  "mssv": "SV090",
+  "fullName": "Nguyễn Hoàng Kim Anh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56cb6f0daac0874dc989a"
+  },
+  "mssv": "SV091",
+  "fullName": "Nguyễn Hoàng Phúc",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56cb6f0daac0874dc98a0"
+  },
+  "mssv": "SV092",
+  "fullName": "Nguyễn Minh Thịnh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56d6df0daac0874dc98c4"
+  },
+  "mssv": "SV093",
+  "fullName": "Nguyễn Hoàng Kim Anh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56d6df0daac0874dc98ca"
+  },
+  "mssv": "SV094",
+  "fullName": "Nguyễn Hoàng Phúc Tiến",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T13:59:02.493Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e56d6df0daac0874dc98d0"
+  },
+  "mssv": "SV095",
+  "fullName": "Nguyễn Minh Thịnh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2024-03-20T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e57fcdf0daac0874dc990b"
+  },
+  "mssv": "SV096",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "1999-11-11",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "07920001234",
+    "issueDate": "1999-11-11",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "1999-11-11"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-3",
+  "createdAt": {
+    "$date": "2025-03-27T16:41:49.264Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-27T16:41:49.264Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e5803cf0daac0874dc9919"
+  },
+  "mssv": "SV097",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "1999-11-11",
+  "gender": "male",
+  "faculty": "faculty-2",
+  "course": "2020",
+  "program": "program-4",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "3",
+    "country": "45"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "3",
+    "country": "45"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "07920001234",
+    "issueDate": "1999-11-11",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "1999-11-11"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-3",
+  "createdAt": {
+    "$date": "2025-03-27T16:43:40.527Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-27T16:43:40.527Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e58086f0daac0874dc9925"
+  },
+  "mssv": "SV098",
+  "fullName": "Quan Lee",
+  "dateOfBirth": "1999-11-11",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "07920001234",
+    "issueDate": "2000-11-11",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2000-11-11"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-3",
+  "createdAt": {
+    "$date": "2025-03-27T16:44:54.223Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-27T16:44:54.224Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e64f45494e1beac8ccd396"
+  },
+  "mssv": "SV099",
+  "fullName": "Lê Quân",
+  "dateOfBirth": "1999-11-11",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2000-11-11",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "1999-11-11"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-3",
+  "createdAt": {
+    "$date": "2025-03-28T07:27:01.050Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-28T07:27:01.050Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e64fad494e1beac8ccd3a2"
+  },
+  "mssv": "SV100",
+  "fullName": "Phan Phúc",
+  "dateOfBirth": "2000-11-11",
+  "gender": "male",
+  "faculty": "faculty-3",
+  "course": "2021",
+  "program": "program-5",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "2",
+    "district": "3",
+    "province": "4",
+    "country": "5"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2000-11-11",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2005-11-11"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-3",
+  "createdAt": {
+    "$date": "2025-03-28T07:28:45.370Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-28T07:28:45.370Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e65246494e1beac8ccd3ae"
+  },
+  "mssv": "SV101",
+  "fullName": "Quan Lee",
+  "dateOfBirth": "2000-11-11",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "23",
+    "district": "4",
+    "province": "5",
+    "country": "6"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "23",
+    "district": "4",
+    "province": "5",
+    "country": "6"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "1999-11-11",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2005-11-11"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-3",
+  "createdAt": {
+    "$date": "2025-03-28T07:39:50.422Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-28T07:39:50.422Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e6bb8e338bc8579d1aa6e1"
+  },
+  "mssv": "SV102",
+  "fullName": "Phan Hồng Phúc",
+  "dateOfBirth": "2001-05-08",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "124535789",
+    "issueDate": "2021-05-05",
+    "issuePlace": "BĐ",
+    "expiryDate": "2036-05-05"
+  },
+  "nationality": "Việt Nam",
+  "email": "php2692004@gmail.com",
+  "phone": "0363353611",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-03-28T15:08:50.691Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-28T15:08:50.691Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67e6c9454e35ad50a8bb0dec"
+  },
+  "mssv": "SV103",
+  "fullName": "Phan Hồng Phúc",
+  "dateOfBirth": "2004-04-05",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "013598972",
+    "issueDate": "0021-05-02",
+    "issuePlace": "BĐ",
+    "expiryDate": "0036-06-05"
+  },
+  "nationality": "Việt Nam",
+  "email": "hoangvane@hcmus.edu.vn",
+  "phone": "0363353611",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-03-28T16:07:07.438Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-28T16:07:07.438Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f3a401da7c7c1993b84a68"
+  },
+  "mssv": "SV105",
+  "fullName": "Phan Hồng Phúc",
+  "dateOfBirth": "2000-04-02",
+  "gender": "male",
+  "faculty": "faculty-4",
+  "course": "2020",
+  "program": "program-6",
+  "permanentAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "035455221",
+    "issueDate": "2002-04-05",
+    "issuePlace": "BD",
+    "expiryDate": "2036-02-04"
+  },
+  "nationality": "Việt Nam",
+  "email": "php2692004@gmail.com",
+  "phone": "0363353611",
+  "status": "status-5",
+  "createdAt": {
+    "$date": "2025-04-07T10:07:48.963Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-07T10:07:48.964Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f3a451da7c7c1993b84a81"
+  },
+  "mssv": "SV106",
+  "fullName": "Phan Hồng Phúc",
+  "dateOfBirth": "2000-02-12",
+  "gender": "male",
+  "faculty": "faculty-2",
+  "course": "2020",
+  "program": "program-4",
+  "permanentAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "12012357534",
+    "issueDate": "2021-02-05",
+    "issuePlace": "BD",
+    "expiryDate": "2036-02-26"
+  },
+  "nationality": "Việt Nam",
+  "email": "php2692004@gmail.com",
+  "phone": "0363353611",
+  "status": "status-5",
+  "createdAt": {
+    "$date": "2025-04-07T10:09:21.261Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-07T10:09:21.261Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67f3ab00da7c7c1993b84a9a"
+  },
+  "mssv": "SV107",
+  "fullName": "Nguyễn Văn An",
+  "dateOfBirth": "2000-05-08",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "26",
+    "ward": "Linh Trung",
+    "district": "Thủ Đức",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "4616572132",
+    "issueDate": "2021-05-08",
+    "issuePlace": "BD",
+    "expiryDate": "2036-02-25"
+  },
+  "nationality": "Việt Nam",
+  "email": "php2692004@gmail.com",
+  "phone": "0363353611",
+  "status": "status-4",
+  "createdAt": {
+    "$date": "2025-04-07T10:37:52.244Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-07T10:37:52.244Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68020e1a1e8053eff7a21907"
+  },
+  "mssv": "SV111",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-2",
+  "course": "2022",
+  "program": "program-4",
+  "permanentAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 3",
+    "district": "Quận 9",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 3",
+    "district": "Quận 9",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2021-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2026-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T08:32:26.002Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T08:32:26.002Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68020e6e1e8053eff7a21920"
+  },
+  "mssv": "SV112",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 1",
+    "district": "Quận 5",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 1",
+    "district": "Quận 5",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2021-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2026-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T08:33:50.738Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T08:33:50.738Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680215e9002c80e52bf0ced2"
+  },
+  "mssv": "SV113",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 1",
+    "district": "Quận 5",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 1",
+    "district": "Quận 5",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2021-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2026-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T09:05:45.381Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:05:45.382Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680217ad6ee94b66b2a1468c"
+  },
+  "mssv": "SV114",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 5",
+    "district": "Quận 6",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường A",
+    "ward": "Phường 5",
+    "district": "Quận 6",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "0021-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2026-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T09:13:17.580Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:13:17.580Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "680219aed7cba3e2a5fe51e6"
+  },
+  "mssv": "SV115",
+  "fullName": "Quan Lee",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2021",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "q",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "mailingAddress": {
+    "streetAddress": "q",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2021-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2026-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T09:21:49.960Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:21:49.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68021a307b1716fc4fc07336"
+  },
+  "mssv": "SV116",
+  "fullName": "Lê Minh Quân",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "qq",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "mailingAddress": {
+    "streetAddress": "qq",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "07920001234",
+    "issueDate": "2000-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2005-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-4",
+  "createdAt": {
+    "$date": "2025-04-18T09:24:00.638Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:24:00.638Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68021aa37b1716fc4fc0735b"
+  },
+  "mssv": "SV117",
+  "fullName": "Lê Minh",
+  "dateOfBirth": "2001-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "q",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "mailingAddress": {
+    "streetAddress": "q",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2001-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2001-01-01"
+  },
+  "nationality": "Mỹ",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T09:25:55.017Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:25:55.017Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6802207dc5c0b15655072229"
+  },
+  "mssv": "SV119",
+  "fullName": "Quan Lee",
+  "dateOfBirth": "2004-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "q",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "mailingAddress": {
+    "streetAddress": "q",
+    "ward": "q",
+    "district": "q",
+    "province": "q",
+    "country": "q"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2004-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2024-01-01"
+  },
+  "nationality": "Vietnam",
+  "email": "contact.quanminhle@student.university.edu.vn",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-04-18T09:50:52.757Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T09:50:52.757Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6826f8935c801cde99c161c9"
+  },
+  "mssv": "SV125",
+  "fullName": "Quan Lee",
+  "dateOfBirth": "1999-01-01",
+  "gender": "male",
+  "faculty": "faculty-2",
+  "course": "2022",
+  "program": "program-4",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "1",
+    "district": "1",
+    "province": "1",
+    "country": "1"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "1",
+    "district": "1",
+    "province": "1",
+    "country": "1"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2025-01-01"
+  },
+  "nationality": "Việt Nam",
+  "email": "contact.quanminhle@gmail.com",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-05-16T08:34:27.014Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-16T08:34:27.014Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68494a7c69a7db3f9f8bd7b4"
+  },
+  "mssv": "SV127",
+  "fullName": "Lê Duy",
+  "dateOfBirth": "1999-01-01",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2022",
+  "program": "program-2",
+  "permanentAddress": {
+    "streetAddress": "1",
+    "ward": "1",
+    "district": "1",
+    "province": "1",
+    "country": "1"
+  },
+  "mailingAddress": {
+    "streetAddress": "1",
+    "ward": "1",
+    "district": "1",
+    "province": "1",
+    "country": "1"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "0792000123456",
+    "issueDate": "1999-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2005-01-01"
+  },
+  "nationality": "Việt Nam",
+  "email": "quan@gmail.com",
+  "phone": "0944888211",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2025-06-11T09:21:00.243Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T09:21:00.243Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68495c4fad72404093f58375"
+  },
+  "mssv": "SV128",
+  "fullName": "Hoàng Văn Đức",
+  "dateOfBirth": "2000-11-30",
+  "gender": "female",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "303 Đường Võ Văn Tần",
+    "ward": "Phường 5",
+    "district": "Quận 3",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "303 Đường Võ Văn Tần",
+    "ward": "Phường 5",
+    "district": "Quận 3",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CMND",
+    "number": "987654321",
+    "issueDate": "2018-12-01",
+    "issuePlace": "CA TP. Hồ Chí Minh",
+    "expiryDate": "2028-12-01"
+  },
+  "nationality": "Việt Nam",
+  "email": "hoangvane@hcmus.edu.vn",
+  "phone": "0976543210",
+  "status": "status-1",
+  "createdAt": {
+    "$date": "2023-01-05T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-06-11T06:15:18.623Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68495c59ad72404093f58382"
+  },
+  "mssv": "SV129",
+  "fullName": "Lê Văn Cường",
+  "dateOfBirth": "1999-08-10",
+  "gender": "male",
+  "faculty": "faculty-3",
+  "course": "2019",
+  "program": "program-5",
+  "permanentAddress": {
+    "streetAddress": "101 Đường Hai Bà Trưng",
+    "ward": "Phường Tân Định",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "101 Đường Hai Bà Trưng",
+    "ward": "Phường Tân Định",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "Passport",
+    "number": "P1234567",
+    "issueDate": "2018-10-01",
+    "issuePlace": "Cục Quản lý Xuất nhập cảnh",
+    "expiryDate": "2028-10-01"
+  },
+  "nationality": "Việt Nam",
+  "email": "levanc@example.com",
+  "phone": "0912345678",
+  "status": "status-5",
+  "createdAt": {
+    "$date": "2023-01-03T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-26T04:09:23.423Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68495d1dad72404093f583b6"
+  },
+  "mssv": "SV130",
+  "fullName": "Nguyễn Văn Anh",
+  "dateOfBirth": "2000-01-15",
+  "gender": "male",
+  "faculty": "faculty-1",
+  "course": "2020",
+  "program": "program-1",
+  "permanentAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "mailingAddress": {
+    "streetAddress": "123 Đường Nguyễn Huệ",
+    "ward": "Phường Bến Nghé",
+    "district": "Quận 1",
+    "province": "TP. Hồ Chí Minh",
+    "country": "Việt Nam"
+  },
+  "identityDocument": {
+    "type": "CCCD",
+    "number": "079200012345",
+    "issueDate": "2020-01-01",
+    "issuePlace": "Cục Cảnh sát ĐKQL cư trú và DLQG về dân cư",
+    "expiryDate": "2030-01-01",
+    "hasChip": true
+  },
+  "nationality": "Việt Nam",
+  "email": "nguyenvana@student.university.edu.vn",
+  "phone": "0901234567",
+  "status": "status-4",
+  "createdAt": {
+    "$date": "2023-01-01T00:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-04-18T10:27:10.712Z"
+  },
+  "__v": 0
+}]

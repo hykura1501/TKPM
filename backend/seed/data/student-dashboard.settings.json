@@ -1,0 +1,57 @@
+[{
+  "_id": {
+    "$oid": "67e69a34c85ca96947abaae3"
+  },
+  "allowDomains": [
+    "gmail.com",
+    "hcmus.edu.vn",
+    "student.university.edu.vn",
+    "example.com",
+    "student.hcmus.edu.vn",
+    "gsdfgsd",
+    "quanlee"
+  ],
+  "allowPhones": [
+    {
+      "countryCode": "VN",
+      "countryName": "Việt Nam",
+      "prefix": "+84",
+      "pattern": "^(0|\\+84)[3|5|7|8|9][0-9]{8}$",
+      "example": "090123459 hoặc +84901234569",
+      "_id": {
+        "$oid": "67e6b459e4410f987e96a1cc"
+      }
+    },
+    {
+      "countryCode": "US",
+      "countryName": "Hoa Kỳ",
+      "prefix": "+1",
+      "pattern": "^(\\+1)?[0-9]{10}$",
+      "example": "1234567890 hoặc +11234567890",
+      "_id": {
+        "$oid": "67e6b459e4410f987e96a1cd"
+      }
+    },
+    {
+      "countryCode": "JP",
+      "countryName": "Nhật Bản",
+      "prefix": "+81",
+      "pattern": "^(\\+81|0)[0-9]{9,10}$",
+      "example": "0123456789 hoặc +81123456789",
+      "_id": {
+        "$oid": "67e6b459e4410f987e96a1ce"
+      }
+    },
+    {
+      "countryCode": "FR",
+      "countryName": "Pháp",
+      "prefix": "+33",
+      "pattern": "^(\\+33|0)[1-9][0-9]{8}$",
+      "example": "0123456789 hoặc +33123456789",
+      "_id": {
+        "$oid": "67e6bf78b5754f57da4eb5d3"
+      }
+    }
+  ],
+  "__v": 0
+}]
