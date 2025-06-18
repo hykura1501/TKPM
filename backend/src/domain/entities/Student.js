@@ -22,13 +22,22 @@ const StudentSchema = new mongoose.Schema({
     province: { type: String },
     country: { type: String }
   },
+  temporaryAddress: {
+    streetAddress: { type: String },
+    ward: { type: String },
+    district: { type: String },
+    province: { type: String },
+    country: { type: String }
+  },
   identityDocument: {
     type: { type: String },
     number: { type: String },
     issueDate: { type: String },
     issuePlace: { type: String },
     expiryDate: { type: String },
-    hasChip: { type: Boolean }
+    hasChip: { type: Boolean },
+    issuingCountry: { type: String },
+    notes: { type: String }
   },
   nationality: { type: String },
   email: { type: String },

@@ -23,6 +23,8 @@ const DeleteStudentUseCase = require('./application/usecases/student/DeleteStude
 const AddStudentsFromFileUseCase = require('./application/usecases/student/AddStudentsFromFileUseCase');
 const AddStudentFromFileUseCase = require('./application/usecases/student/AddStudentFromFileUseCase');
 const GetGradeByStudentIdUseCase = require('./application/usecases/student/GetGradeByStudentIdUseCase');
+const ExportStudentListUseCase = require('./application/usecases/student/ExportStudentListUseCase');
+
 const GetFacultyListUseCase = require('./application/usecases/faculty/GetFacultyListUseCase');
 const GetFacultyByIdUseCase = require('./application/usecases/faculty/GetFacultyByIdUseCase');
 const CreateFacultyUseCase = require('./application/usecases/faculty/CreateFacultyUseCase');
@@ -66,7 +68,7 @@ const UpdateCourseUseCase = require('./application/usecases/course/UpdateCourseU
 const DeleteCourseUseCase = require('./application/usecases/course/DeleteCourseUseCase');
 const GetTranslationCourseUseCase = require('./application/usecases/course/GetTranslationCourseUseCase');
 const UpdateTranslationCourseUseCase = require('./application/usecases/course/UpdateTranslationCourseUseCase');
-// ... import các usecase khác nếu cần
+
 
 // Controllers
 const StudentController = require('./presentation/controllers/StudentController');
@@ -95,6 +97,7 @@ container.register({
   addStudentsFromFileUseCase: asClass(AddStudentsFromFileUseCase).scoped(),
   addStudentFromFileUseCase: asClass(AddStudentFromFileUseCase).scoped(),
   getGradeByStudentIdUseCase: asClass(GetGradeByStudentIdUseCase).scoped(),
+  exportStudentListUseCase: asClass(ExportStudentListUseCase).scoped(),
   // Controller
   studentController: asClass(StudentController).scoped(),
   
@@ -105,8 +108,8 @@ container.register({
   createFacultyUseCase: asClass(CreateFacultyUseCase).scoped(),
   updateFacultyUseCase: asClass(UpdateFacultyUseCase).scoped(),
   deleteFacultyUseCase: asClass(DeleteFacultyUseCase).scoped(),
-  getTranslationFacultyUseCase: asClass(require('./application/usecases/faculty/GetTranslationFacultyUseCase')).scoped(),
-  updateTranslationFacultyUseCase: asClass(require('./application/usecases/faculty/UpdateTranslationFacultyUseCase')).scoped(),
+  getTranslationFacultyUseCase: asClass(GetTranslationFacultyUseCase).scoped(),
+  updateTranslationFacultyUseCase: asClass(UpdateTranslationFacultyUseCase).scoped(),
   facultyController: asClass(FacultyController).scoped(),
   // Program
   programRepository: asClass(ProgramRepository).singleton(),
@@ -168,7 +171,6 @@ container.register({
   cancelRegistrationUseCase: asClass(require('./application/usecases/registration/CancelRegistrationUseCase')).scoped(),
   getGradeByClassIdUseCase: asClass(require('./application/usecases/registration/GetGradeByClassIdUseCase')).scoped(),
   saveGradeByClassIdUseCase: asClass(require('./application/usecases/registration/SaveGradeByClassIdUseCase')).scoped(),
-  getGradeByStudentIdUseCase: asClass(require('./application/usecases/student/GetGradeByStudentIdUseCase')).scoped(),
   registrationController: asClass(RegistrationController).scoped(),
 
   // Semester

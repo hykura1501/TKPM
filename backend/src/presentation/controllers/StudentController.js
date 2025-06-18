@@ -1,4 +1,8 @@
 // StudentController (Presentation Layer)
+const { Parser: Json2csvParser } = require('json2csv');
+const ExcelJS = require('exceljs');
+const js2xmlparser = require('js2xmlparser');
+
 class StudentController {
   /**
    * 
@@ -11,6 +15,7 @@ class StudentController {
    * @param {import('@usecases/student/AddStudentsFromFileUseCase')} deps.addStudentsFromFileUseCase
    * @param {import('@usecases/student/AddStudentFromFileUseCase')} deps.addStudentFromFileUseCase
    * @param {import('@usecases/student/GetGradeByStudentIdUseCase')} deps.getGradeByStudentIdUseCase
+   * @param {import('@usecases/student/ExportStudentListUseCase')} deps.exportStudentListUseCase
    */
   constructor({
     getStudentListUseCase,
@@ -20,7 +25,8 @@ class StudentController {
     deleteStudentUseCase,
     addStudentsFromFileUseCase,
     addStudentFromFileUseCase,
-    getGradeByStudentIdUseCase
+    getGradeByStudentIdUseCase,
+    exportStudentListUseCase
   }) {
     this.getStudentListUseCase = getStudentListUseCase;
     this.getStudentByIdUseCase = getStudentByIdUseCase;
@@ -30,6 +36,7 @@ class StudentController {
     this.addStudentsFromFileUseCase = addStudentsFromFileUseCase;
     this.addStudentFromFileUseCase = addStudentFromFileUseCase;
     this.getGradeByStudentIdUseCase = getGradeByStudentIdUseCase;
+    this.exportStudentListUseCase = exportStudentListUseCase;
   }
 
   async getListStudents(req, res) {
@@ -123,6 +130,22 @@ class StudentController {
     } catch (error) {
       console.error("Lỗi khi lấy điểm của sinh viên:", error);
       res.status(500).json({ error: "Lỗi khi lấy điểm của sinh viên" });
+    }
+  }
+
+  async exportStudentList(req, res) {
+    try {
+      const format = req.query.format || 'json';
+      const { fileContent, fileName, contentType, isExcel } = await this.exportStudentListUseCase.execute({ format, locale: req.language });
+      res.setHeader('Content-Type', contentType);
+      res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+      if (isExcel) {
+        await fileContent.xlsx.write(res);
+        return res.end();
+      }
+      res.send(fileContent);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
   }
 }
