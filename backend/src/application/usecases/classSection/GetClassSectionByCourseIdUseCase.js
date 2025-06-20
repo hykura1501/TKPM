@@ -11,7 +11,7 @@ class GetClassSectionByCourseIdUseCase {
   }
 
   async execute(courseId) {
-    const classSections = await this.classSectionRepository.findOneByCondition({ courseId });
+    const classSections = await this.classSectionRepository.findAllByCondition({ courseId });
     if (!classSections) {
       await addLogEntry({ 
         message: "Không tìm thấy lớp học nào cho khóa học này", 
