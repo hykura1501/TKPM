@@ -53,7 +53,14 @@ class AddStudentsFromFileUseCase {
       newStudents.push(parsed.data);
     }
     await this.studentRepository.createManyStudents(newStudents);
-    await addLogEntry({ message: 'Thêm nhiều sinh viên từ file', level: 'info', action: 'create', entity: 'student', user: 'admin' });
+    await addLogEntry({ 
+      message: 'Thêm nhiều sinh viên từ file', 
+      level: 'info',
+      action: 'create',
+      entity: 'student',
+      user: 'admin',
+      details: 'Added students from file, count: ' + newStudents.length
+    });
     return newStudents;
   }
 }

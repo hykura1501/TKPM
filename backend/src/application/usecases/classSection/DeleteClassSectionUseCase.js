@@ -13,18 +13,39 @@ class DeleteClassSectionUseCase {
 
   async execute(id) {
     if (!id) {
-      await addLogEntry({ message: 'ID lớp học không được để trống', level: 'warn' });
+      await addLogEntry({ 
+        message: 'ID lớp học không được để trống', 
+        level: 'warn',
+        action: 'validate',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'Empty id provided for delete'
+      });
       throw { status: 400, message: 'ID lớp học không được để trống' };
     }
     // Kiểm tra tồn tại lớp học
     const existingClassSection = await this.classSectionRepository.findOneByCondition({ id });
     if (!existingClassSection) {
-      await addLogEntry({ message: 'Lớp học không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Lớp học không tồn tại', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'ClassSection not found: ' + id
+      });
       throw { status: 404, message: 'Lớp học không tồn tại' };
     }
     // Kiểm tra sĩ số
     if (existingClassSection.currentEnrollment > 0) {
-      await addLogEntry({ message: 'Không thể xóa lớp học đang được sử dụng', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Không thể xóa lớp học đang được sử dụng', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'Attempted to delete classSection in use: ' + id
+      });
       throw { status: 400, message: 'Không thể xóa lớp học đang được sử dụng' };
     }
     await this.classSectionRepository.delete(id);

@@ -17,13 +17,27 @@ class UpdateStatusUseCase {
     // Validate schema
     const parsed = statusSchema.safeParse({ ...statusData});
     if (!parsed.success) {
-      await addLogEntry({ message: 'Cập nhật tình trạng sinh viên không hợp lệ', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Cập nhật tình trạng sinh viên không hợp lệ', 
+        level: 'warn',
+        action: 'update',
+        entity: 'status',
+        user: 'admin',
+        details: 'Invalid status data: ' + JSON.stringify(statusData)
+      });
       throw { status: 400, message: parsed.error.errors };
     }
     // Kiểm tra tồn tại status
     const status = await this.statusRepository.findOneByCondition({ id: parsed.data.id });
     if (!status) {
-      await addLogEntry({ message: 'Tình trạng sinh viên không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Tình trạng sinh viên không tồn tại', 
+        level: 'warn',
+        action: 'update',
+        entity: 'status',
+        user: 'admin',
+        details: 'Status not found: ' + parsed.data.id
+      });
       throw { status: 404, message: 'Tình trạng sinh viên không tồn tại' };
     }
     // Cập nhật tên đa ngôn ngữ

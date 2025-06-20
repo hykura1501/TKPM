@@ -66,7 +66,14 @@ class AddStudentFromFileUseCase {
     const newMssv = await this.studentRepository.getNextMssv();
     const newStudent = { ...parsed.data, mssv: newMssv };
     await this.studentRepository.createStudent(newStudent);
-    await addLogEntry({ message: 'Thêm sinh viên từ file', level: 'info', action: 'create', entity: 'student', user: 'admin' });
+    await addLogEntry({ 
+      message: 'Thêm sinh viên từ file', 
+      level: 'info',
+      action: 'create',
+      entity: 'student',
+      user: 'admin',
+      details: 'Added student from file: ' + newStudent.fullName
+    });
     return newStudent;
   }
 }

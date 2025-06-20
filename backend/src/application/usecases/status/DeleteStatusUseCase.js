@@ -16,13 +16,27 @@ class DeleteStatusUseCase {
 
   async execute(id, language = 'vi') {
     if (!id) {
-      await addLogEntry({ message: 'ID không được để trống', level: 'warn' });
+      await addLogEntry({ 
+        message: 'ID không được để trống', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'status',
+        user: 'admin',
+        details: 'Empty id provided for delete'
+      });
       throw { status: 400, message: 'ID không được để trống' };
     }
     // Kiểm tra xem có sinh viên nào đang dùng status này không
     const student = await this.studentRepository.findOneByCondition({ status: id });
     if (student) {
-      await addLogEntry({ message: 'Không thể xóa tình trạng sinh viên đang được sử dụng', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Không thể xóa tình trạng sinh viên đang được sử dụng', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'status',
+        user: 'admin',
+        details: 'Attempted to delete status in use: ' + id
+      });
       throw { status: 400, message: 'Không thể xóa tình trạng sinh viên đang được sử dụng' };
     }
     await this.statusRepository.delete(id);

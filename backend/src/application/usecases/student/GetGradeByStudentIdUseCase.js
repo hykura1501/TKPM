@@ -25,6 +25,10 @@ class GetGradeByStudentIdUseCase {
       await addLogEntry({
         message: "ID sinh viên không được để trống",
         level: "warn",
+        action: 'get-grade',
+        entity: 'student',
+        user: 'admin',
+        details: 'Empty studentId provided for get grade'
       });
       throw { status: 400, message: "ID sinh viên không được để trống" };
     }
@@ -36,6 +40,10 @@ class GetGradeByStudentIdUseCase {
       await addLogEntry({
         message: "Không tìm thấy đăng ký học nào cho sinh viên này",
         level: "warn",
+        action: 'get-grade',
+        entity: 'student',
+        user: 'admin',
+        details: 'No registration found for student: ' + studentId
       });
       throw {
         status: 404,

@@ -14,7 +14,14 @@ class GetFacultyListUseCase {
   async execute(language = 'vi') {
     const faculties = await this.facultyRepository.findAll();
     if (!faculties || faculties.length === 0) {
-      await addLogEntry({ message: "Không tìm thấy khoa nào", level: "warn" });
+      await addLogEntry({ 
+        message: "Không tìm thấy khoa nào", 
+        level: "warn",
+        action: 'get-list',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'No faculties found in database'
+      });
       return [];
     }
     return faculties.map((faculty) => Mapper.formatFaculty(faculty, language));

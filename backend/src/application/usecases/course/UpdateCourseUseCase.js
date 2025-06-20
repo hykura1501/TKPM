@@ -18,12 +18,26 @@ class UpdateCourseUseCase {
   async validateCourse(course, isUpdate = false) {
     const parsed = courseSchema.safeParse(course);
     if (!parsed.success) {
-      await addLogEntry({ message: "Khóa học không hợp lệ", level: "warn" });
+      await addLogEntry({ 
+        message: "Khóa học không hợp lệ", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Invalid course data: ' + JSON.stringify(course)
+      });
       return { success: false, error: parsed.error.errors.message };
     }
     const existingCourse = await this.courseRepository.findOneByCondition({ code: parsed.data.code });
     if (!isUpdate && existingCourse) {
-      await addLogEntry({ message: "Mã khóa học đã tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Mã khóa học đã tồn tại", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Duplicate course code: ' + parsed.data.code
+      });
       return { success: false, error: "Mã khóa học đã tồn tại" };
     }
     let existingCourseName = null;
@@ -32,7 +46,14 @@ class UpdateCourseUseCase {
       if (existingCourseName) break;
     }
     if (!isUpdate && existingCourseName) {
-      await addLogEntry({ message: "Tên khóa học đã tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Tên khóa học đã tồn tại", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Duplicate course name: ' + parsed.data.name
+      });
       return { success: false, error: "Tên khóa học đã tồn tại" };
     }
     return { success: true, data: parsed.data };
@@ -41,19 +62,40 @@ class UpdateCourseUseCase {
   async execute(data, language = 'vi') {
     const validationResult = await this.validateCourse(data, true);
     if (!validationResult.success) {
-      await addLogEntry({ message: "Cập nhật khóa học không hợp lệ", level: "warn" });
+      await addLogEntry({ 
+        message: "Cập nhật khóa học không hợp lệ", 
+        level: "warn",
+        action: 'update',
+        entity: 'course',
+        user: 'admin',
+        details: 'Invalid course data: ' + JSON.stringify(data)
+      });
       throw { status: 400, message: validationResult.error };
     }
     // Kiểm tra faculty tồn tại
     const existingFaculty = await this.facultyRepository.findOneByCondition({ id: data.faculty });
     if (!existingFaculty) {
-      await addLogEntry({ message: "Khoa phụ trách không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa phụ trách không tồn tại", 
+        level: "warn",
+        action: 'update',
+        entity: 'course',
+        user: 'admin',
+        details: 'Faculty not found: ' + data.faculty
+      });
       throw { status: 404, message: "Khoa phụ trách không tồn tại" };
     }
     // Kiểm tra course tồn tại
     const existingCourse = await this.courseRepository.findOneByCondition({ id: validationResult.data.id });
     if (!existingCourse) {
-      await addLogEntry({ message: "Khóa học không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khóa học không tồn tại", 
+        level: "warn",
+        action: 'update',
+        entity: 'course',
+        user: 'admin',
+        details: 'Course not found: ' + validationResult.data.id
+      });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
     existingCourse.name.set(language, data.name);
@@ -68,7 +110,14 @@ class UpdateCourseUseCase {
       description: existingCourse.description,
     });
     const courses = (await this.courseRepository.findAll()).map((course) => Mapper.formatCourse(course, language));
-    await addLogEntry({ message: "Cập nhật khóa học thành công", level: "info", action: "update", entity: "course", user: "admin", details: "Updated course: " + validationResult.data.name });
+    await addLogEntry({ 
+      message: "Cập nhật khóa học thành công", 
+      level: "info",
+      action: "update",
+      entity: "course",
+      user: "admin",
+      details: "Updated course: " + validationResult.data.name
+    });
     return { success: true, message: "Cập nhật khóa học thành công", courses };
   }
 }

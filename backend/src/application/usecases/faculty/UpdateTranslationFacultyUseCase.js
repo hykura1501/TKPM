@@ -13,12 +13,26 @@ class UpdateTranslationFacultyUseCase {
 
   async execute(facultyId, translations) {
     if (!facultyId) {
-      await addLogEntry({ message: "ID khoa không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID khoa không được để trống", 
+        level: "warn",
+        action: 'update-translation',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Empty facultyId provided for translation update'
+      });
       throw { status: 400, message: "ID khoa không được để trống" };
     }
     const faculty = await this.facultyRepository.findOneByCondition({ id: facultyId });
     if (!faculty) {
-      await addLogEntry({ message: "Khoa không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa không tồn tại", 
+        level: "warn",
+        action: 'update-translation',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Faculty not found: ' + facultyId
+      });
       throw { status: 404, message: "Khoa không tồn tại" };
     }
     // Cập nhật bản dịch

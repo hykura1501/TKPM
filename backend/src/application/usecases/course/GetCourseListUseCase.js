@@ -14,7 +14,14 @@ class GetCourseListUseCase {
   async execute(language = 'vi') {
     const courses = await this.courseRepository.findAll();
     if (!courses || courses.length === 0) {
-      await addLogEntry({ message: "Không tìm thấy khóa học nào", level: "warn" });
+      await addLogEntry({ 
+        message: "Không tìm thấy khóa học nào", 
+        level: "warn",
+        action: 'get-list',
+        entity: 'course',
+        user: 'admin',
+        details: 'No courses found in database'
+      });
       return [];
     }
     return courses.map((course) => mapper.formatCourse(course, language));

@@ -17,14 +17,28 @@ class UpdateProgramUseCase {
     // Validate schema
     const parsed = programSchema.safeParse({ ...programData });
     if (!parsed.success) {
-      await addLogEntry({ message: 'Cập nhật chương trình học không hợp lệ', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Cập nhật chương trình học không hợp lệ', 
+        level: 'warn',
+        action: 'update',
+        entity: 'program',
+        user: 'admin',
+        details: 'Invalid program data: ' + JSON.stringify(programData)
+      });
       throw { status: 400, message: parsed.error.errors };
     }
     const { id } = parsed.data;
     // Kiểm tra tồn tại chương trình
     const program = await this.programRepository.findOneByCondition({ id });
     if (!program) {
-      await addLogEntry({ message: 'Chương trình học không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Chương trình học không tồn tại', 
+        level: 'warn',
+        action: 'update',
+        entity: 'program',
+        user: 'admin',
+        details: 'Program not found: ' + id
+      });
       throw { status: 404, message: 'Chương trình học không tồn tại' };
     }
     // Cập nhật tên đa ngôn ngữ

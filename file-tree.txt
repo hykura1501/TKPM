@@ -1,0 +1,66 @@
+├──── backend
+│   ├──── docs
+│   ├──── seed
+│   │   └──── data
+│   ├──── src
+│   │   ├──── application
+│   │   │   ├──── usecases
+│   │   │   │   ├──── classSection
+│   │   │   │   ├──── course
+│   │   │   │   ├──── faculty
+│   │   │   │   ├──── log
+│   │   │   │   ├──── program
+│   │   │   │   ├──── registration
+│   │   │   │   ├──── semester
+│   │   │   │   ├──── setting
+│   │   │   │   ├──── status
+│   │   │   │   └──── student
+│   │   │   └──── validators
+│   │   ├──── configs
+│   │   │   └──── db
+│   │   ├──── domain
+│   │   │   ├──── entities
+│   │   │   └──── repositories
+│   │   ├──── infrastructure
+│   │   │   └──── repositories
+│   │   ├──── presentation
+│   │   │   ├──── controllers
+│   │   │   ├──── middlewares
+│   │   │   └──── routes
+│   │   └──── shared
+│   │       └──── utils
+│   └──── tests
+│       ├──── controllers
+│       ├──── services
+│       └──── usecases
+│           ├──── classSection
+│           ├──── course
+│           ├──── faculty
+│           ├──── log
+│           ├──── program
+│           ├──── registration
+│           ├──── setting
+│           └──── status
+└──── frontend
+    ├──── app
+    │   ├──── students
+    │   │   └──── new
+    │   └──── [locale]
+    │       ├──── classes
+    │       ├──── courses
+    │       ├──── registration
+    │       ├──── settings
+    │       ├──── students
+    │       └──── transcripts
+    ├──── components
+    │   └──── ui
+    ├──── config
+    ├──── data
+    ├──── docs
+    ├──── hooks
+    ├──── lib
+    ├──── messages
+    ├──── public
+    ├──── services
+    ├──── styles
+    └──── types

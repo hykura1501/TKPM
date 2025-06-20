@@ -13,12 +13,26 @@ class DeleteFacultyUseCase {
 
   async execute(id, language = 'vi') {
     if (!id) {
-      await addLogEntry({ message: "ID khoa không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID khoa không được để trống", 
+        level: "warn",
+        action: 'delete',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Empty id provided for delete'
+      });
       throw { status: 400, message: "ID khoa không được để trống" };
     }
     const existingFaculty = await this.facultyRepository.findOneByCondition({ id });
     if (!existingFaculty) {
-      await addLogEntry({ message: "Khoa không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa không tồn tại", 
+        level: "warn",
+        action: 'delete',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Faculty not found: ' + id
+      });
       throw { status: 404, message: "Khoa không tồn tại" };
     }
     await this.facultyRepository.delete(id);

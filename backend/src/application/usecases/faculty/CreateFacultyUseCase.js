@@ -19,7 +19,14 @@ class CreateFacultyUseCase {
   async execute(data, language = 'vi') {
     const parsed = facultySchema.safeParse(data);
     if (!parsed.success) {
-      await addLogEntry({ message: "Thêm khoa không hợp lệ", level: "warn" });
+      await addLogEntry({ 
+        message: "Thêm khoa không hợp lệ", 
+        level: "warn",
+        action: 'create',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Invalid faculty data: ' + JSON.stringify(data)
+      });
       throw { status: 400, message: parsed.error.errors };
     }
     const faculty = parsed.data;

@@ -13,7 +13,14 @@ class FindStatusByIdUseCase {
   async execute(id) {
     const status = await this.statusRepository.findOneByCondition({ id });
     if (!status) {
-      await addLogEntry({ message: "Tình trạng sinh viên không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Tình trạng sinh viên không tồn tại", 
+        level: "warn",
+        action: 'find',
+        entity: 'status',
+        user: 'admin',
+        details: 'Status not found: ' + id
+      });
       throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
     }
     return status;

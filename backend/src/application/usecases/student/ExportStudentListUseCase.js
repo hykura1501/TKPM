@@ -154,6 +154,7 @@ class ExportStudentListUseCase {
       action: 'export',
       entity: 'student',
       user: 'admin',
+      details: `Exported student list, count: ${students.length}`
     });
     return { fileContent, fileName, contentType, isExcel: format === 'excel' };
   }

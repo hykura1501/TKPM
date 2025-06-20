@@ -18,12 +18,26 @@ class CreateCourseUseCase {
   async validateCourse(course, isUpdate = false) {
     const parsed = courseSchema.safeParse(course);
     if (!parsed.success) {
-      await addLogEntry({ message: "Khóa học không hợp lệ", level: "warn" });
+      await addLogEntry({ 
+        message: "Khóa học không hợp lệ", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Invalid course data: ' + JSON.stringify(course)
+      });
       return { success: false, error: parsed.error.errors };
     }
     const existingCourse = await this.courseRepository.findOneByCondition({ code: parsed.data.code });
     if (!isUpdate && existingCourse) {
-      await addLogEntry({ message: "Mã khóa học đã tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Mã khóa học đã tồn tại", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Duplicate course code: ' + parsed.data.code
+      });
       return { success: false, error: "Mã khóa học đã tồn tại" };
     }
     let existingCourseName = null;
@@ -32,12 +46,26 @@ class CreateCourseUseCase {
       if (existingCourseName) break;
     }
     if (!isUpdate && existingCourseName) {
-      await addLogEntry({ message: "Tên khóa học đã tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Tên khóa học đã tồn tại", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Duplicate course name: ' + parsed.data.name
+      });
       return { success: false, error: "Tên khóa học đã tồn tại" };
     }
     const existingFaculty = await this.facultyRepository.findOneByCondition({ id: parsed.data.faculty });
     if (!existingFaculty) {
-      await addLogEntry({ message: "Khoa phụ trách không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa phụ trách không tồn tại", 
+        level: "warn",
+        action: 'validate',
+        entity: 'course',
+        user: 'admin',
+        details: 'Faculty not found: ' + parsed.data.faculty
+      });
       return { success: false, error: "Khoa phụ trách không tồn tại" };
     }
     return { success: true, data: parsed.data };
@@ -46,7 +74,14 @@ class CreateCourseUseCase {
   async execute(data, language = 'vi') {
     const validationResult = await this.validateCourse(data);
     if (!validationResult.success) {
-      await addLogEntry({ message: "Thêm tình trạng sinh viên không hợp lệ", level: "warn" });
+      await addLogEntry({ 
+        message: "Thêm tình trạng sinh viên không hợp lệ", 
+        level: "warn",
+        action: 'create',
+        entity: 'course',
+        user: 'admin',
+        details: 'Invalid course data: ' + JSON.stringify(data)
+      });
       throw { status: 400, message: validationResult.error };
     }
     const course = validationResult.data;
@@ -63,7 +98,14 @@ class CreateCourseUseCase {
     });
     await this.courseRepository.create(newCourse);
     const courses = (await this.courseRepository.findAll()).map((course) => Mapper.formatCourse(course, language));
-    await addLogEntry({ message: "Thêm tình trạng sinh viên thành công", level: "info", action: "create", entity: "course", user: "admin", details: "Add new course: " + course.name });
+    await addLogEntry({ 
+      message: "Thêm khóa học thành công", 
+      level: "info",
+      action: "create",
+      entity: "course",
+      user: "admin",
+      details: "Add new course: " + course.name
+    });
     return { success: true, message: "Thêm khóa học thành công", courses };
   }
 }
