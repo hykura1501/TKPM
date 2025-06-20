@@ -313,6 +313,12 @@ export function StudentForm({
       setActiveTab(errorTab);
     }
   }, [form.formState.isSubmitted, form.formState.errors]);
+
+  const handleIdTypeChange = (type: "CMND" | "CCCD" | "Passport") => {
+    setIdType(type);
+    form.setValue("identityDocument.type", type, { shouldValidate: true });
+  };
+
   return (
     <Form {...form}>
       <form
@@ -738,31 +744,25 @@ export function StudentForm({
                   <Button
                     type="button"
                     variant={idType === "CMND" ? "default" : "outline"}
-                    onClick={() => setIdType("CMND")}
+                    onClick={() => handleIdTypeChange("CMND")}
                   >
                     {t("idDocumentCmnd")}
                   </Button>
                   <Button
                     type="button"
                     variant={idType === "CCCD" ? "default" : "outline"}
-                    onClick={() => setIdType("CCCD")}
+                    onClick={() => handleIdTypeChange("CCCD")}
                   >
                     {t("idDocumentCccd")}
                   </Button>
                   <Button
                     type="button"
                     variant={idType === "Passport" ? "default" : "outline"}
-                    onClick={() => setIdType("Passport")}
+                    onClick={() => handleIdTypeChange("Passport")}
                   >
                     {t("idDocumentPassport")}
                   </Button>
                 </div>
-
-                <input
-                  type="hidden"
-                  {...form.register("identityDocument.type")}
-                  value={idType}
-                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* CMND Fields */}

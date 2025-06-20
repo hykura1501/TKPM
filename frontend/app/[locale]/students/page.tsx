@@ -403,103 +403,23 @@ export default function Home() {
       }
     } else if (action === "export") {
       try {
-        let fileContent;
         const fileName = `students.${format}`;
+        // Gọi API export, nhận về blob
+        // const response = await fetch(`/api/students/export?format=${format}`, {
+        //   method: "GET",
+        //   headers: {
+        //     // Nếu cần truyền thêm header, ví dụ xác thực, thêm ở đây
+        //   },
+        // });
 
-        const data = await StudentService.fetchStudents();
+        // if (!response.ok) throw new Error("Export failed");
 
-        const students = data;
-        // Gắn thông tin đầy đủ cho sinh viên
-        students.forEach((student: Student) => {
-          student.faculty = getFacultyName(student.faculty);
-          student.program = getProgramName(student.program);
-          student.status = getStatusInfo(student.status).name;
-        });
-        // Chuẩn hóa thông tin 3 cột địa chỉ
-        const normalizedStudents = students.map((student: Student) => ({
-          ...student,
-          permanentAddress: [
-            student.permanentAddress?.streetAddress,
-            student.permanentAddress?.ward,
-            student.permanentAddress?.district,
-            student.permanentAddress?.province,
-            student.permanentAddress?.country,
-          ]
-            .filter(Boolean)
-            .join(", "),
-          temporaryAddress: [
-            student.temporaryAddress?.streetAddress,
-            student.temporaryAddress?.ward,
-            student.temporaryAddress?.district,
-            student.temporaryAddress?.province,
-            student.temporaryAddress?.country,
-          ]
-            .filter(Boolean)
-            .join(", "),
-          mailingAddress: [
-            student.mailingAddress?.streetAddress,
-            student.mailingAddress?.ward,
-            student.mailingAddress?.district,
-            student.mailingAddress?.province,
-            student.mailingAddress?.country,
-          ]
-            .filter(Boolean)
-            .join(", "),
-          identityDocument: student.identityDocument
-            ? Object.values(student.identityDocument).filter(Boolean).join(", ")
-            : "",
-        }));
-        if (format === "csv") {
-          fileContent = Papa.unparse(normalizedStudents);
-          const blob = new Blob([fileContent], {
-            type: "text/csv;charset=utf-8;",
-          });
-          saveAs(blob, fileName);
-        } else if (format === "json") {
-          fileContent = JSON.stringify(students, null, 2);
-          const blob = new Blob([fileContent], {
-            type: "application/json;charset=utf-8;",
-          });
-          saveAs(blob, fileName);
-        } else if (format === "excel") {
-          const worksheet = XLSX.utils.json_to_sheet(normalizedStudents);
-          const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-          const excelBuffer = XLSX.write(workbook, {
-            bookType: "xlsx",
-            type: "array",
-          });
-          const blob = new Blob([excelBuffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          });
-          saveAs(blob, "students.xlsx");
-        } else if (format === "xml") {
-          const xmlOptions = { compact: true, ignoreComment: true, spaces: 4 };
-          const xml = js2xml({ students }, xmlOptions);
-          const blob = new Blob([xml], {
-            type: "application/xml;charset=utf-8;",
-          });
-          saveAs(blob, "students.xml");
-        }
-
-        // Log the action
-        const newLog = {
-          id:
-            Math.random().toString(36).substring(2, 15) +
-            Math.random().toString(36).substring(2, 15),
-          timestamp: new Date().toISOString(),
-          level: "info",
-          message: `Exported ${students.length} students in ${format} format`,
-          metadata: {
-            action: "export",
-            entity: "student",
-            user: "admin",
-            details: `Exported ${students.length} students in ${format} format`,
-          },
-        };
-        pushLop(newLog);
+        // const blob = await response.blob();
+        // saveAs(blob, fileName);
+        await StudentService.exportStudents(format);
       } catch (error) {
         console.error("❌ Lỗi khi export sinh viên:", error);
+        toast.error("Đã xảy ra lỗi khi export sinh viên.");
       }
     }
     setIsImportExportOpen(false);

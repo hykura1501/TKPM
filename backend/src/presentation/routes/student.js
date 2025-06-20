@@ -11,5 +11,6 @@ router.put('/', (...args) => studentController.updateStudent(...args));
 router.delete('/:mssv', (...args) => studentController.deleteStudent(...args));
 router.post('/import', (...args) => studentController.addStudentFromFile(...args));
 router.get('/grades/:studentId', (...args) => studentController.getGradeByStudentId(...args));
+router.get('/export', (...args) => studentController.exportStudentList(...args));
 
 module.exports = router;
