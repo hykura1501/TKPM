@@ -2,6 +2,8 @@
 
 **Web demo**: [Student Management](https://fe-student-management.vercel.app/)
 
+**Developer Guide**: [Click vào để xem.](https://www.notion.so/Developer-Guide-Group-08-tiger-21729e62e5ad80078a48e994c79d27cf)
+
 # Cấu trúc Source Code của Dự án
 
 ## **Backend**
