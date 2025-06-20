@@ -166,7 +166,7 @@
     "email": "Email",
     "department": "Department",
     "enrollmentYear": "Enrollment Year",
-    "searchPlaceholder": "Search by name, student ID or email...",
+    "searchPlaceholder": "Search by name, student ID...",
     "config": "Manage Configuration",
     "logs": "System Logs",
     "settings": "Settings",

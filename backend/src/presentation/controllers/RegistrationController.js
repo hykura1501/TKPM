@@ -9,7 +9,8 @@ class RegistrationController {
     cancelRegistrationUseCase,
     getGradeByClassIdUseCase,
     saveGradeByClassIdUseCase,
-    getGradeByStudentIdUseCase
+    getGradeByStudentIdUseCase,
+    getStudentByIdUseCase,
   }) {
     this.getRegistrationListUseCase = getRegistrationListUseCase;
     this.getRegistrationByIdUseCase = getRegistrationByIdUseCase;
@@ -20,6 +21,7 @@ class RegistrationController {
     this.getGradeByClassIdUseCase = getGradeByClassIdUseCase;
     this.saveGradeByClassIdUseCase = saveGradeByClassIdUseCase;
     this.getGradeByStudentIdUseCase = getGradeByStudentIdUseCase;
+    this.getStudentByIdUseCase = getStudentByIdUseCase;
   }
   async getListRegistrations(req, res) {
     try {
@@ -82,8 +84,16 @@ class RegistrationController {
     try {
       const { classId } = req.params;
       const grades = await this.getGradeByClassIdUseCase.execute(classId);
-      // Nếu muốn lấy thêm studentInfo, cần inject StudentUseCase và join ở đây
-      res.status(200).json(grades);
+      const gradeObjects = grades.map(grade => grade.toObject ? grade.toObject() : grade);
+      for (let grade of gradeObjects) { 
+        const student = await this.getStudentByIdUseCase.execute(grade.studentId);
+        if (student) {
+          grade.studentInfo = student;
+        } else {
+          grade.studentInfo = null;
+        }
+      }
+      res.status(200).json(gradeObjects);
     } catch (error) {
       console.error("Lỗi khi lấy điểm theo lớp:", error);
       res.status(error.status || 500).json({ error: error.message || "Lỗi khi lấy điểm theo lớp" });

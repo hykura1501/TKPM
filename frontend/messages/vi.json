@@ -166,7 +166,7 @@
     "email": "Email",
     "department": "Khoa",
     "enrollmentYear": "Năm nhập học",
-    "searchPlaceholder": "Tìm kiếm theo tên, mã sinh viên hoặc email...",
+    "searchPlaceholder": "Tìm kiếm theo tên, mã sinh viên...",
     "config": "Quản lý Cấu hình",
     "settings": "Cài đặt",
     "logs": "Nhật ký hệ thống",

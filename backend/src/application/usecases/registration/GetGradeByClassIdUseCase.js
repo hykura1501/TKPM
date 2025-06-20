@@ -16,7 +16,7 @@ class GetGradeByClassIdUseCase {
       await addLogEntry({ message: "ID lớp học không được để trống", level: "warn" });
       throw { status: 400, message: "ID lớp học không được để trống" };
     }
-    const grades = await this.registrationRepository.findAllByCondition({ classSectionId: classId });
+    const grades = await this.registrationRepository.findAllByCondition({ classSectionId: classId, status: { $ne: "cancelled" } });
     if (!grades) {
       await addLogEntry({ message: "Không tìm thấy đăng ký học nào cho lớp học này", level: "warn" });
       throw { status: 404, message: "Không tìm thấy đăng ký học nào cho lớp học này" };
