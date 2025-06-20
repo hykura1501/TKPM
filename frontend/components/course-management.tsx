@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { PlusCircle, Search, Pencil, Trash2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,10 +28,9 @@ import { toast } from "react-toastify";
 import courseService from "@/services/courseService";
 import facultyService from "@/services/facultyService";
 import { Faculty } from "@/types/student";
-import { Global } from "recharts";
-import { TranslationManager } from "./translation-manager";
 import { useLocale, useTranslations } from "next-intl";
 import { PageLoader } from "./ui/page-loader";
+import { TranslationManager } from "./translation-manager";
 
 const mockInitialTranslations = {
   en: {
@@ -80,9 +79,14 @@ export function CourseManagement() {
 
   // Filter courses based on search term
   const filteredCourses = courses.filter(
-    (course) =>
-      course.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.name.toLowerCase().includes(searchTerm.toLowerCase())
+    (course) => {
+      const searchValue = searchTerm.toLowerCase().trim();
+      if (!searchValue) return true;
+      return (
+        course.code.toLowerCase().includes(searchValue) ||
+        course.name.toLowerCase().includes(searchValue)
+      )
+    }
   );
 
   // Add new course

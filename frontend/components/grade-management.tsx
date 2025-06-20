@@ -17,7 +17,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -25,21 +24,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
-import { Search, Edit, Trash2 } from "lucide-react"
+import { Search } from "lucide-react"
 import coursesServices from "@/services/courseService"
 import classSectionService from "@/services/classSectionService"
 import registrationService from "@/services/registrationService"
-import { ClassSection, Course, Registration } from "@/types"
+import { ClassSection, Course } from "@/types"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { toast } from "react-toastify"
 
 interface Grade {
   id: string
@@ -50,6 +41,7 @@ interface Grade {
   courseId: string
   courseName: string
   grade: number
+  studentInfo?: any
 }
 
 export default function GradeManagement() {
@@ -66,10 +58,6 @@ export default function GradeManagement() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCourse, setSelectedCourse] = useState("all")
   const [selectedClass, setSelectedClass] = useState("all")
-
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-  const [currentGrade, setCurrentGrade] = useState<{ id: string; grade: number } | null>(null)
 
   const handleCourseChange = useCallback(
     (value: string) => {
@@ -158,82 +146,6 @@ export default function GradeManagement() {
     setFilteredGrades(filtered)
   }, [searchTerm, grades])
 
-  const handleEdit = (grade: Grade) => {
-    setCurrentGrade({ id: grade.id, grade: grade.grade })
-    setIsEditDialogOpen(true)
-  }
-
-  const handleDelete = (grade: Grade) => {
-    setCurrentGrade({ id: grade.id, grade: grade.grade })
-    setIsDeleteDialogOpen(true)
-  }
-
-  const saveGrade = async () => {
-    if (!currentGrade) return
-    const newScore = parseFloat(currentGrade.grade.toString())
-    if (isNaN(newScore) || newScore < 0 || newScore > 10) {
-      toast.error(t("invalidGrade"))
-      return
-    }
-    try {
-      const response = await fetch(`/api/grades/${currentGrade.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ grade: newScore }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update grade")
-      }
-
-      const updatedGrade = await response.json()
-      setGrades(grades.map((g) => (g.id === currentGrade.id ? updatedGrade : g)))
-      setFilteredGrades(grades.map((g) => (g.id === currentGrade.id ? updatedGrade : g)))
-      setIsEditDialogOpen(false)
-
-      toast.success(t("gradeUpdated"))
-    } catch (error) {
-      toast.error(t("errorUpdatingGrade"))
-    }
-  }
-
-  const confirmDelete = () => {
-    if (!currentGrade) return
-    setGrades((prev) => prev.filter((g) => g.id !== currentGrade.id))
-    setFilteredGrades((prev) => prev.filter((g) => g.id !== currentGrade.id))
-    setIsDeleteDialogOpen(false)
-  }
-
-  const handleGradeChange = async (gradeId: string, newGrade: number) => {
-    if (newGrade < 0 || newGrade > 10) {
-      toast.error(t("invalidGrade"))
-      return
-    }
-
-    try {
-      const response = await fetch(`/api/grades/${gradeId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ grade: newGrade }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update grade")
-      }
-
-      const updatedGrade = await response.json()
-      setGrades(grades.map((g) => (g.id === gradeId ? updatedGrade : g)))
-      setFilteredGrades(grades.map((g) => (g.id === gradeId ? updatedGrade : g)))
-
-      toast(t("gradeUpdated"))
-    } catch (error) {
-      toast.error(t("errorUpdatingGrade"))
-    }
-  }
 
   return (
     <Card>

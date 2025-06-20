@@ -50,11 +50,6 @@ import type {
   LogEntry,
   SystemConfig,
 } from "@/types/student";
-import Papa from "papaparse";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import { js2xml } from "xml-js";
-import { z } from "zod";
 
 import StudentService from "@/services/studentService";
 import FacultyService from "@/services/facultyService";
@@ -66,6 +61,7 @@ import { ConfigDialog } from "@/components/config-dialog";
 import settingService from "@/services/settingServices";
 import { useTranslations } from "next-intl";
 import { PageLoader } from "@/components/ui/page-loader";
+import { z } from "zod";
 
 export default function Home() {
   const t = useTranslations("students");
@@ -153,9 +149,13 @@ export default function Home() {
 
   // Filter students based on search term and selected faculty
   const filteredStudents = students.filter((student) => {
+    const searchValue = searchTerm.trim().toLowerCase();
+    if (!searchValue && selectedFaculty === "all") {
+      return true; 
+    }
     const matchesSearch =
-      student.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.mssv.toLowerCase().includes(searchTerm.toLowerCase());
+      student.fullName.toLowerCase().includes(searchValue) ||
+      student.mssv.toLowerCase().includes(searchValue);
 
     const matchesFaculty =
       selectedFaculty === "all" || student.faculty === selectedFaculty;

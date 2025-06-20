@@ -55,15 +55,17 @@ export function StudentRegistration() {
 
   // Filter registrations based on search term
   const filteredRegistrations = registrations.filter((registration) => {
-    const student = getStudentById(registration.id, students)
+    const student = getStudentById(registration.studentId, students)
     const classSection = getClassSectionById(registration.classSectionId, classSections)
     const course = classSection ? getCourseById(classSection.courseId, courses) : null
 
+    const searchValue = searchTerm.toLowerCase().trim()
+    if (!searchValue) return true
     return (
-      student?.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student?.mssv.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      classSection?.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course?.name.toLowerCase().includes(searchTerm.toLowerCase())
+      student?.fullName.toLowerCase().includes(searchValue) ||
+      student?.mssv.toLowerCase().includes(searchValue) ||
+      classSection?.code.toLowerCase().includes(searchValue) ||
+      course?.name.toLowerCase().includes(searchValue)
     )
   })
 

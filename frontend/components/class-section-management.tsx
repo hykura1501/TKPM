@@ -46,10 +46,15 @@ export function ClassSectionManagement() {
 
   // Filter class sections based on search term
   const filteredSections = classSections.filter(
-    (section) =>
-      section.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      getCourseById(section.courseId, courses)?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      section.instructor.toLowerCase().includes(searchTerm.toLowerCase()),
+    (section) => {
+      const searchValue = searchTerm.toLowerCase().trim()
+      if (!searchValue) return true
+      return (
+        section.code.toLowerCase().includes(searchValue) ||
+        getCourseById(section.courseId, courses)?.name.toLowerCase().includes(searchValue) ||
+        section.instructor.toLowerCase().includes(searchValue),
+      )
+    }
   )
 
   // Add new class section
