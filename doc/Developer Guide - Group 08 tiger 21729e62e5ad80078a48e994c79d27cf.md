@@ -1,4 +1,4 @@
-# Developer Guide - Group 08: tiger
+# Developer Guide - Group 06: tiger
 
 This document provides essential instructions and best practices for maintaining and extending the Student Management System project.
 
