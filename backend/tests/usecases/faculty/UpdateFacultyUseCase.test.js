@@ -27,7 +27,8 @@ describe('UpdateFacultyUseCase', () => {
     facultyRepositoryMock.findOneByCondition
       .mockResolvedValueOnce(null) // code check
       .mockResolvedValueOnce(null) // name check
-      .mockResolvedValueOnce({ id: 'faculty-1', name: new Map([['vi', 'Khoa CNTT']]) }); // id check
+      .mockResolvedValueOnce({ id: 'faculty-1', name: new Map([['vi', 'Khoa CNTT']]) }) // id check
+      .mockResolvedValueOnce({ id: 'faculty-1', name: new Map([['vi', 'Khoa CNTT']]) }); // id check sau validate
     facultyRepositoryMock.update.mockResolvedValue({ id: 'faculty-1' });
     facultyRepositoryMock.findAll.mockResolvedValue([{ id: 'faculty-1', name: new Map([['vi', 'Khoa CNTT']]) }]);
     const faculty = { id: 'faculty-1', code: 'CNTT', name: 'Khoa CNTT' };

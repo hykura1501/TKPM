@@ -12,9 +12,9 @@ describe('GetStatusRulesUseCase', () => {
 
   it('should return status transition rules', async () => {
     statusRepositoryMock.findAll.mockResolvedValue([
-      { id: '1', name: 'A', allowedStatus: ['2', '3'] },
-      { id: '2', name: 'B', allowedStatus: ['1'] },
-      { id: '3', name: 'C', allowedStatus: [] }
+      { id: '1', name: new Map([['vi', 'A'], ['en', 'A']]), allowedStatus: ['2', '3'], color: 'red' },
+      { id: '2', name: new Map([['vi', 'B'], ['en', 'B']]), allowedStatus: ['1'], color: 'blue' },
+      { id: '3', name: new Map([['vi', 'C'], ['en', 'C']]), allowedStatus: [], color: 'green' }
     ]);
     const result = await useCase.execute('vi');
     expect(result).toHaveProperty('A');

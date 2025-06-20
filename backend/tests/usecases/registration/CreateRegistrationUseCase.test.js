@@ -7,12 +7,14 @@ describe('CreateRegistrationUseCase', () => {
     registrationRepositoryMock = {
       findOneByCondition: jest.fn(),
       create: jest.fn(),
+      findAll: jest.fn(),
     };
     studentRepositoryMock = {
       findStudentByMssv: jest.fn(),
     };
     classSectionRepositoryMock = {
       findOneByCondition: jest.fn(),
+      update: jest.fn(),
     };
     useCase = new CreateRegistrationUseCase({
       registrationRepository: registrationRepositoryMock,
@@ -63,7 +65,7 @@ describe('CreateRegistrationUseCase', () => {
     classSectionRepositoryMock.findOneByCondition.mockResolvedValue({ id: 'class-1', currentEnrollment: 0, maxCapacity: 10 });
     registrationRepositoryMock.findOneByCondition.mockResolvedValue(null);
     registrationRepositoryMock.create.mockResolvedValue({ id: 'reg-1' });
-    const data = { studentId: 'sv1', classSectionId: 'class-1' };
+    const data = { studentId: 'sv1', classSectionId: 'class-1', status: 'active' };
     await expect(useCase.execute(data)).resolves.toBeDefined();
   });
 });

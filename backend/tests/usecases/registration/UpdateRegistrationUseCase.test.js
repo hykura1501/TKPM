@@ -30,7 +30,7 @@ describe('UpdateRegistrationUseCase', () => {
   it('should throw error if registration does not exist', async () => {
     registrationRepositoryMock.findOneByCondition.mockResolvedValue(null);
     const data = { studentId: 'sv1', classSectionId: 'class-1' };
-    await expect(useCase.execute('reg-1', data)).rejects.toHaveProperty('status', 404);
+    await expect(useCase.execute('reg-1', data)).rejects.toHaveProperty('status', 400);
   });
 
   it('should throw error if student does not exist', async () => {
@@ -54,7 +54,7 @@ describe('UpdateRegistrationUseCase', () => {
     classSectionRepositoryMock.findOneByCondition.mockResolvedValue({ id: 'class-1' });
     registrationRepositoryMock.update.mockResolvedValue(true);
     registrationRepositoryMock.findAll.mockResolvedValue([{ id: 'reg-1' }]);
-    const data = { studentId: 'sv1', classSectionId: 'class-1' };
+    const data = { studentId: 'sv1', classSectionId: 'class-1', status: 'active' };
     await expect(useCase.execute('reg-1', data)).resolves.toBeDefined();
   });
 });

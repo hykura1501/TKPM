@@ -26,9 +26,33 @@ describe('DeleteCourseUseCase', () => {
   });
 
   it('should deactivate course if class section exists', async () => {
-    courseRepositoryMock.findOneByCondition.mockResolvedValue({ id: 1 });
+    courseRepositoryMock.findOneByCondition.mockResolvedValue({ 
+      id: 1,
+      code: 'CSE101',
+      name: new Map(Object.entries({ vi: 'Tên khóa học', en: 'Course Name' })),
+      description: new Map(Object.entries({ vi: 'Mô tả', en: 'Description' })),
+      faculty: 'faculty-1',
+      credits: 3,
+      prerequisites: [],
+      isActive: true,
+      createdAt: '2023-01-01T00:00:00+00:00',
+      updatedAt: '2025-06-20T00:00:00+00:00',
+    });
     classSectionRepositoryMock.findOneByCondition.mockResolvedValue({ id: 2 });
-    courseRepositoryMock.findAll.mockResolvedValue([{ id: 1 }]);
+    courseRepositoryMock.findAll.mockResolvedValue([
+      {
+        id: 1,
+        code: 'CSE101',
+        name: new Map(Object.entries({ vi: 'Tên khóa học', en: 'Course Name' })),
+        description: new Map(Object.entries({ vi: 'Mô tả', en: 'Description' })),
+        faculty: 'faculty-1',
+        credits: 3,
+        prerequisites: [],
+        isActive: false,
+        createdAt: '2023-01-01T00:00:00+00:00',
+        updatedAt: '2025-06-20T00:00:00+00:00',
+      }
+    ]);
     const result = await useCase.execute(1);
     expect(result.success).toBe(true);
     expect(result.message).toMatch(/vô hiệu hóa/);
@@ -36,9 +60,33 @@ describe('DeleteCourseUseCase', () => {
   });
 
   it('should delete course if no class section exists', async () => {
-    courseRepositoryMock.findOneByCondition.mockResolvedValue({ id: 1 });
+    courseRepositoryMock.findOneByCondition.mockResolvedValue({ 
+      id: 1,
+      code: 'CSE101',
+      name: new Map(Object.entries({ vi: 'Tên khóa học', en: 'Course Name' })),
+      description: new Map(Object.entries({ vi: 'Mô tả', en: 'Description' })),
+      faculty: 'faculty-1',
+      credits: 3,
+      prerequisites: [],
+      isActive: true,
+      createdAt: '2023-01-01T00:00:00+00:00',
+      updatedAt: '2025-06-20T00:00:00+00:00',
+    });
     classSectionRepositoryMock.findOneByCondition.mockResolvedValue(null);
-    courseRepositoryMock.findAll.mockResolvedValue([{ id: 1 }]);
+    courseRepositoryMock.findAll.mockResolvedValue([
+      {
+        id: 1,
+        code: 'CSE101',
+        name: new Map(Object.entries({ vi: 'Tên khóa học', en: 'Course Name' })),
+        description: new Map(Object.entries({ vi: 'Mô tả', en: 'Description' })),
+        faculty: 'faculty-1',
+        credits: 3,
+        prerequisites: [],
+        isActive: true,
+        createdAt: '2023-01-01T00:00:00+00:00',
+        updatedAt: '2025-06-20T00:00:00+00:00',
+      }
+    ]);
     const result = await useCase.execute(1);
     expect(result.success).toBe(true);
     expect(result.message).toMatch(/thành công/);

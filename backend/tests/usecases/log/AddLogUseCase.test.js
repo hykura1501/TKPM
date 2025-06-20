@@ -19,7 +19,7 @@ describe('AddLogUseCase', () => {
     const logData = { message: 'Test log', level: 'info', action: 'test', entity: 'test', user: 'admin', details: 'details' };
     logRepositoryMock.create.mockResolvedValue({ id: 1, ...logData });
     // Giả lập schema hợp lệ bằng cách patch lại safeParse
-    const { logEntrySchema } = require('../../../src/validators/logValidator');
+    const { logEntrySchema } = require('../../../src/application/validators/logValidator');
     jest.spyOn(logEntrySchema, 'safeParse').mockReturnValue({ success: true, data: logData });
     const result = await useCase.execute(logData);
     expect(result.message).toMatch(/thành công/);
