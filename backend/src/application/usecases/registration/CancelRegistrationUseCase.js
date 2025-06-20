@@ -16,12 +16,26 @@ class CancelRegistrationUseCase {
 
   async execute(id) {
     if (!id) {
-      await addLogEntry({ message: "ID đăng ký học không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID đăng ký học không được để trống", 
+        level: "warn",
+        action: 'cancel',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Empty id provided for cancel'
+      });
       throw { status: 400, message: "ID đăng ký học không được để trống" };
     }
     const registration = await this.registrationRepository.findOneByCondition({ id });
     if (!registration) {
-      await addLogEntry({ message: "Đăng ký học không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Đăng ký học không tồn tại", 
+        level: "warn",
+        action: 'cancel',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Registration not found: ' + id
+      });
       throw { status: 404, message: "Đăng ký học không tồn tại" };
     }
     await this.registrationRepository.update(id, { status: "cancelled" });
@@ -31,7 +45,14 @@ class CancelRegistrationUseCase {
       classSection.currentEnrollment -= 1;
       await this.classSectionRepository.update(classSection.id, classSection);
     } else {
-      await addLogEntry({ message: "Lớp học không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Lớp học không tồn tại", 
+        level: "warn",
+        action: 'cancel',
+        entity: 'registration',
+        user: 'admin',
+        details: 'ClassSection not found: ' + registration.classSectionId
+      });
       throw { status: 404, message: "Lớp học không tồn tại" };
     }
     const registrations = await this.registrationRepository.findAll();

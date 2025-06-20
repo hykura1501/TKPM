@@ -38,8 +38,12 @@ describe("SettingService", () => {
     it("should throw an error if domains list is empty", async () => {
       await expect(SettingService.updateDomains([])).rejects.toEqual(
         expect.objectContaining({
-          status: 400,
-          message: "Danh sách domain không được để trống",
+          message: "Danh sách domain không được để trống", 
+          level: "warn",
+          action: 'update',
+          entity: 'setting',
+          user: 'admin',
+          details: 'Empty domains list provided for update'
         })
       );
       expect(SettingRepository.update).not.toHaveBeenCalled();

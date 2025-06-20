@@ -17,13 +17,27 @@ class DeleteProgramUseCase {
 
   async execute(id, language = 'vi') {
     if (!id) {
-      await addLogEntry({ message: 'ID không được để trống', level: 'warn' });
+      await addLogEntry({ 
+        message: 'ID không được để trống', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'program',
+        user: 'admin',
+        details: 'Empty id provided for delete'
+      });
       throw { status: 400, message: 'ID không được để trống' };
     }
     // Kiểm tra xem có sinh viên nào đang dùng chương trình này không
     const students = await this.studentRepository.findOneByCondition({ program: id });
     if (students) {
-      await addLogEntry({ message: 'Không thể xóa chương trình học', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Không thể xóa chương trình học', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'program',
+        user: 'admin',
+        details: 'Attempted to delete program in use: ' + id
+      });
       throw { status: 400, message: 'Không thể xóa chương trình học' };
     }
     await this.programRepository.delete(id);

@@ -52,6 +52,10 @@ class CreateStudentUseCase {
       await addLogEntry({
         message: "Thêm sinh viên không hợp lệ",
         level: "warn",
+        action: "create",
+        entity: "student",
+        user: "admin",
+        details: 'Invalid student data: ' + JSON.stringify(studentData)
       });
       throw new Error(JSON.stringify(parsed.error.errors));
     }
@@ -89,9 +93,8 @@ class CreateStudentUseCase {
       level: "info",
       action: "create",
       entity: "student",
-      entityId: newStudent.mssv,
       user: "admin",
-      details: `Created student: ${newStudent.fullName}`,
+      details: `Created student: ${newStudent.fullName}`
     });
 
     return newStudent;

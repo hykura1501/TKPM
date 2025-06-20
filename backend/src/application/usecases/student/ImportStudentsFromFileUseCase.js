@@ -82,6 +82,7 @@ class ImportStudentsFromFileUseCase {
       action: "import",
       entity: "student",
       user: "admin",
+      details: `Imported students: ${imported.length}, errors: ${errors.length}`
     });
     return { imported, errors };
   }

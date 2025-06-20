@@ -13,12 +13,26 @@ class GetFacultyByIdUseCase {
 
   async execute(id, language = 'vi') {
     if (!id) {
-      await addLogEntry({ message: "ID khoa không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID khoa không được để trống", 
+        level: "warn",
+        action: 'get',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Empty id provided for get by id'
+      });
       throw { status: 400, message: "ID khoa không được để trống" };
     }
     const faculty = await this.facultyRepository.findOneByCondition({ id });
     if (!faculty) {
-      await addLogEntry({ message: "Khoa không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa không tồn tại", 
+        level: "warn",
+        action: 'get',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Faculty not found: ' + id
+      });
       throw { status: 404, message: "Khoa không tồn tại" };
     }
     return Mapper.formatFaculty(faculty, language);

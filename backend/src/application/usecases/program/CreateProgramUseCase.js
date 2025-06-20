@@ -18,9 +18,13 @@ class CreateProgramUseCase {
     // Validate schema
     const parsed = programSchema.safeParse(programData);
     if (!parsed.success) {
-      await addLogEntry({
-        message: "Thêm chương trình học không hợp lệ",
+      await addLogEntry({ 
+        message: "Thêm chương trình học không hợp lệ", 
         level: "warn",
+        action: 'create',
+        entity: 'program',
+        user: 'admin',
+        details: 'Invalid program data: ' + JSON.stringify(programData)
       });
       throw { status: 400, message: parsed.error.errors };
     }

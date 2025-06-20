@@ -18,12 +18,26 @@ class UpdateFacultyUseCase {
   async validateFaculty(faculty, isUpdate = false) {
     const parsed = facultySchema.safeParse(faculty);
     if (!parsed.success) {
-      await addLogEntry({ message: "Khoa không hợp lệ", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa không hợp lệ", 
+        level: "warn",
+        action: 'update',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Invalid faculty data: ' + JSON.stringify(faculty)
+      });
       return { success: false, error: parsed.error.errors.message };
     }
     const existingFaculty = await this.facultyRepository.findOneByCondition({ code: parsed.data.code });
     if (!isUpdate && existingFaculty) {
-      await addLogEntry({ message: "Mã khoa đã tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Mã khoa đã tồn tại", 
+        level: "warn",
+        action: 'update',
+        entity: 'faculty',
+        user: 'admin',
+        details: 'Duplicate faculty code: ' + parsed.data.code
+      });
       return { success: false, error: "Mã khoa đã tồn tại" };
     }
     let existingFacultyName = null;

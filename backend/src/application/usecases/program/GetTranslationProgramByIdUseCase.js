@@ -13,12 +13,26 @@ class GetTranslationProgramByIdUseCase {
 
   async execute(programId) {
     if (!programId) {
-      await addLogEntry({ message: "ID chương trình không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID chương trình không được để trống", 
+        level: "warn",
+        action: 'get-translation',
+        entity: 'program',
+        user: 'admin',
+        details: 'Empty programId provided for get translation'
+      });
       throw { status: 400, message: "ID chương trình không được để trống" };
     }
     const program = await this.programRepository.findOneByCondition({ id: programId });
     if (!program) {
-      await addLogEntry({ message: "Khoa không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khoa không tồn tại", 
+        level: "warn",
+        action: 'get-translation',
+        entity: 'program',
+        user: 'admin',
+        details: 'Program not found: ' + programId
+      });
       throw { status: 404, message: "Khoa không tồn tại" };
     }
     const translations = {};

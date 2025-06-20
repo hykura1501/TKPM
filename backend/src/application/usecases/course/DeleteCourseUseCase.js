@@ -16,17 +16,38 @@ class DeleteCourseUseCase {
 
   async execute(id, language = 'vi') {
     if (!id) {
-      await addLogEntry({ message: "ID khóa học không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID khóa học không được để trống", 
+        level: "warn",
+        action: 'delete',
+        entity: 'course',
+        user: 'admin',
+        details: 'Empty id provided for delete'
+      });
       throw { status: 400, message: "ID khóa học không được để trống" };
     }
     const existingCourse = await this.courseRepository.findOneByCondition({ id });
     if (!existingCourse) {
-      await addLogEntry({ message: "Khóa học không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khóa học không tồn tại", 
+        level: "warn",
+        action: 'delete',
+        entity: 'course',
+        user: 'admin',
+        details: 'Course not found: ' + id
+      });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
     const classSection = await this.classSectionRepository.findOneByCondition({ course: id });
     if (classSection) {
-      await addLogEntry({ message: "Không thể xóa khóa học đang được sử dụng", level: "warn" });
+      await addLogEntry({ 
+        message: "Không thể xóa khóa học đang được sử dụng", 
+        level: "warn",
+        action: 'delete',
+        entity: 'course',
+        user: 'admin',
+        details: 'Attempted to delete course in use: ' + id
+      });
       await this.courseRepository.update(id, { isActive: false });
       const courses = (await this.courseRepository.findAll()).map((course) => Mapper.formatCourse(course, language));
       return { success: true, message: "Khóa học đã được vô hiệu hóa", courses };

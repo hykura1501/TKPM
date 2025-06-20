@@ -17,7 +17,14 @@ class CreateStatusUseCase {
     // Validate schema
     const parsed = statusSchema.safeParse(statusData);
     if (!parsed.success) {
-      await addLogEntry({ message: 'Thêm tình trạng sinh viên không hợp lệ', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Thêm tình trạng sinh viên không hợp lệ', 
+        level: 'warn',
+        action: 'create',
+        entity: 'status',
+        user: 'admin',
+        details: 'Invalid status data: ' + JSON.stringify(statusData)
+      });
       throw { status: 400, message: parsed.error.errors };
     }
     // Sinh id mới

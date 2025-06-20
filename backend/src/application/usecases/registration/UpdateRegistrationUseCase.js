@@ -23,25 +23,53 @@ class UpdateRegistrationUseCase {
     // Validate schema
     const parsed = registrationSchema.safeParse({ ...registrationData, id });
     if (!parsed.success) {
-      await addLogEntry({ message: 'Cập nhật đăng ký học không hợp lệ', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Cập nhật đăng ký học không hợp lệ', 
+        level: 'warn',
+        action: 'update',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Invalid registration data: ' + JSON.stringify(registrationData)
+      });
       throw { status: 400, message: parsed.error.errors };
     }
     // Kiểm tra tồn tại đăng ký
     const existingRegistration = await this.registrationRepository.findOneByCondition({ id });
     if (!existingRegistration) {
-      await addLogEntry({ message: 'Đăng ký học không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Đăng ký học không tồn tại', 
+        level: 'warn',
+        action: 'update',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Registration not found: ' + id
+      });
       throw { status: 404, message: 'Đăng ký học không tồn tại' };
     }
     // Kiểm tra tồn tại sinh viên
     const existingStudent = await this.studentRepository.findStudentByMssv(parsed.data.studentId);
     if (!existingStudent) {
-      await addLogEntry({ message: 'Sinh viên không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Sinh viên không tồn tại', 
+        level: 'warn',
+        action: 'update',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Student not found: ' + parsed.data.studentId
+      });
       throw { status: 400, message: 'Sinh viên không tồn tại' };
     }
     // Kiểm tra tồn tại lớp học
     const existingClassSection = await this.classSectionRepository.findOneByCondition({ id: parsed.data.classSectionId });
     if (!existingClassSection) {
-      await addLogEntry({ message: 'Lớp học không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Lớp học không tồn tại', 
+        level: 'warn',
+        action: 'update',
+        entity: 'registration',
+        user: 'admin',
+        details: 'ClassSection not found: ' + parsed.data.classSectionId
+      });
       throw { status: 400, message: 'Lớp học không tồn tại' };
     }
     // Cập nhật đăng ký

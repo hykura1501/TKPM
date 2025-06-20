@@ -61,13 +61,27 @@ class UpdateStudentUseCase {
     });
     const parsed = dynamicSchema.safeParse(studentData);
     if (!parsed.success) {
-      await addLogEntry({ message: 'Cập nhật sinh viên không hợp lệ', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Cập nhật sinh viên không hợp lệ', 
+        level: 'warn',
+        action: 'update',
+        entity: 'student',
+        user: 'admin',
+        details: 'Invalid student data: ' + JSON.stringify(studentData)
+      });
       throw { status: 400, message: parsed.error.errors.map(e => e.message).join(', ') };
     }
     // Kiểm tra tồn tại sinh viên
     const currentStudent = await this.studentRepository.findStudentByMssv(mssv);
     if (!currentStudent) {
-      await addLogEntry({ message: 'Sinh viên không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Sinh viên không tồn tại', 
+        level: 'warn',
+        action: 'update',
+        entity: 'student',
+        user: 'admin',
+        details: 'Student not found: ' + mssv
+      });
       throw { status: 404, message: 'Sinh viên không tồn tại' };
     }
     // Kiểm tra tồn tại faculty/program/status nếu có

@@ -13,12 +13,26 @@ class UpdateTranslationStatusUseCase {
 
   async execute(statusId, translations) {
     if (!statusId) {
-      await addLogEntry({ message: "ID tình trạng không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID tình trạng không được để trống", 
+        level: "warn",
+        action: 'update-translation',
+        entity: 'status',
+        user: 'admin',
+        details: 'Empty statusId provided for translation update'
+      });
       throw { status: 400, message: "ID tình trạng không được để trống" };
     }
     const status = await this.statusRepository.findOneByCondition({ id: statusId });
     if (!status) {
-      await addLogEntry({ message: "Tình trạng sinh viên không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Tình trạng sinh viên không tồn tại", 
+        level: "warn",
+        action: 'update-translation',
+        entity: 'status',
+        user: 'admin',
+        details: 'Status not found: ' + statusId
+      });
       throw { status: 404, message: "Tình trạng sinh viên không tồn tại" };
     }
     SUPPORTED_LOCALES.forEach((locale) => {

@@ -13,7 +13,14 @@ class GetClassSectionByIdUseCase {
   async execute(id) {
     const classSection = await this.classSectionRepository.findOneByCondition({ id });
     if (!classSection) {
-      await addLogEntry({ message: "Không tìm thấy lớp học", level: "warn" });
+      await addLogEntry({ 
+        message: "Không tìm thấy lớp học", 
+        level: "warn",
+        action: 'get',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'No classSection found for id: ' + id
+      });
       throw { status: 404, message: "Không tìm thấy lớp học" };
     }
     return classSection;

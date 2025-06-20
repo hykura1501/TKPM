@@ -13,7 +13,14 @@ class UpdateDomainsUseCase {
 
   async execute(domains) {
     if (!domains?.length) {
-      await addLogEntry({ message: "Danh sách domain không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "Danh sách domain không được để trống", 
+        level: "warn",
+        action: 'update',
+        entity: 'setting',
+        user: 'admin',
+        details: 'Empty domains list provided for update'
+      });
       throw { status: 400, message: "Danh sách domain không được để trống" };
     }
 

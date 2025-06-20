@@ -17,13 +17,27 @@ class DeleteRegistrationUseCase {
 
   async execute(id, language = 'vi') {
     if (!id) {
-      await addLogEntry({ message: 'ID đăng ký học không được để trống', level: 'warn' });
+      await addLogEntry({ 
+        message: 'ID đăng ký học không được để trống', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Empty id provided for delete'
+      });
       throw { status: 400, message: 'ID đăng ký học không được để trống' };
     }
     // Kiểm tra xem đăng ký có đang được sử dụng bởi sinh viên không
     const student = await this.studentRepository.findOneByCondition({ registration: id });
     if (student) {
-      await addLogEntry({ message: 'Không thể xóa đăng ký học đang được sử dụng', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Không thể xóa đăng ký học đang được sử dụng', 
+        level: 'warn',
+        action: 'delete',
+        entity: 'registration',
+        user: 'admin',
+        details: 'Attempted to delete registration in use: ' + id
+      });
       throw { status: 400, message: 'Không thể xóa đăng ký học đang được sử dụng' };
     }
     await this.registrationRepository.delete(id);

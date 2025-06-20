@@ -13,12 +13,26 @@ class UpdateTranslationCourseUseCase {
 
   async execute(courseId, translations) {
     if (!courseId) {
-      await addLogEntry({ message: "ID khóa học không được để trống", level: "warn" });
+      await addLogEntry({ 
+        message: "ID khóa học không được để trống", 
+        level: "warn",
+        action: 'update-translation',
+        entity: 'course',
+        user: 'admin',
+        details: 'Empty courseId provided for translation update'
+      });
       throw { status: 400, message: "ID khóa học không được để trống" };
     }
     const course = await this.courseRepository.findOneByCondition({ id: courseId });
     if (!course) {
-      await addLogEntry({ message: "Khóa học không tồn tại", level: "warn" });
+      await addLogEntry({ 
+        message: "Khóa học không tồn tại", 
+        level: "warn",
+        action: 'update-translation',
+        entity: 'course',
+        user: 'admin',
+        details: 'Course not found: ' + courseId
+      });
       throw { status: 404, message: "Khóa học không tồn tại" };
     }
     SUPPORTED_LOCALES.forEach((locale) => {

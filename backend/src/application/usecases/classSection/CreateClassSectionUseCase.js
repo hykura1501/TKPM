@@ -19,19 +19,40 @@ class CreateClassSectionUseCase {
     // Kiểm tra dữ liệu đầu vào
     const parsed = classSectionSchema.safeParse(data);
     if (!parsed.success) {
-      await addLogEntry({ message: 'Mã lớp học không hợp lệ', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Mã lớp học không hợp lệ', 
+        level: 'warn',
+        action: 'validate',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'Invalid classSection data: ' + JSON.stringify(data)
+      });
       throw { status: 400, message: parsed.error.errors };
     }
     // Kiểm tra trùng mã lớp
     const existingClassSection = await this.classSectionRepository.findOneByCondition({ code: parsed.data.code });
     if (existingClassSection) {
-      await addLogEntry({ message: 'Mã lớp học đã tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Mã lớp học đã tồn tại', 
+        level: 'warn',
+        action: 'validate',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'Duplicate classSection code: ' + parsed.data.code
+      });
       throw { status: 400, message: 'Mã lớp học đã tồn tại' };
     }
     // Kiểm tra tồn tại khóa học
     const existingCourse = await this.courseRepository.findOneByCondition({ id: parsed.data.courseId });
     if (!existingCourse) {
-      await addLogEntry({ message: 'Khóa học không tồn tại', level: 'warn' });
+      await addLogEntry({ 
+        message: 'Khóa học không tồn tại', 
+        level: 'warn',
+        action: 'validate',
+        entity: 'classSection',
+        user: 'admin',
+        details: 'Course not found: ' + parsed.data.courseId
+      });
       throw { status: 400, message: 'Khóa học không tồn tại' };
     }
     // Sinh id mới
