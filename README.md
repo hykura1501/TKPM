@@ -2,40 +2,137 @@
 
 **Web demo**: [Student Management](https://fe-student-management.vercel.app/)
 
-## Cấu trúc source code
-Dưới đây là mô tả các thư mục và tệp chính trong dự án:
+# Cấu trúc Source Code của Dự án
 
-### Frontend
-**Thư mục**: `/frontend`
+## **Backend**
 
-**Mô tả**: Chứa mã nguồn giao diện người dùng, được xây dựng bằng Next.js.
+**Thư mục**: `/backend`  
+**Mô tả**: Chứa mã nguồn xử lý logic phía server, được xây dựng theo kiến trúc Clean Architecture với Domain-Driven Design (DDD).
 
-**Các thư mục và tệp chính**:
-- `/src` - Chứa mã nguồn chính của ứng dụng, bao gồm các components, pages, và logic xử lý.
-  - `/app` - Chứa các tệp liên quan đến routing và giao diện chính của ứng dụng.
-  - `/components` - Chứa các thành phần UI tái sử dụng.
-  - `/lib` - Chứa các tệp hỗ trợ, như kết nối API hoặc utilities.
-- `/public` - Chứa các tệp tĩnh như hình ảnh, favicon, fonts.
-- `package.json` - Danh sách các dependencies và scripts để chạy dự án.
-- `tsconfig.json` - Cấu hình TypeScript cho dự án.
-- `.env` - Chứa biến môi trường (nếu có sử dụng API hoặc database).
+### **Các thư mục và tệp chính**:
 
-### Backend
-**Thư mục**: `/backend`
+#### **📁 `/src` - Mã nguồn chính**
 
-**Mô tả**: Chứa mã nguồn xử lý logic phía server, được xây dựng bằng Node.js và Express.
+##### **🏗️ `/application` - Tầng ứng dụng**
+- **`/usecases`** - Chứa các use cases (business logic) của từng module:
+  - `/classSection` - Xử lý logic cho lớp học
+  - `/course` - Xử lý logic cho khóa học
+  - `/faculty` - Xử lý logic cho khoa/phòng ban
+  - `/log` - Xử lý logic cho hệ thống log
+  - `/program` - Xử lý logic cho chương trình đào tạo
+  - `/registration` - Xử lý logic cho đăng ký
+  - `/semester` - Xử lý logic cho học kỳ
+  - `/setting` - Xử lý logic cho cài đặt hệ thống
+  - `/status` - Xử lý logic cho trạng thái
+  - `/student` - Xử lý logic cho sinh viên
+- **`/validators`** - Chứa các validator để kiểm tra dữ liệu đầu vào
 
-**Các thư mục và tệp chính**:
-- `/src` - Chứa mã nguồn chính, bao gồm các API, services, và cấu hình database.
-  - `/api` - Chứa các controllers và services xử lý API.
-    - `/controller` - Chứa các file điều khiển (controllers) để xử lý các yêu cầu từ client.
-    - `/services` - Chứa các file xử lý logic nghiệp vụ (business logic) và giao tiếp với database.
-    - `/routes` - Chứa các file định nghĩa các endpoint API.
-    - `/model` - Chứa các định nghĩa mô hình dữ liệu.
-    - `/repository` - Chứa các file truy cập dữ liệu
-    - `/configs` - Chứa các tệp cấu hình, như kết nối database.
-- `package.json` - Danh sách các dependencies và scripts để chạy backend.
-- `.env` - Chứa biến môi trường cho backend.
+##### **⚙️ `/configs` - Cấu hình hệ thống**
+- **`/db`** - Cấu hình kết nối và thiết lập database
+
+##### **🏛️ `/domain` - Tầng domain (nghiệp vụ)**
+- **`/entities`** - Chứa các entity (thực thể) của hệ thống
+- **`/repositories`** - Chứa các interface repository (abstract)
+
+##### **🔧 `/infrastructure` - Tầng infrastructure**
+- **`/repositories`** - Chứa implementation cụ thể của các repository
+
+##### **🌐 `/presentation` - Tầng presentation**
+- **`/controllers`** - Chứa các controller xử lý HTTP requests
+- **`/middlewares`** - Chứa các middleware (authentication, validation, etc.)
+- **`/routes`** - Chứa định nghĩa các API endpoints
+
+##### **🛠️ `/shared` - Utilities chung**
+- **`/utils`** - Chứa các utility functions dùng chung
+
+#### **📋 `/docs` - Tài liệu dự án**
+- Chứa documentation, API specs, và các tài liệu kỹ thuật
+
+#### **🌱 `/seed` - Dữ liệu khởi tạo**
+- **`/data`** - Chứa các file dữ liệu mẫu để seed database
+
+#### **🧪 `/tests` - Test cases**
+- **`/controllers`** - Test cho các controllers
+- **`/services`** - Test cho các services
+- **`/usecases`** - Test cho các use cases theo module:
+  - `/classSection`, `/course`, `/faculty`, `/log`, `/program`
+  - `/registration`, `/setting`, `/status`
+
+---
+
+## **Frontend**
+
+**Thư mục**: `/frontend`  
+**Mô tả**: Chứa mã nguồn giao diện người dùng, được xây dựng bằng Next.js với App Router và hỗ trợ đa ngôn ngữ (i18n).
+
+### **Các thư mục và tệp chính**:
+
+#### **📱 `/app` - App Router của Next.js**
+- **`/students/new`** - Route cho tạo sinh viên mới
+- **`/[locale]`** - Routes với hỗ trợ đa ngôn ngữ:
+  - `/classes` - Quản lý lớp học
+  - `/courses` - Quản lý khóa học
+  - `/registration` - Quản lý đăng ký
+  - `/settings` - Cài đặt hệ thống
+  - `/students` - Quản lý sinh viên
+  - `/transcripts` - Quản lý bảng điểm
+
+#### **🎨 `/components` - Components tái sử dụng**
+- **`/ui`** - Chứa các UI components cơ bản (buttons, forms, modals, etc.)
+
+#### **⚙️ `/config` - Cấu hình ứng dụng**
+- Chứa các file cấu hình cho frontend
+
+#### **📊 `/data` - Dữ liệu tĩnh**
+- Chứa mock data hoặc dữ liệu cấu hình
+
+#### **📖 `/docs` - Tài liệu frontend**
+- Documentation cho frontend
+
+#### **🎣 `/hooks` - Custom React Hooks**
+- Chứa các custom hooks để tái sử dụng logic
+
+#### **📚 `/lib` - Libraries và utilities**
+- Chứa các helper functions, API clients, và utilities
+
+#### **🌍 `/messages` - Internationalization**
+- Chứa các file ngôn ngữ cho đa ngôn ngữ
+
+#### **🖼️ `/public` - Static assets**
+- Chứa images, icons, fonts và các file tĩnh khác
+
+#### **🔌 `/services` - API Services**
+- Chứa các service để gọi API từ backend
+
+#### **🎨 `/styles` - Stylesheets**
+- Chứa CSS/SCSS files cho styling
+
+#### **📝 `/types` - TypeScript Types**
+- Chứa các type definitions cho TypeScript
+
+---
+
+## **Kiến trúc tổng thể**
+
+### **Backend Architecture**: Clean Architecture + DDD
+- **Domain Layer**: Entities và Repository interfaces
+- **Application Layer**: Use cases và business logic
+- **Infrastructure Layer**: Database implementation
+- **Presentation Layer**: Controllers và HTTP handling
+
+### **Frontend Architecture**: Next.js App Router
+- **Component-based**: Tái sử dụng UI components
+- **Service Layer**: API integration
+- **Internationalization**: Hỗ trợ đa ngôn ngữ
+- **Type Safety**: Full TypeScript support
+
+### **Key Features**
+- 🏫 **Quản lý giáo dục**: Students, Courses, Classes, Registration
+- 🌍 **Đa ngôn ngữ**: Internationalization support
+- 🔒 **Bảo mật**: Authentication & Authorization
+- 📊 **Báo cáo**: Transcripts và analytics
+- ⚡ **Performance**: Optimized với Next.js
+- 🧪 **Testing**: Comprehensive test coverage
 
 ## Hướng dẫn cài đặt & chạy chương trình
 
