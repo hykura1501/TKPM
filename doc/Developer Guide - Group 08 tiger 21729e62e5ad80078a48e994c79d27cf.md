@@ -24,6 +24,6 @@ This document provides essential instructions and best practices for maintaining
 
 [Web API documentation](Developer%20Guide%20-%20Group%2008%20tiger%2021729e62e5ad80078a48e994c79d27cf/Web%20API%20documentation%2021729e62e5ad80cd88b1d9001f60867a.md)
 
-[Updating an existing entity (How to add a new property)](Developer%20Guide%20-%20Group%2008%20tiger%2021729e62e5ad80078a48e994c79d27cf/Updating%20an%20existing%20entity%20(How%20to%20add%20a%20new%20prop%2021729e62e5ad80ecb4d9df20700550ab.md)
+[Updating an existing entity](Developer%20Guide%20-%20Group%2008%20tiger%2021729e62e5ad80078a48e994c79d27cf/Updating%20an%20existing%20entity%20(How%20to%20add%20a%20new%20prop%2021729e62e5ad80ecb4d9df20700550ab.md)
 
 [Inversion of Control and Dependency Injection](Developer%20Guide%20-%20Group%2008%20tiger%2021729e62e5ad80078a48e994c79d27cf/Inversion%20of%20Control%20and%20Dependency%20Injection%2021729e62e5ad800d8016c574448e4902.md)
